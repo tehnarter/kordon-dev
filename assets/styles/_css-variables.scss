@@ -1,0 +1,50 @@
+// viewport
+
+:root {
+  --viewport: 1440;
+
+  @include mobile {
+    --viewport: 375;
+  }
+}
+
+// fonts
+
+:root {
+  --font-family: "Rubik-Regular", sans-serif;
+}
+
+// transitions
+
+// :root {
+// --transition: 0.5s ease-in-out;
+// --transition-fast: 0.3 ease-in-out;
+// --transition-slow: 0.8s ease-in-out;
+// --default-ease: cubic-bezier(0.24, 1, 0.36, 1);
+// }
+
+// colors
+
+:root {
+  --tekst-i-elementy-na-temnom-fone: #fff;
+  --fon-temnyy-tekst: #20222a;
+  --vtorostepennyy-tekst: rgba(255, 255, 255, 0.5);
+  --podlozhka: #272e3b;
+  --razdeliteli: #3d4554;
+  --neaktivnye-elementy: #425170;
+  --w---vtorostepennyy-tekst: rgba(32, 34, 42, 0.5);
+  --w---razdeliteli: #e0e0e0;
+  --akcentnyy: #f4c038;
+  --ogon-cena: #f47523;
+  --pozitivnye-indikatory: #3cbf27;
+  --promezhutochnye-indikatory: #2da0e0;
+  --negativnye-indikatory: #d93855;
+  --redkost-arcana: #4add32;
+  --redkost-neobychayno-redkie-immortal: #ffce50;
+  --redkost-taynye: #ed422b;
+  --redkost-zasekrechennye-legendary: #cf309c;
+  --redkost-zapreschennye-mythical: #8533ed;
+  --redkost-armeyskie-rare: #275ce4;
+  --redkost-promyshlennye-uncommon: #6ab2f4;
+  --redkost-shirpotreb-common: #b4c2d7;
+}

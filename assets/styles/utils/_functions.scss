@@ -1,0 +1,7 @@
+@function vw($size) {
+  @return calc(#{$size} / var(--viewport) * 100vw);
+}
+
+@function rem($px) {
+  @return calc(#{$px} / 16 * 1rem);
+}
