@@ -27,7 +27,8 @@
 
 :root {
   --tekst-i-elementy-na-temnom-fone: #fff;
-  --fon-temnyy-tekst: #20222a;
+  --fon: #20222a;
+  --temnyy-tekst: #20222a;
   --vtorostepennyy-tekst: rgba(255, 255, 255, 0.5);
   --podlozhka: #272e3b;
   --razdeliteli: #3d4554;
@@ -40,11 +41,16 @@
   --promezhutochnye-indikatory: #2da0e0;
   --negativnye-indikatory: #d93855;
   --redkost-arcana: #4add32;
-  --redkost-neobychayno-redkie-immortal: #ffce50;
+  --redkost-neobychayno-redkie: #ffce50 -immortal: #ffce50;
   --redkost-taynye: #ed422b;
-  --redkost-zasekrechennye-legendary: #cf309c;
-  --redkost-zapreschennye-mythical: #8533ed;
-  --redkost-armeyskie-rare: #275ce4;
-  --redkost-promyshlennye-uncommon: #6ab2f4;
-  --redkost-shirpotreb-common: #b4c2d7;
+  --redkost-zasekrechennye: #cf309c;
+  --legendary: #cf309c;
+  --redkost-zapreschennye: #8533ed;
+  --mythical: #8533ed;
+  --redkost-armeyskie: #275ce4;
+  -rare: #275ce4;
+  --redkost-promyshlennye: #6ab2f4;
+  --uncommon: #6ab2f4;
+  --redkost-shirpotreb: #b4c2d7;
+  --common: #b4c2d7;
 }

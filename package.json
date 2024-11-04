@@ -23,6 +23,7 @@
     "typescript": "^5.4.2"
   },
   "dependencies": {
+    "@vueuse/core": "^11.2.0",
     "gsap": "npm:@gsap/shockingly@^3.11.4",
     "swiper": "^10.0.3"
   }

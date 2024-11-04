@@ -1,34 +1,10 @@
 <script setup>
-const currentTime = ref(new Date().toLocaleTimeString())
-const currentDate = ref(new Date().toLocaleDateString())
 const weather = ref("")
 const usdRate = ref("")
 const plnRate = ref("")
 const euroRate = ref("")
-// Функція для форматування часу
-
-// Функція для оновлення часу
-function updateTime() {
-  const now = new Date()
-  currentTime.value = now.toLocaleTimeString()
-  currentDate.value = now.toLocaleDateString() // Дата залишається без змін
-  // Перевірка, чи досягнуто 00:00:00
-  if (
-    now.getHours() === 0 &&
-    now.getMinutes() === 0 &&
-    now.getSeconds() === 0
-  ) {
-    currentDate.value = now.toLocaleDateString() // Оновлення дати
-  }
-}
-// Ініціалізація дати
-currentDate.value = new Date().toLocaleDateString()
 
 onMounted(() => {
-  // Оновлення часу кожну хвилину
-  updateTime() // Викликати один раз для ініціалізації
-  setInterval(updateTime, 1000)
-
   // Функція для отримання координат
   const getCoordinates = async () => {
     if (navigator.geolocation) {
@@ -95,7 +71,7 @@ async function fetchWeather(lat, lon) {
     const temperature = data.main.temp // Температура
     // console.log("Отримані дані Погоди:", data)
     // Формування рядка для відображення
-    weather.value = `Погода в ${cityName}: ${weatherDescription}, ${temperature}°C`
+    weather.value = `${cityName}: ${weatherDescription}, ${temperature}°C`
   } catch (error) {
     console.error("Помилка отримання погоди:", error)
     weather.value = "Не вдалося отримати дані про погоду"
@@ -119,11 +95,11 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
     if (data.length) {
       const rate = data[0].rate
       if (currencyCode === "USD") {
-        usdRate.value = `USD : ${rate},`
+        usdRate.value = `USD  ${rate},`
       } else if (currencyCode === "PLN") {
-        plnRate.value = `PLN : ${rate} `
+        plnRate.value = `PLN  ${rate} `
       } else if (currencyCode === "EUR") {
-        euroRate.value = `EUR : ${rate}, `
+        euroRate.value = `EUR  ${rate}, `
       }
     } else {
       console.error(`Курс для ${currencyCode} не знайдено.`)
@@ -137,10 +113,32 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
 }
 </script>
 <template>
-  <div>
-    <p>Час: {{ currentTime }}</p>
-    <p>Дата: {{ currentDate }}</p>
-    <p>{{ weather }}</p>
-    <p>{{ euroRate }} {{ usdRate }} {{ plnRate }}</p>
+  <div class="geo">
+    <div class="weather">{{ weather }}</div>
+    <div class="rate">{{ euroRate }} {{ usdRate }} {{ plnRate }}</div>
   </div>
 </template>
+<style lang="scss">
+.geo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weather {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--redkost-armeyskie);
+}
+.rate {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--redkost-armeyskie);
+}
+</style>

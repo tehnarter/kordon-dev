@@ -8,10 +8,12 @@ const closeBurger = () => {
   isClickedBurger.value = false
 }
 const menu = [
-  { name: "Привіт1" },
-  { name: "Привіт2" },
-  { name: "Привіт3" },
-  { name: "Привіт4 " },
+  { name: "Польща" },
+  { name: "Словаччина" },
+  { name: "Угорщина" },
+  { name: "Румунія " },
+  { name: "Молдова" },
+  { name: "Контакти" },
 ]
 </script>
 
@@ -20,8 +22,8 @@ const menu = [
     <div class="header__nav-1">
       <div class="header__logo">
         <img src="/ukraine.svg" alt="" class="header__logo-img" />
-        <div class="header__logo-title">KORDON<span>.UA</span></div>
       </div>
+      <TimeDate />
       <div class="header__long-row">
         <div class="header__long-ua">UA</div>
         <img src="/user_up.svg" alt="" class="header__long-img" />
@@ -71,8 +73,7 @@ const menu = [
 					</div>
 				</div> -->
       </div>
-      <div class="header__time"></div>
-      <div class="header__money"></div>
+      <Geo />
     </div>
   </header>
 </template>
@@ -121,14 +122,7 @@ const menu = [
   &__logo-img {
     width: 50px;
   }
-  &__logo-title {
-    font-family: Rubik-Bold;
-    line-height: 1.14286;
-    color: var(--tekst-i-elementy-na-temnom-fone);
-    span {
-      color: var(--akcentnyy);
-    }
-  }
+
   // .header__nav-2
 
   &__nav-2 {
@@ -137,7 +131,8 @@ const menu = [
     height: 48px;
     background: #f4c038;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    column-gap: 50px;
     align-items: center;
   }
 
