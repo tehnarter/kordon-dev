@@ -1,17 +1,23 @@
 <script setup>
+import { ref, onMounted } from "vue"
+
 const weather = ref("")
 const usdRate = ref("")
 const plnRate = ref("")
 const euroRate = ref("")
+const defaultCoordinates = { lat: 50.4333, lon: 30.5167 } // Координати Києва
 
 onMounted(() => {
   // Функція для отримання координат
+
   const getCoordinates = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords
           await fetchWeather(latitude, longitude)
+
+          // Отримання курсу валют
           const today = new Date()
           const formattedDate = today
             .toISOString()
@@ -21,9 +27,11 @@ onMounted(() => {
           await fetchExchangeRate("PLN", formattedDate)
           await fetchExchangeRate("EUR", formattedDate)
         },
-        async () => {
-          // Використовуємо дефолтні координати Львова
-          await fetchWeather(49.8397, 24.0297)
+        async (error) => {
+          console.warn("Помилка отримання геолокації:", error.message)
+          // Використовуємо дефолтні координати Києва у разі помилки
+          await fetchWeather(defaultCoordinates.lat, defaultCoordinates.lon)
+
           const today = new Date()
           const formattedDate = today
             .toISOString()
@@ -32,21 +40,30 @@ onMounted(() => {
           await fetchExchangeRate("USD", formattedDate)
           await fetchExchangeRate("PLN", formattedDate)
           await fetchExchangeRate("EUR", formattedDate)
+        },
+        {
+          enableHighAccuracy: false, // Знижена точність
+          timeout: 20000, // Час очікування на відповідь
+          maximumAge: 60000, // Використання кешованих даних
         }
       )
     } else {
-      // Якщо геолокація недоступна, використовуємо дефолтні координати Львова
-      await fetchWeather(49.8397, 24.0297)
+      // Якщо геолокація недоступна в браузері, використовуємо дефолтні координати Києва
+      await fetchWeather(defaultCoordinates.lat, defaultCoordinates.lon)
+
+      const today = new Date()
+      const formattedDate = today.toISOString().slice(0, 10).replace(/-/g, "")
+      await fetchExchangeRate("USD", formattedDate)
+      await fetchExchangeRate("PLN", formattedDate)
+      await fetchExchangeRate("EUR", formattedDate)
     }
   }
 
   // Отримуємо координати користувача
   getCoordinates()
 
-  // Оновлюємо погоду кожну годину
+  // Оновлюємо погоду та курс валют кожну годину
   setInterval(() => {
-    const now = new Date()
-    // Отримуємо координати знову перед оновленням погоди
     getCoordinates()
   }, 3600000) // 3600000 мс = 1 година
 })
@@ -59,18 +76,13 @@ async function fetchWeather(lat, lon) {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=ua`
     )
 
-    // Перевірка, чи відповідь успішна
-    if (!response.ok) {
+    if (!response.ok)
       throw new Error(`HTTP помилка! Статус: ${response.status}`)
-    }
 
     const data = await response.json()
-
-    const cityName = data.name // Назва міста
-    const weatherDescription = data.weather[0].description // Опис погоди
-    const temperature = data.main.temp // Температура
-    // console.log("Отримані дані Погоди:", data)
-    // Формування рядка для відображення
+    const cityName = data.name
+    const weatherDescription = data.weather[0].description
+    const temperature = data.main.temp
     weather.value = `${cityName}: ${weatherDescription}, ${temperature}°C`
   } catch (error) {
     console.error("Помилка отримання погоди:", error)
@@ -85,22 +97,16 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
       `/api/exchangeRate?currencyCode=${currencyCode}&dateFormat=${dateFormat}`
     )
 
-    if (!response.ok) {
+    if (!response.ok)
       throw new Error(`Помилка отримання курсу: ${response.status}`)
-    }
 
     const data = await response.json()
-    // console.log("Отримані дані Курсу :", data)
 
     if (data.length) {
       const rate = data[0].rate
-      if (currencyCode === "USD") {
-        usdRate.value = `USD  ${rate},`
-      } else if (currencyCode === "PLN") {
-        plnRate.value = `PLN  ${rate} `
-      } else if (currencyCode === "EUR") {
-        euroRate.value = `EUR  ${rate}, `
-      }
+      if (currencyCode === "USD") usdRate.value = `USD ${rate},`
+      else if (currencyCode === "PLN") plnRate.value = `PLN ${rate} `
+      else if (currencyCode === "EUR") euroRate.value = `EUR ${rate}, `
     } else {
       console.error(`Курс для ${currencyCode} не знайдено.`)
     }
@@ -112,12 +118,14 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
   }
 }
 </script>
+
 <template>
   <div class="geo">
     <div class="weather">{{ weather }}</div>
     <div class="rate">{{ euroRate }} {{ usdRate }} {{ plnRate }}</div>
   </div>
 </template>
+
 <style lang="scss">
 .geo {
   display: flex;
@@ -125,14 +133,7 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
   align-items: center;
 }
 
-.weather {
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.25;
-  text-align: center;
-  color: var(--redkost-armeyskie);
-}
+.weather,
 .rate {
   font-family: var(--font-family);
   font-weight: 500;

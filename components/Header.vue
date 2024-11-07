@@ -84,7 +84,7 @@ const menu = [
 
   &__nav-1 {
     padding: 12px 16px;
-    width: 375px;
+    width: 100%;
     height: 48px;
     background: #141fec;
     display: flex;
@@ -127,7 +127,7 @@ const menu = [
 
   &__nav-2 {
     padding: 12px 16px;
-    width: 375px;
+    width: 100%;
     height: 48px;
     background: #f4c038;
     display: flex;
