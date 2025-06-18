@@ -1,2 +1,2 @@
-@forward "./functions";
-@forward "./mixins";
+@use "./functions" as *;
+@use "./mixins" as *;

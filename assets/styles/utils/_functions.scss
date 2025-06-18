@@ -1,7 +1,23 @@
-@function vw($size) {
+// 📐 Функція: перетворення px у vw
+@function to-vw($size) {
   @return calc(#{$size} / var(--viewport) * 100vw);
 }
 
-@function rem($px) {
-  @return calc(#{$px} / 16 * 1rem);
+// 📐 Функція: перетворення px у rem
+@function to-rem($px) {
+  @return calc(#{$px} / var(--base-font-size) * 1rem);
+}
+
+// 📐 Функція: clamp з ремами та vw
+@function adap-fonts($min, $vwValue, $max) {
+  // повертає CSS clamp(minimum, preferred, maximum)
+
+  @return clamp(to-rem($min), to-vw($vwValue), to-rem($max));
+}
+//мінімум у rem,  бажане значення в vw #{$vwValue}vw,  максимум у rem
+
+@function adap($min, $vwValue, $max) {
+  // повертає CSS clamp(minimum, preferred, maximum)
+
+  @return clamp(to-rem($min), #{$vwValue}vw, to-rem($max));
 }

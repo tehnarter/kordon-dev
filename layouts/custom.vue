@@ -1,8 +1,4 @@
-<script setup lang="ts">
-definePageMeta({
-  layout: "custom",
-})
-</script>
+<script setup lang="ts"></script>
 <template>
-  <slot />
+  <NuxtPage />
 </template>

@@ -67,16 +67,14 @@ const closePolicy = () => {
   top: 0;
   left: 0;
   width: 100%;
-  overflow: hidden;
+  height: 100%;
   background-color: rgba(206, 206, 248, 0.1);
-  color: #000;
-  overflow: hidden;
+
+  overflow: auto;
   &__content {
     margin: 45px 0px 0px 0px;
+    background-color: var(--themes-bg);
     width: 100%;
-    height: 100%;
-    background-color: #fff;
-    overflow: hidden;
   }
   &__text {
     margin: 0 auto;
@@ -84,8 +82,6 @@ const closePolicy = () => {
     flex-direction: column;
     max-width: 768px;
     padding: 50px 20px 50px 20px;
-
-    height: 100%;
 
     h3 {
       padding: 0px 0px 20px 0px;
@@ -108,7 +104,7 @@ const closePolicy = () => {
     padding: 10px 20px;
     background-color: #6f86a0;
     color: #fff;
-    font-family: RobotoBoldItalic;
+    font-family: Unbounded;
     border-radius: 10px;
     align-self: flex-end;
   }

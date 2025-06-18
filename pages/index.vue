@@ -2,11 +2,12 @@
 <template>
   <main>
     <BorderTracker />
+    <BorderName />
   </main>
 </template>
 
 <style lang="scss" scoped>
-main {
-  // background-color: var(--temnyy-tekst);
-}
+// main {
+//   // background-color: var(--temnyy-tekst);
+// }
 </style>

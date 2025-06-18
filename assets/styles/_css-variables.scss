@@ -1,18 +1,26 @@
 // viewport
+@use "./utils/mixins" as *;
 
 :root {
-  --viewport: 1440;
+  --viewport: 1440; // ширина макета в px
+  --font-main: "Rubik", sans-serif;
+  --font-heading: "Manrope", sans-serif;
+  --base-font-size: 16; //базовий розмір шрифту  у пікселях
+  --color-primary: #000;
+  --container-padding: 15px;
+  --container-max: 1170px;
 
-  @include mobile {
-    --viewport: 375;
+  @include tablet {
+    --viewport: 284;
   }
 }
 
 // fonts
 
-:root {
-  --font-family: "Rubik-Regular", sans-serif;
-}
+// :root {
+// --font: "HelveticaNeueCyr-Roman";
+// --font-light: "HelveticaNeueCyr-Light";
+// }
 
 // transitions
 
@@ -25,32 +33,7 @@
 
 // colors
 
-:root {
-  --tekst-i-elementy-na-temnom-fone: #fff;
-  --fon: #20222a;
-  --temnyy-tekst: #20222a;
-  --vtorostepennyy-tekst: rgba(255, 255, 255, 0.5);
-  --podlozhka: #272e3b;
-  --razdeliteli: #3d4554;
-  --neaktivnye-elementy: #425170;
-  --w---vtorostepennyy-tekst: rgba(32, 34, 42, 0.5);
-  --w---razdeliteli: #e0e0e0;
-  --akcentnyy: #f4c038;
-  --ogon-cena: #f47523;
-  --pozitivnye-indikatory: #3cbf27;
-  --promezhutochnye-indikatory: #2da0e0;
-  --negativnye-indikatory: #d93855;
-  --redkost-arcana: #4add32;
-  --redkost-neobychayno-redkie: #ffce50 -immortal: #ffce50;
-  --redkost-taynye: #ed422b;
-  --redkost-zasekrechennye: #cf309c;
-  --legendary: #cf309c;
-  --redkost-zapreschennye: #8533ed;
-  --mythical: #8533ed;
-  --redkost-armeyskie: #275ce4;
-  -rare: #275ce4;
-  --redkost-promyshlennye: #6ab2f4;
-  --uncommon: #6ab2f4;
-  --redkost-shirpotreb: #b4c2d7;
-  --common: #b4c2d7;
-}
+// :root {
+// --c-pure-black: #000000;
+// --c-pure-white: #ffffff;
+// }

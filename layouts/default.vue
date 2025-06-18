@@ -9,9 +9,9 @@ const removeClassPolicy = () => {
 </script>
 <template>
   <div class="wrapper">
-    <Header />
-    <slot />
-    <Footer @openPolicyClick="addClassPolicy" />
+    <AppHeader />
+    <NuxtPage />
+    <AppFooter @openPolicyClick="addClassPolicy" />
     <Policy
       :class="{ open: isClickedPolicy }"
       @closePolicyClick="removeClassPolicy"

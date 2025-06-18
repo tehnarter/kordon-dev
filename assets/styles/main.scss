@@ -1,6 +1,10 @@
-@import "./fonts";
-@import "./css-variables";
-@import "./general";
-@import "./typography";
-@import "./hovers";
-@import "./vue-transitions";
+// @use "@/assets/styles/utils" as *; // для міксинів/функцій
+@use "./normalize" as *;
+@use "./fonts" as *;
+@use "./css-variables" as *;
+@use "./typography" as *;
+@use "./hovers" as *;
+@use "./themes" as *;
+@use "./vue-transitions" as *;
+@use "./wrapper" as *;
+@use "./global" as *;

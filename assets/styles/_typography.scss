@@ -1,1 +1,38 @@
 // common classes for typography like .p1, .p2, .H1, .H2 ...
+
+body {
+  font-family: var(--font-body);
+  // font-weight: 400 — автоматично застосовується
+  line-height: 1.6;
+}
+
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+p {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+// font-size, line-height	rem / clamp()	Масштабується з налаштуваннями браузера. Доступно для користувача.
+
+// margin, padding	rem / em / clamp	Відносно шрифту — зручно для збереження ритму між блоками.
+
+// width, height	%, vw, vh	Адаптивна верстка. Використовуй разом з max-width, min-height тощо.
+
+// border-radius	rem / %	Відносність до розміру шрифта або контейнера.
+
+// gap, grid-gap	rem	Щоб зберігати єдність між елементами незалежно від масштабу.
+
+// transform, translate	%, vw, vh	Щоб елемент рухався відносно вікна або батьківського контейнера.

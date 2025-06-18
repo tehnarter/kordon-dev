@@ -44,19 +44,12 @@ onMounted(() => {
   display: flex;
   column-gap: 20px;
 }
-.time {
-  font-family: var(--font-family);
-  font-size: 14px;
-  line-height: 1.25;
-  text-align: center;
-  color: var(--tekst-i-elementy-na-temnom-fone);
-}
+.time,
 .data {
-  font-family: var(--font-family);
   font-weight: 500;
   font-size: 14px;
   line-height: 1.25;
   text-align: center;
-  color: var(--tekst-i-elementy-na-temnom-fone);
+  color: #141fec;
 }
 </style>

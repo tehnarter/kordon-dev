@@ -121,7 +121,13 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
 
 <template>
   <div class="geo">
-    <div class="weather">{{ weather }}</div>
+    <!-- Біжучий рядок -->
+    <div class="marquee">
+      <div class="marquee-inner">
+        <div class="weather">{{ weather }}</div>
+        <TimeDate />
+      </div>
+    </div>
     <div class="rate">{{ euroRate }} {{ usdRate }} {{ plnRate }}</div>
   </div>
 </template>
@@ -131,15 +137,40 @@ async function fetchExchangeRate(currencyCode, dateFormat) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.1rem; // або скільки потрібно між блоками
+}
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.marquee-inner {
+  display: inline-flex;
+  gap: 1rem;
+  padding-left: 100%;
+  animation: marquee 10s linear infinite;
+  white-space: nowrap;
+  align-items: center;
 }
 
 .weather,
 .rate {
-  font-family: var(--font-family);
   font-weight: 500;
   font-size: 14px;
   line-height: 1.25;
   text-align: center;
-  color: var(--redkost-armeyskie);
+  color: #141fec;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 </style>

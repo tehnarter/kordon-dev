@@ -3,23 +3,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  // -webkit-user-select: none;
+  // -ms-user-select: none;
+  // user-select: none; //Забороняє користувачеві виділяти текст
   -webkit-user-drag: none;
-  font-size: vw(16);
-}
-
-body {
+  font-family: var(--font-main);
+  font-size: calc(
+    var(--base-font-size) / 16 * 100%
+  ); //  Встановлюємо базу в % — це дає доступність наприклад: 87.5% якщо $base-font-size: 14;
   overscroll-behavior: none;
-}
-
-*,
-*:after,
-*:before {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+  background-color: var(--themes-bg);
+  color: var(--themes-text);
+  transition:
+    background-color 3s ease,
+    color 3s ease;
 }
 
 button,
@@ -83,16 +80,3 @@ input:-webkit-autofill:active {
 // }
 
 //
-ul li {
-  list-style: none;
-}
-.wrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  // Прижимаем footer
-  > main {
-    flex: 1 1 auto;
-  }
-}

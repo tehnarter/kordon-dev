@@ -1,0 +1,29 @@
+// Світла тема
+.light {
+  --themes-bg: #d3e3fd;
+  --themes-bg-layouts: #e4c8d7;
+  --themes-bg-header: #005bb2;
+  --themes-bg-footer: #f7ca00;
+  --themes-text: #111827;
+  --themes-card-bg: #1f2937;
+  --themes-border-color: #374151;
+  --themes-hover-dropdown-item: #8f2de0;
+  --themes-header-background: linear-gradient(to right, #cc2a68, #8e2de2);
+  --themes-footer-background: linear-gradient(to right, #f472b6, #c084fc);
+  --themes-footer-border-color: rgba(255, 255, 255, 0.05);
+}
+
+// Темна тема
+.dark {
+  --themes-bg: #111827;
+  --themes-bg-layouts: #111827;
+  --themes-bg-header: #020bac;
+  --themes-bg-footer: #f8b201;
+  --themes-text: #f9fafb;
+  --themes-card-bg: #ffffff;
+  --themes-border-color: #e5e7eb;
+  --themes-hover-dropdown-item: #ffc3dc;
+  --themes-header-background: linear-gradient(to right, #cc2a68, #8e2de2);
+  --themes-footer-background: linear-gradient(to right, #f472b6, #c084fc);
+  --themes-footer-border-color: rgba(255, 255, 255, 0.05);
+}

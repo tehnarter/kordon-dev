@@ -23,14 +23,9 @@ const menu = [
       <div class="header__logo">
         <img src="/ukraine.svg" alt="" class="header__logo-img" />
       </div>
-      <TimeDate />
-      <div class="header__long-row">
-        <div class="header__long-ua">UA</div>
-        <img src="/user_up.svg" alt="" class="header__long-img" />
-      </div>
-      <div class="header__user">
-        <img src="/user_login.svg" alt="" class="heder__user-img" />
-      </div>
+
+      <ThemeSwitcher />
+      <LanguageSwitcher />
     </div>
     <div class="header__nav-2">
       <div class="header__burger">
@@ -86,11 +81,11 @@ const menu = [
     padding: 12px 16px;
     width: 100%;
     height: 48px;
-    background: #141fec;
+    background-color: var(--themes-bg-header);
     display: flex;
     column-gap: 20px;
-
     align-items: center;
+    transition: background-color 3s ease;
   }
 
   // .header__logo
@@ -104,11 +99,6 @@ const menu = [
 
   // .header__long
 
-  &__long-row {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-  }
   &__long-ua {
     font-family: Rubik-Medium;
     font-size: 14px;
@@ -129,10 +119,11 @@ const menu = [
     padding: 12px 16px;
     width: 100%;
     height: 48px;
-    background: #f4c038;
+    background-color: var(--themes-bg-footer);
+    transition: background-color 3s ease;
     display: flex;
     justify-content: flex-start;
-    column-gap: 50px;
+    column-gap: 15px;
     align-items: center;
   }
 

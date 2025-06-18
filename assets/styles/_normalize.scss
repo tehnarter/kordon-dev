@@ -1,0 +1,87 @@
+/* normalize.scss */
+
+/* Box sizing та базове скидання margin/padding */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Основні теги */
+html {
+  line-height: 1.15; /* Покращує читаність */
+  -webkit-text-size-adjust: 100%; /* Запобігає автоматичному масштабуванню на мобільних */
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+  background-color: var(--background, #fff);
+  color: var(--text-color, #000);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Зображення */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Форми */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Лінки */
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Таблиці */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Списки */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Текстове виділення */
+::selection {
+  background-color: var(--selection-bg, #b3d4fc);
+  color: var(--selection-color, #000);
+}

@@ -1,13 +1,34 @@
-@mixin mobile() {
+@use "sass:math";
+
+//Зручно для мобільних стилів, працює як "нижче 1024px"
+@mixin tablet() {
   @media (max-width: 1023px) {
     @content;
   }
 }
+
+//Потрібен для стилів, які активні лише на десктопах
+
 @mixin desktop() {
   @media (min-width: 1024px) {
     @content;
   }
 }
+
+//Зручно для мобільних стилів, працює як "нижче 768px"
+@mixin mobile() {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+//Зручно для мобільних стилів, працює як "нижче 480px"
+@mixin small-mobile() {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+
+//Використовується для стилів, які потрібні тільки на пристроях з підтримкою hover, щоб уникати помилкових наведень на мобілках (особливо з :hover).
 
 @mixin hover() {
   @media (hover: hover) {
@@ -15,6 +36,37 @@
   }
 }
 
+//Універсальний міксин для анімацій типу "бігучий рядок" (@keyframes ticker має бути заданий окремо).
+
 @mixin ticker($time) {
   animation: ticker $time linear infinite;
+}
+
+//Враховує найкращі сучасні практики:використання 100dvh з fallback на 100vh, а також підтримку iOS / Android браузерів.
+
+@mixin full-screen {
+  & {
+    min-height: 100vh; // базове значення для старих браузерів
+  }
+  @supports (height: 100dvh) {
+    & {
+      min-height: 100dvh; // сучасна одиниця, яка враховує браузерні панелі на мобільних
+    }
+  }
+}
+
+// Адаптивна властивість залежно від розмірів екрану
+
+// $property — CSS-властивість (наприклад, font-size)
+// $minValue — Мінімальне значення властивості (у px)
+// $maxValue — Максимальне значення властивості (у px)
+// $minViewport — Мінімальна ширина екрана
+//$maxViewport — Максимальна ширина екрана
+
+@mixin fluid($property, $minValue, $maxValue, $minViewport, $maxViewport) {
+  $slope: math.div(($maxValue - $minValue), ($maxViewport - $minViewport)) * 100;
+  $intercept: $minValue - ($slope * math.div($minViewport, 100));
+  $preferred: calc(#{$slope}vw + #{$intercept}px);
+
+  #{$property}: clamp(#{$minValue}px, #{$preferred}, #{$maxValue}px);
 }

@@ -9,7 +9,7 @@ const openPolicy = () => {
   <div>
     <footer class="footer">
       <div class="footer__container footer-row">
-        <div class="footer__title">KORDON<span>.UA</span></div>
+        <div class="footer__title">KORDON</div>
         <div class="footer__policy" @click="openPolicy">
           Політика приватності
         </div>
@@ -19,7 +19,8 @@ const openPolicy = () => {
 </template>
 <style lang="scss">
 .footer {
-  background: var(--akcentnyy);
+  background-color: var(--themes-bg-footer);
+  transition: background-color 3s ease;
 }
 .footer-row {
   padding: 5px 10px;
@@ -27,23 +28,16 @@ const openPolicy = () => {
   justify-content: space-between;
 }
 .footer__title {
-  font-family: Rubik-Bold;
+  font-weight: 700;
   line-height: 1.14286;
-  color: #141fec;
-  span {
-    color: var(--tekst-i-elementy-na-temnom-fone);
-  }
+  color: #fff;
 }
 
 .footer__policy {
-  font-family: var(--font-family);
   font-size: 16px;
   line-height: 1.25;
   text-align: center;
-  color: var(--tekst-i-elementy-na-temnom-fone);
+  color: #141fec;
   cursor: pointer;
-  &:hover {
-    border-bottom: solid 1px;
-  }
 }
 </style>

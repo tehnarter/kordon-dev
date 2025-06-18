@@ -1,33 +1,86 @@
-@font-face {
-  font-family: "Rubik-Light";
-  src: url("../fonts/Rubik/Rubik-Light.woff2"),
-    url("../fonts/Rubik/Rubik-Light.woff"),
-    url("../fonts/Rubik/Rubik-Light.ttf");
-  font-style: normal;
-  font-display: swap;
-}
+// _fonts.scss
+// @use "@/assets/styles/utils/mixins" as *;
+
+// @include font("Helvetica Neue", "HelveticaNeueCyr-Light", 300, normal);
+// @include font("Helvetica Neue", "HelveticaNeueCyr-Roman", 400, normal);
 
 @font-face {
-  font-family: "Rubik-Medium";
-  src: url("../fonts/Rubik/Rubik-Medium.woff2"),
-    url("../fonts/Rubik/Rubik-Medium.woff"),
-    url("../fonts/Rubik/Rubik-Medium.ttf");
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Rubik-Regular";
-  src: url("../fonts/Rubik/Rubik-Regular.woff2"),
-    url("../fonts/Rubik/Rubik-Regular.woff"),
-    url("../fonts/Rubik/Rubik-Regular.ttf");
-  font-style: normal;
-  font-display: swap;
-}
+  font-family: "Manrope";
+  src:
+    url("../fonts/Manrope/Manrope-Regular.woff2") format("woff2"),
+    url("../fonts/Manrope/Manrope-Regular.woff") format("woff");
 
-@font-face {
-  font-family: "Rubik-Bold";
-  src: url("../fonts/Rubik/Rubik-Bold.woff2"),
-    url("../fonts/Rubik/Rubik-Bold.woff"), url("../fonts/Rubik/Rubik-Bold.ttf");
-  font-style: normal;
+  font-weight: 400;
   font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("../fonts/Manrope/Manrope-Medium.woff2") format("woff2"),
+    url("../fonts/Manrope/Manrope-Medium.woff") format("woff");
+
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Unbounded";
+  src:
+    url("../fonts/Unbounded/Unbounded-Medium.woff2") format("woff2"),
+    url("../fonts/Unbounded/Unbounded-Medium.woff") format("woff");
+
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Unbounded";
+  src:
+    url("../fonts/Unbounded/Unbounded-Bold.woff2") format("woff2"),
+    url("../fonts/Unbounded/Unbounded-Bold.woff") format("woff");
+
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("../fonts/Rubik/Rubik-Light.woff2") format("woff2"),
+    url("../fonts/Rubik/Rubik-Light.woff2") format("woff");
+
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("../fonts/Rubik/Rubik-Regular.woff2") format("woff2"),
+    url("../fonts/Rubik/Rubik-Regular.woff2") format("woff");
+
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("../fonts/Rubik/Rubik-Medium.woff2") format("woff2"),
+    url("../fonts/Rubik/Rubik-Medium.woff2") format("woff");
+
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("../fonts/Rubik/Rubik-Bold.woff2") format("woff2"),
+    url("../fonts/Rubik/Rubik-Bold.woff2") format("woff");
+
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
 }
