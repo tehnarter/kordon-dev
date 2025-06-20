@@ -83,7 +83,7 @@ onMounted(() => {
       errorCallback,
       {
         enableHighAccuracy: true, // Максимальна точність
-        timeout: 10000, // Максимальний час очікування відповіді (мс)
+        timeout: 30000, // Максимальний час очікування відповіді (мс)
         maximumAge: 0, // Як довго можна використовувати кешовані дані (мс)
       }
     )
@@ -101,14 +101,105 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
-    <h2>Відстеження часу проходження кордону</h2>
-    <p v-if="status">{{ status }}</p>
-    <p v-if="timeElapsed">Час проходження: {{ timeElapsed }} секунд</p>
-    <p v-if="currentLocation">Теперішні координати: {{ currentLocation }}</p>
-    <p v-if="accuracy">Точність: {{ accuracy }} метрів</p>
-    <!-- Виводимо точність -->
+  <div class="tracker-card">
+    <h2 class="tracker-title">Відстеження проходження кордону</h2>
+    <div
+      class="tracker-status"
+      :class="{ success: timeElapsed, error: status.includes('Помилка') }"
+    >
+      {{ status }}
+    </div>
+
+    <div class="tracker-info">
+      <div v-if="timeElapsed" class="tracker-info__item">
+        <span>⏱ Час проходження:</span>
+        <strong>{{ timeElapsed }} сек</strong>
+      </div>
+      <div v-if="currentLocation" class="tracker-info__item">
+        <span>📍 Координати:</span>
+        <strong>{{ currentLocation }}</strong>
+      </div>
+      <div v-if="accuracy" class="tracker-info__item">
+        <span>🎯 Точність:</span>
+        <strong>{{ accuracy }} м</strong>
+      </div>
+    </div>
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.tracker-card {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tracker-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.tracker-status {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: background 0.3s;
+
+  &.success {
+    background-color: rgba(76, 175, 80, 0.3); // Зелений
+  }
+
+  &.error {
+    background-color: rgba(244, 67, 54, 0.3); // Червоний
+  }
+}
+
+.tracker-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      opacity: 0.8;
+    }
+
+    strong {
+      font-weight: 500;
+    }
+  }
+}
+
+// Адаптивність
+@media (max-width: 500px) {
+  .tracker-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .tracker-info__item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+</style>

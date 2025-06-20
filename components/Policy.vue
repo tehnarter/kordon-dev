@@ -104,7 +104,6 @@ const closePolicy = () => {
     padding: 10px 20px;
     background-color: #6f86a0;
     color: #fff;
-    font-family: Unbounded;
     border-radius: 10px;
     align-self: flex-end;
   }

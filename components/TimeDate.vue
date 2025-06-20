@@ -1,45 +1,38 @@
 <script setup>
-const currentTime = ref(new Date().toLocaleTimeString())
-const currentDate = ref(new Date().toLocaleDateString())
+import { ref, onMounted } from "vue"
 
-// Функція для оновлення часу
-function updateTime() {
-  const now = new Date()
-  currentTime.value = formatTime(now)
-  currentDate.value = now.toLocaleDateString() // Дата залишається без змін
-  // Перевірка, чи досягнуто 00:00:00
-  if (
-    now.getHours() === 0 &&
-    now.getMinutes() === 0 &&
-    now.getSeconds() === 0
-  ) {
-    currentDate.value = now.toLocaleDateString() // Оновлення дати
-  }
-}
-// Ініціалізація дати
-currentDate.value = new Date().toLocaleDateString()
+const currentTime = ref("")
+const currentDate = ref("")
 
-// Функція для форматування часу
 function formatTime(date) {
   return date.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
   })
 }
+
+function updateTime() {
+  const now = new Date()
+  currentTime.value = formatTime(now)
+  currentDate.value = now.toLocaleDateString()
+}
+
 onMounted(() => {
-  // Оновлення часу кожну хвилину
-  updateTime() // Викликати один раз для ініціалізації
-  setInterval(updateTime, 1000)
+  updateTime() // Початкове встановлення
+  setInterval(updateTime, 1000) // Оновлення щосекунди
 })
 </script>
 
 <template>
-  <div class="time-data">
-    <div class="data">{{ currentDate }}</div>
-    <div class="time">{{ currentTime }}</div>
-  </div>
+  <client-only>
+    <div class="time-data">
+      <div class="data">{{ currentDate }}</div>
+      <div class="time">{{ currentTime }}</div>
+    </div>
+  </client-only>
 </template>
-<style lang="scss">
+
+<style lang="scss" scoped>
 .time-data {
   display: flex;
   column-gap: 20px;

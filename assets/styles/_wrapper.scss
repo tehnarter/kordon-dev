@@ -28,9 +28,10 @@
 // Адаптивний  контейнер
 
 [class*="__container"] {
+  height: 100%;
   margin: 0 auto;
   box-sizing: content-box;
-  @include fluid(max-width, 1000, 1644, 1231.98, 1920);
-  @include fluid(padding-left, 5, 15, 1231.98, 1920);
-  @include fluid(padding-right, 5, 15, 1231.98, 1920);
+  @include fluid(max-width, 702, 1300, 768, 1366);
+  @include fluid(padding-left, 5, 10, 768, 1366);
+  @include fluid(padding-right, 5, 10, 768, 1366);
 }

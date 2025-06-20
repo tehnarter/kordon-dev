@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <main>
+  <main class="main__container">
     <BorderTracker />
     <BorderName />
   </main>
