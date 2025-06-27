@@ -1,6 +1,8 @@
 <script setup></script>
 <template>
   <main class="main__container">
+    <QueueForm />
+    <CrossingTimeForm />
     <BorderTracker />
     <BorderName />
   </main>

@@ -34,47 +34,47 @@ function getTrafficClass(value) {
   return "status-red"
 }
 
-async function fetchQueueData() {
-  try {
-    const { data, error } = await $fetch(
-      "http://localhost:1337/api/border-queues"
-    )
+// async function fetchQueueData() {
+//   try {
+//     const { data, error } = await $fetch(
+//       "http://localhost:1337/api/border-queues"
+//     )
 
-    if (error || !data) {
-      setUnavailable()
-      return
-    }
+//     if (error || !data) {
+//       setUnavailable()
+//       return
+//     }
 
-    const busesQueue = []
-    const carsQueue = []
-    const tirQueue = []
-    const footQueue = []
+//     const busesQueue = []
+//     const carsQueue = []
+//     const tirQueue = []
+//     const footQueue = []
 
-    data.forEach((entry) => {
-      if (entry.buses !== null) busesQueue.push(entry.buses)
-      if (entry.cars !== null) carsQueue.push(entry.cars)
-      if (entry.tir !== null) tirQueue.push(entry.tir)
-      if (entry.foot !== null) footQueue.push(entry.foot)
-    })
+//     data.forEach((entry) => {
+//       if (entry.buses !== null) busesQueue.push(entry.buses)
+//       if (entry.cars !== null) carsQueue.push(entry.cars)
+//       if (entry.tir !== null) tirQueue.push(entry.tir)
+//       if (entry.foot !== null) footQueue.push(entry.foot)
+//     })
 
-    queueData.value = {
-      buses: busesQueue.length ? calculateAverageQueue(busesQueue) : "-",
-      cars: carsQueue.length ? calculateAverageQueue(carsQueue) : "-",
-      tir: tirQueue.length ? calculateAverageQueue(tirQueue) : " - ",
-      foot: footQueue.length ? calculateAverageQueue(footQueue) : "-",
-    }
+//     queueData.value = {
+//       buses: busesQueue.length ? calculateAverageQueue(busesQueue) : "-",
+//       cars: carsQueue.length ? calculateAverageQueue(carsQueue) : "-",
+//       tir: tirQueue.length ? calculateAverageQueue(tirQueue) : " - ",
+//       foot: footQueue.length ? calculateAverageQueue(footQueue) : "-",
+//     }
 
-    waitTimeData.value = {
-      buses: busesQueue.length ? calculateAverageTime(busesQueue) : "-",
-      cars: carsQueue.length ? calculateAverageTime(carsQueue) : "-",
-      tir: tirQueue.length ? calculateAverageTime(tirQueue) : "-",
-      foot: footQueue.length ? calculateAverageTime(footQueue) : "-",
-    }
-  } catch (e) {
-    console.error("Помилка отримання даних:", e)
-    setUnavailable()
-  }
-}
+//     waitTimeData.value = {
+//       buses: busesQueue.length ? calculateAverageTime(busesQueue) : "-",
+//       cars: carsQueue.length ? calculateAverageTime(carsQueue) : "-",
+//       tir: tirQueue.length ? calculateAverageTime(tirQueue) : "-",
+//       foot: footQueue.length ? calculateAverageTime(footQueue) : "-",
+//     }
+//   } catch (e) {
+//     console.error("Помилка отримання даних:", e)
+//     setUnavailable()
+//   }
+// }
 
 function setUnavailable() {
   const unavailable = {
@@ -87,10 +87,10 @@ function setUnavailable() {
   waitTimeData.value = unavailable
 }
 
-onMounted(() => {
-  fetchQueueData()
-  setInterval(fetchQueueData, 3600000)
-})
+// onMounted(() => {
+//   fetchQueueData()
+//   setInterval(fetchQueueData, 3600000)
+// })
 </script>
 
 <template>
