@@ -2,10 +2,19 @@
 import { ref, onMounted, nextTick } from "vue"
 import gsap from "gsap"
 
+const { menu } = useMenu()
+
 const emit = defineEmits(["close"])
 
 const activeSubmenu = ref<string | null>(null)
 const activeBorder = ref<string | null>(null)
+const selected = useBorder()
+
+const setActiveBorder = (border: { key: string; label: string }) => {
+  activeBorder.value = border.key
+  selected.value = border // тепер selected містить і key, і label
+  closeWithAnimation()
+}
 
 function closeWithAnimation() {
   if (process.client) {
@@ -27,31 +36,25 @@ function closeWithAnimation() {
 
 defineExpose({ closeWithAnimation })
 
-const toggleSubmenu = async (name: string) => {
-  if (activeSubmenu.value === name) {
-    const submenu = document.querySelector(`[data-submenu="${name}"]`)
-    if (submenu && process.client) {
+async function toggleSubmenu(key: string) {
+  if (activeSubmenu.value === key) {
+    const submenu = document.querySelector(`[data-submenu="${key}"]`)
+    if (submenu && process.client)
       gsap.to(submenu, { height: 0, opacity: 0, duration: 0.3 })
-    }
     setTimeout(() => (activeSubmenu.value = null), 300)
   } else {
-    activeSubmenu.value = name
+    activeSubmenu.value = key
     await nextTick()
-    const submenu = document.querySelector(`[data-submenu="${name}"]`)
-    if (submenu && process.client) {
-      const h = (submenu as HTMLElement).scrollHeight
-      gsap.fromTo(
-        submenu,
-        { height: 0, opacity: 0 },
-        { height: h, opacity: 1, duration: 0.4 }
-      )
-    }
+    const submenu = document.querySelector(
+      `[data-submenu="${key}"]`
+    )! as HTMLElement
+    const h = submenu.scrollHeight
+    gsap.fromTo(
+      submenu,
+      { height: 0, opacity: 0 },
+      { height: h, opacity: 1, duration: 0.4 }
+    )
   }
-}
-
-const setActiveBorder = (name: string) => {
-  activeBorder.value = name
-  closeWithAnimation()
 }
 
 onMounted(() => {
@@ -68,66 +71,6 @@ onMounted(() => {
     })
   })
 })
-
-const menu = [
-  {
-    name: "Україна-Польща",
-    borders: [
-      "Краківець-Корчова",
-      "Рава-Руська-Гребенне",
-      "Шегині-Медика",
-      "Устилуг-Зосін",
-      "Ягодин-Дорогуськ",
-      "Грушів-Будомєж",
-      "Смільниця-Кросценко",
-    ],
-  },
-  {
-    name: "Польща-Україна",
-    borders: [
-      "Корчова-Краківець",
-      "Гребенне-Рава-Руська",
-      "Медика-Шегині",
-      "Зосін-Устилуг",
-      "Дорогуськ-Ягодин",
-      "Будомєж-Грушів",
-      "Кросценко-Смільниця",
-    ],
-  },
-  {
-    name: "Україна-Словаччина",
-    borders: ["Ужгород-Вишнє Нємецьке", "Малі Селменці-Вельке Селменце"],
-  },
-  {
-    name: "Словаччина-Україна",
-    borders: ["Вишнє Нємецьке-Ужгород", "Вельке Селменце-Малі Селменці"],
-  },
-  {
-    name: "Україна-Угорщина",
-    borders: ["Чоп-Захонь", "Лужанка-Берегдароц", "Дзвінкове-Астей"],
-  },
-  {
-    name: "Угорщина-Україна",
-    borders: ["Захонь-Чоп", "Берегдароц-Лужанка", "Астей-Дзвінкове"],
-  },
-  {
-    name: "Україна-Румунія",
-    borders: ["Порубне-Сірет", "Дякове-Халмеу", "Солотвино-Сігет"],
-  },
-  {
-    name: "Румунія-Україна",
-    borders: ["Сірет-Порубне", "Халмеу-Дякове", "Сігет-Солотвино"],
-  },
-  {
-    name: "Україна-Молдова",
-    borders: ["Могилів-Подільський-Отач", "Мамалига-Крива", "Росошани-Бричени"],
-  },
-  {
-    name: "Молдова-Україна",
-    borders: ["Отач-Могилів-Подільський", "Крива-Мамалига", "Бричени-Росошани"],
-  },
-  { name: "Контакти" },
-]
 </script>
 
 <template>
@@ -138,38 +81,40 @@ const menu = [
         <div class="nav__item-login-img">
           <img src="/logo-img.svg" alt="" />
         </div>
-        <div class="nav__item-name">Привіт, <span>Гість</span></div>
+        <div class="nav__item-name">Гість</div>
         <img src="/user_login.svg" alt="" class="nav__item-exit" />
       </div>
       <ul class="nav__item">
-        <li v-for="nav in menu" :key="nav.name" class="nav__link">
+        <li v-for="item in menu" :key="item.key" class="nav__link">
           <div
             class="nav__link-item"
-            :class="{ active: activeSubmenu === nav.name }"
+            :class="{ active: activeSubmenu === item.key }"
             @click="
-              nav.borders ? toggleSubmenu(nav.name) : closeWithAnimation()
+              item.borders && item.borders.length
+                ? toggleSubmenu(item.key)
+                : closeWithAnimation()
             "
           >
-            {{ nav.name }}
+            {{ item.name }}
           </div>
           <ul
-            v-if="nav.borders"
-            :data-submenu="nav.name"
+            v-if="item.borders && item.borders.length"
+            :data-submenu="item.key"
             class="nav__sublist"
             :style="{
               overflow: 'hidden',
-              height: activeSubmenu === nav.name ? 'auto' : '0',
-              opacity: activeSubmenu === nav.name ? 1 : 0,
+              height: activeSubmenu === item.key ? 'auto' : '0',
+              opacity: activeSubmenu === item.key ? 1 : 0,
             }"
           >
             <li
-              v-for="border in nav.borders"
-              :key="border"
+              v-for="border in item.borders"
+              :key="border.key"
               class="nav__sublink"
-              :class="{ active: activeBorder === border }"
+              :class="{ active: activeBorder === border.key }"
               @click="setActiveBorder(border)"
             >
-              {{ border }}
+              {{ border.full }}
             </li>
           </ul>
         </li>
@@ -217,10 +162,8 @@ const menu = [
 
 .nav__item-name {
   font-size: 18px;
-  span {
-    color: #1976d2;
-    font-weight: 600;
-  }
+  color: #1976d2;
+  font-weight: 600;
 }
 
 .nav__item-exit {

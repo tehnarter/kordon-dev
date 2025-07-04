@@ -17,14 +17,19 @@ onMounted(() => {
 
   let startX = 0
   let endX = 0
+  let swipeFromSlider = false
 
   document.addEventListener("touchstart", (e) => {
+    const target = e.target as HTMLElement
+    swipeFromSlider = !!target.closest(".direction-buttons, .sort-buttons") // 👈 перевірка
     startX = e.touches[0].clientX
   })
 
   document.addEventListener("touchend", (e) => {
     endX = e.changedTouches[0].clientX
     const diff = endX - startX
+
+    if (swipeFromSlider) return // ❌ не відкривати меню
 
     if (diff > 100 && !isClickedBurger.value) {
       handleOpenMenu()
@@ -62,9 +67,9 @@ onMounted(() => {
     </div>
 
     <AppHeaderNav
-      ref="navRef"
       v-if="isClickedBurger"
       @close="handleCloseMenu"
+      ref="navRef"
     />
   </header>
 </template>

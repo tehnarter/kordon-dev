@@ -1,6 +1,136 @@
 {
+  "ua-pl": {
+    "name": "Ukraine-Poland",
+    "borders": {
+      "krakovets": { "label": "Krakovets", "full": "Krakovets-Korchova" },
+      "rava-ruska": { "label": "Rava-Ruska", "full": "Rava-Ruska-Grebenne" },
+      "shehyni": { "label": "Shehyni", "full": "Shehyni-Medyka" },
+      "ustyluh": { "label": "Ustyluh", "full": "Ustyluh-Zosin" },
+      "yahodyn": { "label": "Yahodyn", "full": "Yahodyn-Dorohusk" },
+      "hrushiv": { "label": "Hrushiv", "full": "Hrushiv-Budomierz" },
+      "smilnytsia": { "label": "Smilnytsia", "full": "Smilnytsia-Kroscienko" }
+    }
+  },
+
+  "pl-ua": {
+    "name": "Poland-Ukraine",
+    "borders": {
+      "korchova": { "label": "Korchova", "full": "Korchova-Krakovets" },
+      "grebenne": { "label": "Grebenne", "full": "Grebenne-Rava-Ruska" },
+      "medyka": { "label": "Medyka", "full": "Medyka-Shehyni" },
+      "zosin": { "label": "Zosin", "full": "Zosin-Ustyluh" },
+      "dorohusk": { "label": "Dorohusk", "full": "Dorohusk-Yahodyn" },
+      "budomierz": { "label": "Budomierz", "full": "Budomierz-Hrushiv" },
+      "kroscienko": { "label": "Kroscienko", "full": "Kroscienko-Smilnytsia" }
+    }
+  },
+
+  "ua-sk": {
+    "name": "Ukraine-Slovakia",
+    "borders": {
+      "uzhhorod": { "label": "Uzhhorod", "full": "Uzhhorod-Vysne Nemecke" },
+      "mali-selmentsi": {
+        "label": "Mali Selmentsi",
+        "full": "Mali Selmentsi-Velke Selmentsi"
+      }
+    }
+  },
+  "sk-ua": {
+    "name": "Slovakia-Ukraine",
+    "borders": {
+      "vysne-nemecke": {
+        "label": "Vysne Nemecke",
+        "full": "Vysne Nemecke-Uzhhorod"
+      },
+
+      "velke-selmentsi": {
+        "label": "Velke Selmentsi",
+        "full": "Velke Selmentsi-Mali Selmentsi"
+      }
+    }
+  },
+
+  "ua-hu": {
+    "name": "Ukraine-Hungary",
+    "borders": {
+      "chop": { "label": "Chop", "full": "Chop-Zahony" },
+      "luzhanka": { "label": "Luzhanka", "full": "Luzhanka-Bereh Daroc" },
+      "dzvinkove": { "label": "Dzvinkove", "full": "Dzvinkove-Astei" }
+    }
+  },
+
+  "hu-ua": {
+    "name": "Hungary-Ukraine",
+    "borders": {
+      "zahony": { "label": "Zahony", "full": "Zahony-Chop" },
+      "beregdaroc": { "label": "Bereh Daroc", "full": "Bereh Daroc-Luzhanka" },
+      "astei": { "label": "Astei", "full": "Astei-Dzvinkove" }
+    }
+  },
+
+  "ua-ro": {
+    "name": "Ukraine-Romania",
+    "borders": {
+      "porubne": { "label": "Porubne", "full": "Porubne-Siret" },
+      "dyakove": { "label": "Dyakove", "full": "Dyakove-Halmeu" },
+      "solotvyno": { "label": "Solotvyno", "full": "Solotvyno-Siget" }
+    }
+  },
+
+  "ro-ua": {
+    "name": "Romania-Ukraine",
+    "borders": {
+      "siret": { "label": "Siret", "full": "Siret-Porubne" },
+      "halmeu": { "label": "Halmeu", "full": "Halmeu-Dyakove" },
+      "sighet": { "label": "Sighet", "full": "Sighet-Solotvyno" }
+    }
+  },
+
+  "ua-md": {
+    "name": "Ukraine-Moldova",
+    "borders": {
+      "mohyliv": {
+        "label": "Mohyliv-Podilskyi",
+        "full": "Mohyliv-Podilskyi-Otach"
+      },
+      "mamalyga": { "label": "Mamalyga", "full": "Mamalyga-Kryva" },
+      "rosozhany": { "label": "Rososhany", "full": "Rososhany-Brycheny" }
+    }
+  },
+
+  "md-ua": {
+    "name": "Moldova-Ukraine",
+    "borders": {
+      "otach": { "label": "Otach", "full": "Otach-Mohyliv-Podilskyi" },
+      "kryva": { "label": "Kryva", "full": "Kryva-Mamalyga" },
+      "brycheny": { "label": "Brycheny", "full": "Brycheny-Rososhany" }
+    }
+  },
+  "name": "Contacts",
   "toggleTheme": "Toggle theme",
-  "footer": {
-    "rights": "All rights reserved"
+  "footer-policy": "Privacy policy",
+  "policy": {
+    "title-1": "Privacy Policy",
+    "title-2": "Collection and Use of Information",
+    "title-3": "Disclosure to Third Parties",
+    "title-4": "Data Protection",
+    "title-5": "Changes to the Privacy Policy",
+    "title-6": "Contact Information",
+    "text-1": "This Privacy Policy applies to your visit to our website https://resume-cv.pp.ua/. We do not collect, use, or disclose any personal information about you during your time on our site.",
+    "text-2": "We do not collect any personal information about you.",
+    "text-3": "Since we do not collect personal information about you, we do not disclose it to third parties.",
+    "text-4": "Although we do not collect personal information about you, we still apply security measures to protect your privacy while using our website.",
+    "text-5": "This privacy policy was last updated on 01.03.2024. We may periodically update this privacy policy, and the new edition of the Privacy Policy becomes effective upon its posting on the Internet at the address specified in this section, unless otherwise provided by the new edition of the Privacy Policy. The current version of the Privacy Policy is always available at the address https://resume-cv.pp.ua/. If there are any changes to the Privacy Policy with which the User disagrees, they must cease using the Site. The continued use of the Site constitutes acceptance and acknowledgment by the User of the respective edition of the Privacy Policy.",
+    "text-6": "If you have any questions or concerns regarding this Policy, please contact us at https://resume-cv.pp.ua/. This Privacy Policy is developed in accordance with the requirements of Ukrainian legislation on the protection of personal data and other relevant regulatory legal acts.",
+    "button": "CONFIRM"
+  },
+  "loading": "Loading...",
+  "error": "Unable to retrieve data. Please check your connection or try again later.",
+  "empty": "No data available",
+  "errorMessage": "Failed to retrieve data. Please check your connection or try again later.",
+  "button-clock": {
+    "all": "All borders",
+    "time": "Current information as of",
+    "timeInfo": "Current information for"
   }
 }

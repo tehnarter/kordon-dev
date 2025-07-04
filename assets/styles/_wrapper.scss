@@ -31,7 +31,7 @@
   height: 100%;
   margin: 0 auto;
   box-sizing: content-box;
-  @include fluid(max-width, 702, 1300, 768, 1366);
+  @include fluid(max-width, 310, 1300, 320, 1366);
   @include fluid(padding-left, 5, 10, 768, 1366);
   @include fluid(padding-right, 5, 10, 768, 1366);
 }

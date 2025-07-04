@@ -11,7 +11,7 @@ const openPolicy = () => {
       <div class="footer__container footer-row">
         <div class="footer__title">KORDON</div>
         <div class="footer__policy" @click="openPolicy">
-          Політика приватності
+          {{ $t("footer-policy") }}
         </div>
       </div>
     </footer>
