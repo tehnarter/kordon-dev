@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue"
+import { ref, onMounted, watch, computed } from "vue"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 const { menu } = useMenu()
@@ -18,91 +18,21 @@ interface BorderData {
   times: BorderQueuesTimes
 }
 
-interface Direction {
-  id: string
-  from: string
-  to: string
-  label: string
-  flags: {
-    from: string
-    to: string
-  }
-}
+// ✅ Динамічне формування напрямків з menu
+const directions = computed(() =>
+  menu.value.map((d) => ({
+    id: d.key,
+    from: d.from ?? d.key.split("-")[0].toUpperCase(),
+    to: d.to ?? d.key.split("-")[1].toUpperCase(),
+    label: d.name,
+    flags: d.flags ?? {
+      from: `/flags/${(d.from ?? d.key.split("-")[0]).toLowerCase()}.svg`,
+      to: `/flags/${(d.to ?? d.key.split("-")[1]).toLowerCase()}.svg`,
+    },
+  }))
+)
 
-const directions = ref<Direction[]>([
-  {
-    id: "UA-PL",
-    from: "UA",
-    to: "PL",
-    label: "UA → PL",
-    flags: { from: "/flags/ua.svg", to: "/flags/pl.svg" },
-  },
-  {
-    id: "PL-UA",
-    from: "PL",
-    to: "UA",
-    label: "Польща-Україна",
-    flags: { from: "/flags/pl.svg", to: "/flags/ua.svg" },
-  },
-  {
-    id: "UA-SK",
-    from: "UA",
-    to: "SK",
-    label: "Україна-Словаччина",
-    flags: { from: "/flags/ua.svg", to: "/flags/sk.svg" },
-  },
-  {
-    id: "SK-UA",
-    from: "SK",
-    to: "UA",
-    label: "Словаччина-Україна",
-    flags: { from: "/flags/sk.svg", to: "/flags/ua.svg" },
-  },
-  {
-    id: "UA-HU",
-    from: "UA",
-    to: "HU",
-    label: "Україна-Угорщина",
-    flags: { from: "/flags/ua.svg", to: "/flags/hu.svg" },
-  },
-  {
-    id: "HU-UA",
-    from: "HU",
-    to: "UA",
-    label: "Угорщина-Україна",
-    flags: { from: "/flags/hu.svg", to: "/flags/ua.svg" },
-  },
-  {
-    id: "UA-RO",
-    from: "UA",
-    to: "RO",
-    label: "Україна-Румунія",
-    flags: { from: "/flags/ua.svg", to: "/flags/ro.svg" },
-  },
-  {
-    id: "RO-UA",
-    from: "RO",
-    to: "UA",
-    label: "Румунія-Україна",
-    flags: { from: "/flags/ro.svg", to: "/flags/ua.svg" },
-  },
-  {
-    id: "UA-MD",
-    from: "UA",
-    to: "MD",
-    label: "Україна-Молдова",
-    flags: { from: "/flags/ua.svg", to: "/flags/md.svg" },
-  },
-  {
-    id: "MD-UA",
-    from: "MD",
-    to: "UA",
-    label: "Молдова-Україна",
-    flags: { from: "/flags/md.svg", to: "/flags/ua.svg" },
-  },
-])
-
-const selectedDirection = ref(directions.value[0].id)
+const selectedDirection = ref("")
 const borders = ref<BorderData[]>([])
 const loading = ref(true)
 const error = ref("")
@@ -169,37 +99,55 @@ async function fetchBorders(directionId: string): Promise<void> {
     }))
   } catch (e: any) {
     console.error("❌ fetchBorders error:", e)
-
-    // Показує одне загальне повідомлення користувачу
     error.value = t("error")
-
     borders.value = []
   } finally {
     loading.value = false
   }
 }
 
-onMounted(() => fetchBorders(selectedDirection.value))
-watch(selectedDirection, fetchBorders)
+onMounted(() => {
+  const cookieDirection = useCookie<string>("user_direction").value
+  const defaultDirection = directions.value[0]?.id || ""
+
+  if (
+    cookieDirection &&
+    directions.value.some((d) => d.id === cookieDirection)
+  ) {
+    selectedDirection.value = cookieDirection
+  } else {
+    selectedDirection.value = defaultDirection
+  }
+
+  fetchBorders(selectedDirection.value)
+})
+
+watch(selectedDirection, (newVal) => {
+  if (!newVal) {
+    borders.value = []
+    return
+  }
+
+  // Зберігаємо в cookie тільки якщо напрямок обраний
+  useCookie<string>("user_direction").value = newVal
+
+  fetchBorders(newVal)
+})
 
 const transportTypes = ["cars", "buses", "tir", "foot"] as const
 
 function getIcon(type: (typeof transportTypes)[number], statusClass: string) {
   const icons = {
-    cars: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-car-front-fill ${statusClass}" viewBox="0 0 16 16">
+    cars: ` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-car-front-fill ${statusClass}" viewBox="0 0 16 16">
         <path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z"/>
-      </svg>`,
-    buses: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bus-front-fill ${statusClass}" viewBox="0 0 16 16">
+      </svg>`, // залишити svg як є
+    buses: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bus-front-fill ${statusClass}" viewBox="0 0 16 16">
         <path d="M16 7a1 1 0 0 1-1 1v3.5c0 .818-.393 1.544-1 2v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5V14H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a2.5 2.5 0 0 1-1-2V8a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1V2.64C1 1.452 1.845.408 3.064.268A44 44 0 0 1 8 0c2.1 0 3.792.136 4.936.268C14.155.408 15 1.452 15 2.64V4a1 1 0 0 1 1 1zM3.552 3.22A43 43 0 0 1 8 3c1.837 0 3.353.107 4.448.22a.5.5 0 0 0 .104-.994A44 44 0 0 0 8 2c-1.876 0-3.426.109-4.552.226a.5.5 0 1 0 .104.994M8 4c-1.876 0-3.426.109-4.552.226A.5.5 0 0 0 3 4.723v3.554a.5.5 0 0 0 .448.497C4.574 8.891 6.124 9 8 9s3.426-.109 4.552-.226A.5.5 0 0 0 13 8.277V4.723a.5.5 0 0 0-.448-.497A44 44 0 0 0 8 4m-3 7a1 1 0 1 0-2 0 1 1 0 0 0 2 0m8 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m-7 0a1 1 0 0 0 1 1h2a1 1 0 1 0 0-2H7a1 1 0 0 0-1 1"/>
       </svg>`,
-    tir: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck ${statusClass}" viewBox="0 0 16 16">
+    tir: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck ${statusClass}" viewBox="0 0 16 16">
         <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
       </svg>`,
-    foot: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-walking ${statusClass}" viewBox="0 0 16 16">
+    foot: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-walking ${statusClass}" viewBox="0 0 16 16">
         <path d="M9.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M6.44 3.752A.75.75 0 0 1 7 3.5h1.445c.742 0 1.32.643 1.243 1.38l-.43 4.083a1.8 1.8 0 0 1-.088.395l-.318.906.213.242a.8.8 0 0 1 .114.175l2 4.25a.75.75 0 1 1-1.357.638l-1.956-4.154-1.68-1.921A.75.75 0 0 1 6 8.96l.138-2.613-.435.489-.464 2.786a.75.75 0 1 1-1.48-.246l.5-3a.75.75 0 0 1 .18-.375l2-2.25Z"/>
         <path d="M6.25 11.745v-1.418l1.204 1.375.261.524a.8.8 0 0 1-.12.231l-2.5 3.25a.75.75 0 1 1-1.19-.914zm4.22-4.215-.494-.494.205-1.843.006-.067 1.124 1.124h1.44a.75.75 0 0 1 0 1.5H11a.75.75 0 0 1-.531-.22Z"/>
       </svg>`,

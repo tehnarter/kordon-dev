@@ -49,7 +49,9 @@ onMounted(() => {
         <div class="header__logo">
           <img src="/ukraine.svg" alt="" class="header__logo-img" />
         </div>
-        <ThemeSwitcher />
+        <ClientOnly>
+          <ThemeSwitcher />
+        </ClientOnly>
         <LanguageSwitcher />
       </div>
     </div>

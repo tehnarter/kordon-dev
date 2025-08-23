@@ -12,12 +12,14 @@ export function useMenu() {
       borders: [
         {
           key: "krakovets",
+          coords: { lat: 49.291701, lon: 25.694697 },
           labelfun: () => t("ua-pl.borders['krakovets'].label"),
           label: t("ua-pl.borders.krakovets.label"),
           full: t("ua-pl.borders.krakovets.full"),
         },
         {
           key: "rava-ruska",
+          coords: { lat: 50.264339, lon: 23.598819 },
           labelfun: () => t("ua-pl.borders['rava-ruska'].label"),
           label: t("ua-pl.borders.rava-ruska.label"),
           full: t("ua-pl.borders.rava-ruska.full"),
@@ -60,12 +62,14 @@ export function useMenu() {
       borders: [
         {
           key: "korchova",
+          coords: { lat: 49.29547, lon: 25.691887 },
           labelfun: () => t("pl-ua.borders['korchova'].label"),
           label: t("pl-ua.borders.korchova.label"),
           full: t("pl-ua.borders.korchova.full"),
         },
         {
           key: "grebenne",
+          coords: { lat: 50.279398, lon: 23.583456 },
           labelfun: () => t("pl-ua.borders['grebenne'].label"),
           label: t("pl-ua.borders.grebenne.label"),
           full: t("pl-ua.borders.grebenne.full"),
