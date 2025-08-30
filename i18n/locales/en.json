@@ -1,4 +1,18 @@
 {
+  "seo": {
+  "title": "KORDON – Border queues and news from Ukraine's borderlands",
+  "description": "Up-to-date information about border queues, checkpoints, crossing rules, and news from Ukraine's border regions. Data updated in real time.",
+  "keywords": "Ukraine border, border queues, border news, checkpoints, border crossing, exit rules"
+},
+"og": {
+  "title": "KORDON – Border queues and news from Ukraine",
+  "description": "Real-time: queues at checkpoints, crossing rules, and the latest news from Ukraine's borders."
+},
+"twitter": {
+  "card": "summary_large_image",
+  "title": "KORDON – Border queues and news from Ukraine",
+  "description": "Live data about border queues, checkpoints, and news from Ukraine's border regions."
+},
   "ua-pl": {
     "name": "Ukraine-Poland",
     "borders": {
@@ -116,12 +130,12 @@
     "title-4": "Data Protection",
     "title-5": "Changes to the Privacy Policy",
     "title-6": "Contact Information",
-    "text-1": "This Privacy Policy applies to your visit to our website https://resume-cv.pp.ua/. We do not collect, use, or disclose any personal information about you during your time on our site.",
+    "text-1": "This Privacy Policy applies to your visit to our website https://kordon.pp.ua/. We do not collect, use, or disclose any personal information about you during your time on our site.",
     "text-2": "We do not collect any personal information about you.",
     "text-3": "Since we do not collect personal information about you, we do not disclose it to third parties.",
     "text-4": "Although we do not collect personal information about you, we still apply security measures to protect your privacy while using our website.",
-    "text-5": "This privacy policy was last updated on 01.03.2024. We may periodically update this privacy policy, and the new edition of the Privacy Policy becomes effective upon its posting on the Internet at the address specified in this section, unless otherwise provided by the new edition of the Privacy Policy. The current version of the Privacy Policy is always available at the address https://resume-cv.pp.ua/. If there are any changes to the Privacy Policy with which the User disagrees, they must cease using the Site. The continued use of the Site constitutes acceptance and acknowledgment by the User of the respective edition of the Privacy Policy.",
-    "text-6": "If you have any questions or concerns regarding this Policy, please contact us at https://resume-cv.pp.ua/. This Privacy Policy is developed in accordance with the requirements of Ukrainian legislation on the protection of personal data and other relevant regulatory legal acts.",
+    "text-5": "This privacy policy was last updated on 01.08.2025. We may periodically update this privacy policy, and the new edition of the Privacy Policy becomes effective upon its posting on the Internet at the address specified in this section, unless otherwise provided by the new edition of the Privacy Policy. The current version of the Privacy Policy is always available at the address https://kordon.pp.ua/. If there are any changes to the Privacy Policy with which the User disagrees, they must cease using the Site. The continued use of the Site constitutes acceptance and acknowledgment by the User of the respective edition of the Privacy Policy.",
+    "text-6": "If you have any questions or concerns regarding this Policy, please contact us at https://kordon.pp.ua/. This Privacy Policy is developed in accordance with the requirements of Ukrainian legislation on the protection of personal data and other relevant regulatory legal acts.",
     "button": "CONFIRM"
   },
   "loading": "Loading...",
@@ -132,5 +146,44 @@
     "all": "All borders",
     "time": "Current information as of",
     "timeInfo": "Current information for"
-  }
+  },
+  "tracker": {
+    "warning": "Attention !!! ",
+    "warning-1": " The application is under development",
+    "title": "Border crossing tracking",
+    "direction": "Direction:",
+    "current": "Coordinates:",
+    "accuracy": "Accuracy:",
+    "time": "Crossing time:",
+    "hours": "h",
+    "minutes": "min"
+  },"message": {
+  "error": "Queue submission failed",
+  "ok": "✅ Successfully submitted!",
+  "err": "Submission error"
+},
+"status": {
+  "waiting": "Waiting for GPS coordinates…",
+  "received": "Coordinates received",
+  "error": "Geolocation is disabled or unavailable",
+  "not_supported": "Geolocation is not supported"
+},
+ "modals": {
+      "select": "Select direction of movement",
+      "confirm": "✅ Confirm",
+      "cross": "You are leaving the international border crossing",
+      "time": "Border crossing time: ",
+      "road": "Have a safe journey!",
+      "choose": "— Select —",
+      "geo": "Geolocation is disabled",
+      "on": "Please enable geolocation in your device or browser settings to continue.",
+      "warning": "Attention!",
+      "border": "You are approaching an international border crossing",
+      "type": "Transport type: ",
+      "queue": "Queue length:",
+      "car": "Car",
+      "bus": "Bus",
+      "tir": "TIR",
+      "pedestrian": "Pedestrian"
+    }
 }

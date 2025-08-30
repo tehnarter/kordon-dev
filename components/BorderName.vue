@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue"
+import { ref, watch, computed, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
+
 const props = defineProps<{
   border: {
     key: string
@@ -9,7 +10,7 @@ const props = defineProps<{
   }
 }>()
 
-const selectedSort = ref<number | string>(1)
+const selectedSort = ref<number | string>(1) // стартуємо з 1h
 
 const queueData = ref({
   buses: "-",
@@ -34,35 +35,45 @@ watch(
       return
     }
     await fetchQueueData(newKey, Number(hours))
-  },
-  { immediate: true }
+  }
 )
+
+onMounted(() => {
+  // при кожному переході на компонент викликаємо запит на 1 годину
+  selectedSort.value = 1
+  fetchQueueData(props.border.key, 1)
+})
 
 function getTrafficClass(value: string | number) {
   if (value === "-") return "status-gray"
   const numeric = Number(value)
-  if (numeric <= 20) return "status-green"
-  if (numeric <= 50) return "status-yellow"
+  if (numeric <= 10) return "status-green"
+  if (numeric <= 30) return "status-yellow"
+  return "status-red"
+}
+
+function getBusTrafficClass(value: string | number) {
+  if (value === "-") return "status-gray"
+  const numeric = Number(value)
+  if (numeric <= 2) return "status-green"
+  if (numeric <= 5) return "status-yellow"
   return "status-red"
 }
 
 function setUnavailable() {
-  const unavailable = {
-    buses: "-",
-    cars: "-",
-    tir: "-",
-    foot: "-",
-  }
+  const unavailable = { buses: "-", cars: "-", tir: "-", foot: "-" }
   queueData.value = unavailable
   waitTimeData.value = unavailable
 }
 
+const api_key = useRuntimeConfig().public.apiKey
+const api_url = useRuntimeConfig().public.apiBase
 async function fetchQueueData(borderKey: string, hours: number) {
   try {
     const { queues, times } = await $fetch(
-      `http://192.168.0.107/api/get-border-data.php?name=${encodeURIComponent(
+      `${api_url}/api/get-border-data.php?name=${encodeURIComponent(
         borderKey
-      )}&hours=${hours}`
+      )}&hours=${hours}&api_key=${api_key}`
     )
 
     queueData.value = {
@@ -79,7 +90,7 @@ async function fetchQueueData(borderKey: string, hours: number) {
       foot: times.pedestrian ?? "-",
     }
 
-    errorMessage.value = "" // все ок
+    errorMessage.value = ""
   } catch (err) {
     console.error("Помилка отримання даних:", err)
     setUnavailable()
@@ -146,6 +157,20 @@ const timeInfo = computed(() => {
     return `${t("button-clock.timeInfo")}\n${year}-${month}-${day} ${hours}:${minutes}`
   }
 })
+function formatWaitTime(value: string | number) {
+  if (value === "-" || value === null) return "-"
+
+  const minutes = Number(value)
+  if (isNaN(minutes)) return "-"
+
+  if (minutes <= 59) {
+    return `${minutes} хв`
+  }
+
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return mins > 0 ? `${hours} ${t("tracker.hours")} ${mins} ${t("tracker.minutes")}` : `${hours} год`
+}
 </script>
 <template>
   <div class="border-queue">
@@ -211,6 +236,7 @@ const timeInfo = computed(() => {
         xmlns="http://www.w3.org/2000/svg"
         width="25"
         height="25"
+
         :class="['bi bi-car-front-fill', getTrafficClass(queueData.cars)]"
         viewBox="0 0 16 16"
       >
@@ -222,8 +248,8 @@ const timeInfo = computed(() => {
         >{{ queueData.cars }}
       </span>
       <span :class="{ 'gray-text': waitTimeData.cars === '-' }">
-        {{ waitTimeData.cars === "-" ? "-" : waitTimeData.cars + " хв" }}</span
-      >
+  {{ formatWaitTime(waitTimeData.cars) }}
+</span>
     </div>
 
     <div class="queue-row">
@@ -231,21 +257,19 @@ const timeInfo = computed(() => {
         xmlns="http://www.w3.org/2000/svg"
         width="25"
         height="25"
-        :class="['bi bi-bus-front-fill', getTrafficClass(queueData.buses)]"
+        :class="['bi bi-bus-front-fill', getBusTrafficClass(queueData.buses)]"
         viewBox="0 0 16 16"
       >
         <path
           d="M16 7a1 1 0 0 1-1 1v3.5c0 .818-.393 1.544-1 2v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5V14H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a2.5 2.5 0 0 1-1-2V8a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1V2.64C1 1.452 1.845.408 3.064.268A44 44 0 0 1 8 0c2.1 0 3.792.136 4.936.268C14.155.408 15 1.452 15 2.64V4a1 1 0 0 1 1 1zM3.552 3.22A43 43 0 0 1 8 3c1.837 0 3.353.107 4.448.22a.5.5 0 0 0 .104-.994A44 44 0 0 0 8 2c-1.876 0-3.426.109-4.552.226a.5.5 0 1 0 .104.994M8 4c-1.876 0-3.426.109-4.552.226A.5.5 0 0 0 3 4.723v3.554a.5.5 0 0 0 .448.497C4.574 8.891 6.124 9 8 9s3.426-.109 4.552-.226A.5.5 0 0 0 13 8.277V4.723a.5.5 0 0 0-.448-.497A44 44 0 0 0 8 4m-3 7a1 1 0 1 0-2 0 1 1 0 0 0 2 0m8 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m-7 0a1 1 0 0 0 1 1h2a1 1 0 1 0 0-2H7a1 1 0 0 0-1 1"
         />
       </svg>
-      <span :class="getTrafficClass(queueData.buses)"
+      <span :class="getBusTrafficClass(queueData.buses)"
         >{{ queueData.buses }}
       </span>
       <span :class="{ 'gray-text': waitTimeData.buses === '-' }">
-        {{
-          waitTimeData.buses === "-" ? "-" : waitTimeData.buses + " хв"
-        }}</span
-      >
+  {{ formatWaitTime(waitTimeData.buses) }}
+</span>
     </div>
     <!-- Аналогічно додай TIR і пішоходи зі стилями -->
     <div class="queue-row">
@@ -261,9 +285,9 @@ const timeInfo = computed(() => {
         />
       </svg>
       <span :class="getTrafficClass(queueData.tir)">{{ queueData.tir }} </span>
-      <span :class="{ 'gray-text': waitTimeData.tir === '-' }">
-        {{ waitTimeData.tir === "-" ? "-" : waitTimeData.tir + " хв" }}</span
-      >
+     <span :class="{ 'gray-text': waitTimeData.tir === '-' }">
+  {{ formatWaitTime(waitTimeData.tir) }}
+</span>
     </div>
     <div class="queue-row">
       <svg
@@ -284,8 +308,8 @@ const timeInfo = computed(() => {
         >{{ queueData.foot }}
       </span>
       <span :class="{ 'gray-text': waitTimeData.foot === '-' }">
-        {{ waitTimeData.foot === "-" ? "-" : waitTimeData.foot + " хв" }}</span
-      >
+  {{ formatWaitTime(waitTimeData.foot) }}
+</span>
     </div>
   </div>
 </template>

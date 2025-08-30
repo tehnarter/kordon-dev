@@ -12,13 +12,17 @@ export async function registerSession() {
       : (localStorage.getItem("auth_id") ?? "custom_" + name)
 
   const session_token = crypto.randomUUID()
-
+const api_key = useRuntimeConfig().public.apiKey
+    const api_url = useRuntimeConfig().public.apiBase
   try {
-    const res = await fetch("http://border/api/register-session.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ session_token, name, auth_provider, auth_id }),
-    })
+    const res = await fetch(
+      `${api_url}/api/register-session.php?api_key=${api_key}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_token, name, auth_provider, auth_id }),
+      }
+    )
 
     const result = await res.json()
     if (!res.ok) {

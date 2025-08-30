@@ -41,14 +41,24 @@ function normalizeValue(value: any): number | string {
   return value == null ? "-" : value
 }
 
-function getTrafficClass(value: number | string): string {
-  if (value === "-" || value === "Дані відсутні") return "status-gray"
-  const num = Number(value)
-  if (isNaN(num)) return "status-gray"
-  if (num <= 20) return "status-green"
-  if (num <= 50) return "status-yellow"
-  return "status-red"
+function getStatusClass(type: string, value: string | number): string {
+  if (type === "buses") {
+    if (value === "-" || value === "Дані відсутні") return "status-gray"
+    const num = Number(value)
+    if (num <= 2) return "status-green"
+    if (num <= 5) return "status-yellow"
+    return "status-red"
+  } else {
+    // для інших транспортів залишаємо старі пороги
+    if (value === "-" || value === "Дані відсутні") return "status-gray"
+    const num = Number(value)
+    if (isNaN(num)) return "status-gray"
+    if (num <= 10) return "status-green"
+    if (num <= 30) return "status-yellow"
+    return "status-red"
+  }
 }
+
 
 function getBorderLabel(borderName: string): string {
   const directionKeyNormalized = selectedDirection.value.toLowerCase()
@@ -61,14 +71,15 @@ function getBorderLabel(borderName: string): string {
   )
   return border?.label ?? borderName
 }
-
+const api_key = useRuntimeConfig().public.apiKey
+const api_url = useRuntimeConfig().public.apiBase
 async function fetchBorders(directionId: string): Promise<void> {
   loading.value = true
   error.value = ""
 
   try {
     const response = await $fetch(
-      `http://192.168.0.107/api/get-borders.php?direction=${encodeURIComponent(directionId)}`
+      `${api_url}/api/get-borders.php?direction=${encodeURIComponent(directionId)}&api_key=${api_key}`
     )
 
     let data: any[] = []
@@ -122,18 +133,22 @@ onMounted(() => {
   fetchBorders(selectedDirection.value)
 })
 
+const initial = ref(true) // прапорець першого рендера
+
 watch(selectedDirection, (newVal) => {
+  if (initial.value) {
+    initial.value = false
+    return // ігноруємо перший тригер
+  }
+
   if (!newVal) {
     borders.value = []
     return
   }
 
-  // Зберігаємо в cookie тільки якщо напрямок обраний
   useCookie<string>("user_direction").value = newVal
-
   fetchBorders(newVal)
 })
-
 const transportTypes = ["cars", "buses", "tir", "foot"] as const
 
 function getIcon(type: (typeof transportTypes)[number], statusClass: string) {
@@ -154,6 +169,21 @@ function getIcon(type: (typeof transportTypes)[number], statusClass: string) {
   }
   return icons[type] ?? ""
 }
+function formatWaitTime(value: string | number) {
+  if (value === "-" || value === null) return "-"
+
+  const minutes = Number(value)
+  if (isNaN(minutes)) return "-"
+
+  if (minutes < 60) {
+    return `${minutes} хв`
+  }
+
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return mins > 0 ? `${hours} ${t("tracker.hours")} ${mins} ${t("tracker.minutes")}` : `${hours} год`
+}
+
 </script>
 
 <template>
@@ -202,23 +232,17 @@ function getIcon(type: (typeof transportTypes)[number], statusClass: string) {
               v-for="type in transportTypes"
               :key="type"
             >
-              <div
-                class="icon"
-                v-html="getIcon(type, getTrafficClass(border.queues[type]))"
-              ></div>
+                   <div class="icon" v-html="getIcon(type, getStatusClass(type, border.queues[type]))"></div>
+                <div class="traffic-values">
+              <span :class="getStatusClass(type, border.queues[type])">
+              {{ border.queues[type] }}
+         </span>
+           <small :class="{ 'status-gray': border.times[type] === '-' }">
+  {{ formatWaitTime(border.times[type]) }}
+</small>
+                   </div>
 
-              <div class="traffic-values">
-                <span :class="getTrafficClass(border.queues[type])">
-                  {{ border.queues[type] }}
-                </span>
-                <small :class="{ 'status-gray': border.times[type] === '-' }">
-                  {{
-                    border.times[type] === "-"
-                      ? "-"
-                      : border.times[type] + " хв"
-                  }}
-                </small>
-              </div>
+
             </div>
           </div>
         </div>
@@ -228,7 +252,7 @@ function getIcon(type: (typeof transportTypes)[number], statusClass: string) {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 1s ease;
@@ -362,16 +386,21 @@ function getIcon(type: (typeof transportTypes)[number], statusClass: string) {
 // Статуси
 .status-gray {
   color: #9e9e9e;
+
 }
 .status-green {
   color: #4caf50;
+
 }
 .status-yellow {
   color: #f8b201;
+
 }
 .status-red {
   color: #f44336;
+
 }
+
 
 // Завантаження/Помилка
 .loading,

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 defineProps<{
   borderLabel: string
 }>()
@@ -10,6 +12,14 @@ const emit = defineEmits<{
 const closeModal = () => {
   emit("close")
 }
+onMounted(() => {
+
+    //  звук відкриття модального вікна
+  const audio = new Audio("/sounds/notify-2.mp3")
+  audio.play().catch(() => {
+    console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
+  })
+})
 </script>
 
 <template>
@@ -18,11 +28,11 @@ const closeModal = () => {
       <div class="exit-modal">
         <button class="close-button" @click="closeModal">×</button>
 
-        <h3>Ви покидаєте міжнародний пункт пропуску</h3>
+        <h3>{{ $t("modals.cross") }}</h3>
         <p class="modal-subtitle">
           <strong>{{ borderLabel }}</strong>
         </p>
-        <p>Щасливої дороги!</p>
+        <p>{{ $t("modals.road") }}</p>
       </div>
     </div>
   </Teleport>
@@ -35,7 +45,7 @@ const closeModal = () => {
   backdrop-filter: blur(6px);
   display: grid;
   place-items: center;
-  z-index: 9999;
+  z-index: 9997;
 }
 
 .exit-modal {

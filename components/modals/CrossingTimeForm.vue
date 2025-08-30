@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useSessionToken } from "@/composables/useSessionToken"
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 
 const { time, borderLabel } = defineProps<{
   time?: number | null
@@ -14,6 +16,20 @@ const emit = defineEmits<{
 const { sessionToken, initToken } = useSessionToken()
 
 const reportedAt = ref("")
+
+// 🔹 Форматування часу
+const formattedTime = computed(() => {
+  if (!time || time <= 0) return " "
+
+
+  const hours = Math.floor(time / 60)
+  const minutes = time % 60
+
+  if (hours > 0) {
+    return minutes > 0 ? `${hours} ${t("tracker.hours")} ${minutes} ${t("tracker.minutes")}` : `${hours} ${t("tracker.hours")}`
+  }
+  return `${minutes} ${t("tracker.minutes")}`
+})
 
 function setReportedAtNowUTC() {
   const now = new Date()
@@ -42,15 +58,19 @@ const submitForm = async () => {
   try {
     const body = {
       session_token: sessionToken.value,
-      crossing_time_minutes: Math.round(time / 60),
+      crossing_time_minutes: time,
       reported_at: reportedAt.value,
     }
-
-    const res = await fetch("http://192.168.0.107/api/add-crossing-time.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
+    const api_key = useRuntimeConfig().public.apiKey
+    const api_url = useRuntimeConfig().public.apiBase
+    const res = await fetch(
+      `${api_url}/api/add-crossing-time.php?api_key=${api_key}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    )
 
     const result = await res.json()
 
@@ -68,6 +88,17 @@ const submitForm = async () => {
 }
 
 onMounted(() => {
+
+
+
+    //  звук відкриття модального вікна
+  const audio = new Audio("/sounds/notify-1.mp3")
+  audio.play().catch(() => {
+    console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
+  })
+})
+
+onMounted(() => {
   initToken()
   setReportedAtNowUTC()
   submitForm()
@@ -80,16 +111,16 @@ onMounted(() => {
       <div class="modal-form">
         <button class="close-button" @click="emit('close')">×</button>
 
-        <h3>Ви покидаєте міжнародний пункт пропуску</h3>
+        <h3> {{ $t("modals.cross") }}</h3>
 
         <p class="modal-subtitle">
           <strong>{{ borderLabel }}</strong>
         </p>
         <p>
-          Час проходження кордону: <strong>{{ time }} сек</strong>
+          {{ $t("modals.time") }}<strong>{{ formattedTime }}</strong>
         </p>
 
-        <p>Щасливої дороги!</p>
+        <p>{{ $t("modals.road") }}</p>
       </div>
     </div>
   </Teleport>
@@ -103,7 +134,7 @@ onMounted(() => {
   backdrop-filter: blur(6px);
   display: grid;
   place-items: center;
-  z-index: 9999;
+  z-index: 9997;
 }
 
 .modal-form {

@@ -1,4 +1,18 @@
 {
+  "seo": {
+  "title": "KORDON – Kolejki na granicy i wiadomości z pogranicza Ukrainy",
+  "description": "Aktualne informacje o kolejkach na granicy, przejściach granicznych, zasadach przekraczania oraz wiadomościach z pogranicza Ukrainy. Dane aktualizowane w czasie rzeczywistym.",
+  "keywords": "granica Ukraina, kolejki na granicy, wiadomości graniczne, przejścia graniczne, przekraczanie granicy, zasady wyjazdu"
+},
+"og": {
+  "title": "KORDON – Kolejki i wiadomości z granicy Ukrainy",
+  "description": "Czas rzeczywisty: kolejki na przejściach granicznych, zasady przekraczania i najważniejsze wiadomości z granicy Ukrainy."
+},
+"twitter": {
+  "card": "summary_large_image",
+  "title": "KORDON – Kolejki i wiadomości z granicy Ukrainy",
+  "description": "Bieżące dane o kolejkach, przejściach granicznych i wiadomościach z pogranicza Ukrainy."
+},
   "ua-pl": {
     "name": "Ukraina-Polska",
     "borders": {
@@ -116,12 +130,12 @@
     "title-4": "Ochrona danych",
     "title-5": "Zmiany w Polityce prywatności",
     "title-6": "Dane kontaktowe",
-    "text-1": "Niniejsza Polityka prywatności dotyczy wizyty na naszej stronie internetowej https://resume-cv.pp.ua/. Nie zbieramy, nie używamy ani nie ujawniamy żadnych danych osobowych o Tobie podczas Twojej obecności na naszej stronie.",
+    "text-1": "Niniejsza Polityka prywatności dotyczy wizyty na naszej stronie internetowej https://kordon.pp.ua/. Nie zbieramy, nie używamy ani nie ujawniamy żadnych danych osobowych o Tobie podczas Twojej obecności na naszej stronie.",
     "text-2": "Nie zbieramy żadnych danych osobowych o Tobie.",
     "text-3": "Ponieważ nie zbieramy danych osobowych o Tobie, nie ujawniamy ich osobom trzecim.",
     "text-4": "Choć nie zbieramy danych osobowych o Tobie, wciąż stosujemy środki bezpieczeństwa w celu ochrony Twojej prywatności podczas korzystania z naszej witryny.",
-    "text-5": "Niniejsza polityka prywatności została ostatnio zaktualizowana 01.03.2024 r. Możemy okresowo aktualizować tę politykę prywatności, a nowa edycja Polityki prywatności staje się skuteczna po jej opublikowaniu w Internecie pod adresem określonym w tej sekcji, chyba że nowa edycja Polityki prywatności stanowi inaczej. Obecna wersja Polityki prywatności jest zawsze dostępna pod adresem https://resume-cv.pp.ua/. Jeśli istnieją jakiekolwiek zmiany w Polityce prywatności, z którymi Użytkownik się nie zgadza, musi zaprzestać korzystania ze Strony. Kontynuowane korzystanie ze Strony stanowi akceptację i uznanie przez Użytkownika odpowiedniej edycji Polityki prywatności.",
-    "text-6": "Jeśli masz jakiekolwiek pytania lub wątpliwości dotyczące tej Polityki, skontaktuj się z nami pod adresem https://resume-cv.pp.ua/. Niniejsza Polityka prywatności została opracowana zgodnie z wymogami ukraińskiego prawa dotyczącego ochrony danych osobowych oraz innymi odpowiednimi aktami prawnymi regulującymi.",
+    "text-5": "Niniejsza polityka prywatności została ostatnio zaktualizowana 01.08.2025 r. Możemy okresowo aktualizować tę politykę prywatności, a nowa edycja Polityki prywatności staje się skuteczna po jej opublikowaniu w Internecie pod adresem określonym w tej sekcji, chyba że nowa edycja Polityki prywatności stanowi inaczej. Obecna wersja Polityki prywatności jest zawsze dostępna pod adresem https://kordon.pp.ua/. Jeśli istnieją jakiekolwiek zmiany w Polityce prywatności, z którymi Użytkownik się nie zgadza, musi zaprzestać korzystania ze Strony. Kontynuowane korzystanie ze Strony stanowi akceptację i uznanie przez Użytkownika odpowiedniej edycji Polityki prywatności.",
+    "text-6": "Jeśli masz jakiekolwiek pytania lub wątpliwości dotyczące tej Polityki, skontaktuj się z nami pod adresem https://kordon.pp.ua/. Niniejsza Polityka prywatności została opracowana zgodnie z wymogami ukraińskiego prawa dotyczącego ochrony danych osobowych oraz innymi odpowiednimi aktami prawnymi regulującymi.",
     "button": "POTWIERDZAM"
   },
   "loading": "Ładowanie...",
@@ -132,5 +146,46 @@
     "all": "Wszystkie granice",
     "time": "Aktualna informacja na",
     "timeInfo": "Aktualna informacja z"
-  }
+  },
+  "tracker": {
+    "warning": "Uwaga !!! ",
+    "warning-1": " Aplikacja jest w trakcie rozwoju",
+    "title": "Śledzenie przejścia granicznego",
+    "direction": "Kierunek:",
+    "current": "Współrzędne:",
+    "accuracy": "Dokładność:",
+    "time": "Czas przejścia:",
+    "hours": "g",
+     "minutes": "min"
+  },
+  "message": {
+  "error": "Błąd wysyłania kolejki",
+  "ok": "✅ Wysłano pomyślnie!",
+  "err": "Błąd wysyłki"
+},
+"status": {
+  "waiting": "Oczekiwanie na współrzędne GPS…",
+  "received": "Współrzędne otrzymane",
+  "error": "Geolokalizacja wyłączona lub niedostępna",
+  "not_supported": "Geolokalizacja nie jest obsługiwana"
+},
+ "modals": {
+      "select": "Wybierz kierunek ruchu",
+     "confirm": "✅ Potwierdź",
+      "cross": "Opuszczasz międzynarodowe przejście graniczne",
+      "time": "Czas przekroczenia granicy: ",
+      "road": "Szerokiej drogi!",
+      "choose": "— Wybierz —",
+      "geo": "Geolokalizacja jest wyłączona",
+      "on": "Włącz geolokalizację w ustawieniach urządzenia lub przeglądarki, aby kontynuować.",
+      "warning": "Uwaga!",
+      "border": "Zbliżasz się do międzynarodowego przejścia granicznego",
+      "type": "Typ transportu: ",
+      "queue": "Liczba w kolejce:",
+      "car": "Samochód",
+      "bus": "Autobus",
+      "tir": "TIR",
+      "pedestrian": "Pieszy"
+    }
+
 }

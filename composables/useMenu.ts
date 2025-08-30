@@ -12,7 +12,7 @@ export function useMenu() {
       borders: [
         {
           key: "krakovets",
-          coords: { lat: 49.291701, lon: 25.694697 },
+          coords: { lat: 49.290496, lon: 25.695826 },
           labelfun: () => t("ua-pl.borders['krakovets'].label"),
           label: t("ua-pl.borders.krakovets.label"),
           full: t("ua-pl.borders.krakovets.full"),
@@ -32,6 +32,7 @@ export function useMenu() {
         },
         {
           key: "ustyluh",
+
           labelfun: () => t("ua-pl.borders['ustyluh'].label"),
           label: t("ua-pl.borders.ustyluh.label"),
           full: t("ua-pl.borders.ustyluh.full"),
@@ -62,7 +63,7 @@ export function useMenu() {
       borders: [
         {
           key: "korchova",
-          coords: { lat: 49.29547, lon: 25.691887 },
+          coords: { lat: 49.295599, lon: 25.692518 },
           labelfun: () => t("pl-ua.borders['korchova'].label"),
           label: t("pl-ua.borders.korchova.label"),
           full: t("pl-ua.borders.korchova.full"),
@@ -76,6 +77,7 @@ export function useMenu() {
         },
         {
           key: "medyka",
+
           labelfun: () => t("pl-ua.borders['medyka'].label"),
           label: t("pl-ua.borders.medyka.label"),
           full: t("pl-ua.borders.medyka.full"),

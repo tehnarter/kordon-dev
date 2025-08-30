@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import { useMenu } from "~/composables/useMenu"
-
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 import { useCookie } from "#app"
 
 const emit = defineEmits<{
@@ -25,7 +26,7 @@ const directionOptions = computed(() =>
 
 const selectedLabel = computed(() => {
   const found = directionOptions.value.find((d) => d.key === selected.value)
-  return found ? found.name : "— Оберіть —"
+  return found ? found.name : t("modals.choose")
 })
 
 const toggleDropdown = () => {
@@ -50,7 +51,7 @@ const confirm = () => {
     <Teleport to="body">
       <div class="modal-overlay">
         <div class="modal">
-          <h3>Оберіть напрям руху</h3>
+          <h3>{{ $t("modals.select") }}</h3>
 
           <div class="custom-select" @click="toggleDropdown">
             <div class="custom-select__selected">
@@ -68,7 +69,7 @@ const confirm = () => {
             </ul>
           </div>
 
-          <button :disabled="!selected" @click="confirm">✅ Підтвердити</button>
+          <button :disabled="!selected" @click="confirm">{{ $t("modals.confirm") }}</button>
         </div>
       </div>
     </Teleport>
@@ -84,7 +85,7 @@ const confirm = () => {
   backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
-  z-index: 9999;
+  z-index: 9998;
 }
 
 .modal {

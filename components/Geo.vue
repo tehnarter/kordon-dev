@@ -1,29 +1,33 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
+import TimeDate from "@/components/TimeDate.vue" // або свій шлях до компонента часу
 
 const weather = ref("Завантаження погоди...")
 const currentRate = ref("Завантаження курсів...")
 const rates = ref<string[]>([])
 let idx = 0
 
-// Нові реактивні для часу/погоди
+const defaultCoords = { lat: 50.4333, lon: 30.5167 }
+
 const wtItems = [{ type: "weather" }, { type: "time" }]
 const wtIndex = ref(0)
 
-const defaultCoords = { lat: 50.4333, lon: 30.5167 }
-
-// Функція для чергової появи часу чи погоди
 function rotateWT() {
   wtIndex.value = (wtIndex.value + 1) % wtItems.length
 }
 
-// Отримання погоди (без змін)
+function rotateRate() {
+  if (rates.value.length) {
+    idx = (idx + 1) % rates.value.length
+    currentRate.value = rates.value[idx]
+  }
+}
+
 async function fetchWeather(lat: number, lon: number) {
   try {
     const key = "759916e1b82682818d6bab4555fc2340"
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}` +
-        `&appid=${key}&units=metric&lang=ua`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric&lang=ua`
     )
     if (!res.ok) throw new Error()
     const d = await res.json()
@@ -32,31 +36,35 @@ async function fetchWeather(lat: number, lon: number) {
     weather.value = "Погода недоступна"
   }
 }
-
-// Отримання курсів (без змін)
+const api_key = useRuntimeConfig().public.apiKey
+const api_url = useRuntimeConfig().public.apiBase
 async function fetchRates() {
-  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "")
-  const codes = ["EUR", "USD", "PLN"]
-  const promises = codes.map((cur) =>
-    fetch(`/api/exchangeRate?currencyCode=${cur}&dateFormat=${date}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((js) => (js?.[0]?.rate ? `${cur} ${js[0].rate}` : `${cur} —`))
-      .catch(() => `${cur} —`)
-  )
-  rates.value = await Promise.all(promises)
-  idx = 0
-  currentRate.value = rates.value[idx]
-}
+  try {
+    const res = await fetch(
+      `${api_url}/api/get-rates-proxy.php?api_key=${api_key}`
+    )
+    if (!res.ok) throw new Error("Network error")
+    const data = await res.json()
 
-// Змінює курс
-function rotateRate() {
-  if (rates.value.length) {
-    idx = (idx + 1) % rates.value.length
-    currentRate.value = rates.value[idx]
+    // data: { pln: [...], usd: [...], eur: [...] }
+
+    const codes = ["PLN", "USD", "EUR"]
+    rates.value = codes.map((code) => {
+      const curCode = code.toLowerCase()
+      const rateObj = data[curCode]?.[0]
+      if (rateObj?.rate) {
+        return `${code} ${rateObj.rate}`
+      }
+      return `${code} —`
+    })
+
+    currentRate.value = rates.value[0]
+  } catch {
+    rates.value = ["PLN —", "USD —", "EUR —"]
+    currentRate.value = rates.value[0]
   }
 }
 
-// Отримання координат
 function getCoords(): Promise<{ lat: number; lon: number }> {
   return new Promise((resolve) => {
     if (!navigator.geolocation) return resolve(defaultCoords)
@@ -73,22 +81,18 @@ onMounted(async () => {
   await fetchWeather(lat, lon)
   await fetchRates()
 
-  // Ротація часу/погоди
   setInterval(rotateWT, 7500)
-  // Оновлення щогодини
+  setInterval(rotateRate, 15000)
   setInterval(async () => {
-    const c = await getCoords()
-    fetchWeather(c.lat, c.lon)
+    const coords = await getCoords()
+    fetchWeather(coords.lat, coords.lon)
     fetchRates()
   }, 3600000)
-  // Ротація курсів
-  setInterval(rotateRate, 15000)
 })
 </script>
 
 <template>
   <div class="geo">
-    <!-- Анімація погоди/часу -->
     <div class="rotate-container">
       <transition name="fade" mode="out-in">
         <div :key="wtItems[wtIndex].type" class="rotate-item">
@@ -102,7 +106,6 @@ onMounted(async () => {
       </transition>
     </div>
 
-    <!-- Анімація курсів -->
     <transition name="fade" mode="out-in">
       <div class="rate" :key="currentRate">{{ currentRate }}</div>
     </transition>
@@ -140,10 +143,9 @@ onMounted(async () => {
   line-height: 1.25;
   text-align: center;
   color: #141fec;
-  min-height: 1.25em; // Щоб не скакало при появі/зникненні
+  min-height: 1.25em;
 }
 
-/* Однакова анімація для обох блоків */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 5s ease;

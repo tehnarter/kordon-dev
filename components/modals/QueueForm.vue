@@ -2,6 +2,8 @@
 import { ref, computed, onMounted, onUnmounted } from "vue"
 import { useSessionToken } from "@/composables/useSessionToken"
 import { registerSession } from "@/utils/registerSession"
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 
 const { borderKey, borderLabel } = defineProps<{
   borderKey: string
@@ -21,10 +23,10 @@ const dropdownOpen = ref(false)
 const { setToken } = useSessionToken()
 
 const vehicleOptions = [
-  { key: "car", label: "Легковий" },
-  { key: "bus", label: "Автобус" },
-  { key: "tir", label: "TIR" },
-  { key: "pedestrian", label: "Пішохід" },
+  { key: "car", label: t("modals.car") },
+  { key: "bus", label: t("modals.bus") },
+  { key: "tir", label: t("modals.tir") },
+  { key: "pedestrian", label: t("modals.pedestrian")},
 ]
 
 const selectedLabel = computed(
@@ -49,6 +51,11 @@ const handleClickOutside = (e: MouseEvent) => {
 
 onMounted(() => {
   document.addEventListener("click", handleClickOutside)
+    //  звук відкриття модального вікна
+  const audio = new Audio("/sounds/notify.mp3")
+  audio.play().catch(() => {
+    console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
+  })
 })
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside)
@@ -88,8 +95,9 @@ const submitQueue = async () => {
       queue_length: queue_length.value,
       report_time: getCurrentUTCTimeString(),
     }
-
-    const res = await fetch("http://192.168.0.107/api/add-queue.php", {
+    const api_key = useRuntimeConfig().public.apiKey
+    const api_url = useRuntimeConfig().public.apiBase
+    const res = await fetch(`${api_url}/api/add-queue.php?api_key=${api_key}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -98,11 +106,11 @@ const submitQueue = async () => {
     const result = await res.json()
 
     if (!res.ok) {
-      message.value = result.error || "Помилка відправки черги"
+      message.value = result.error || `${t("message.error")}`
       messageColor.value = "red"
       setToken(null)
     } else {
-      message.value = "✅ Успішно відправлено!"
+      message.value = `${t("message.ok")}`
       messageColor.value = "green"
       queue_length.value = 0
       vehicle_type.value = "car"
@@ -110,7 +118,7 @@ const submitQueue = async () => {
     }
   } catch (err) {
     console.error(err)
-    message.value = "Помилка відправки"
+    message.value = `${t("message.err")}`
     messageColor.value = "red"
     setToken(null)
   }
@@ -124,16 +132,16 @@ const submitQueue = async () => {
         <button class="modal-close" @click="emit('close')">×</button>
 
         <h3 class="modal-title">
-          Увага!<br />
-          Ви наближаєтесь до міжнародного пункту пропуску
-        </h3>
+          {{ $t("modals.warning") }}<br />
+          {{ $t("modals.border") }}
+           </h3>
         <p class="modal-subtitle">
           <strong>{{ borderLabel }}</strong>
         </p>
 
         <form @submit.prevent="submitQueue" class="queue-form">
           <div>
-            <label>Тип транспорту:</label>
+            <label>{{ $t("modals.type") }}</label>
             <div class="custom-select" @click="toggleDropdown">
               <div class="custom-select__selected">
                 {{ selectedLabel }}
@@ -152,7 +160,7 @@ const submitQueue = async () => {
           </div>
 
           <div>
-            <label for="queue_length">Кількість в черзі:</label>
+            <label for="queue_length">{{ $t("modals.queue") }}</label>
             <input
               id="queue_length"
               type="number"
@@ -162,7 +170,7 @@ const submitQueue = async () => {
             />
           </div>
 
-          <button type="submit">Надіслати</button>
+          <button type="submit">{{ $t("modals.confirm") }}</button>
 
           <p v-if="message" :style="{ color: messageColor }">{{ message }}</p>
         </form>
@@ -176,10 +184,11 @@ const submitQueue = async () => {
   position: fixed;
   inset: 0;
   background: rgba(255, 255, 255, 0.15);
-  z-index: 1000;
+  z-index: 9998;
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .modal {
