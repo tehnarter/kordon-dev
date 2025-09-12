@@ -28,9 +28,9 @@ export default defineNuxtRouteMiddleware((to) => {
   const isMobileOrTablet =
     isMobileUA || isIPadOS13Plus || (isTouchDevice && isTabletSize)
 
-  console.log(`UA: ${userAgent}`)
-  console.log(`Width: ${width}, Height: ${height}, Portrait: ${isPortrait}`)
-  console.log(`isMobileOrTablet: ${isMobileOrTablet}`)
+  //console.log(`UA: ${userAgent}`)
+ // console.log(`Width: ${width}, Height: ${height}, Portrait: ${isPortrait}`)
+  //console.log(`isMobileOrTablet: ${isMobileOrTablet}`)
 
   if (!isMobileOrTablet && to.path !== "/warning") {
     return navigateTo("/warning")

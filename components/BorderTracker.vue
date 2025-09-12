@@ -1,12 +1,16 @@
+// BorderTracker.vue
+
+
 <script setup lang="ts">
 import { computed } from "vue"
-import { useBorderTracker } from "~/composables/useBorderTracker"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 const {
+
   currentCoords,
   accuracy,
   statusKey,
+  startTime,
   timeElapsed,
   modal,
   direction,
@@ -22,6 +26,9 @@ const modalVal = computed(() => modal.value)
 const timeElapsedVal = computed(() => timeElapsed.value)
 const { clearToken } = useSessionToken()
 const handleCloseCrossing = () => {
+ if (modal.value?.type === "done") {
+    startTime.value = null   // очищаємо тільки після того, як користувач підтвердив
+  }
   modal.value = null
   clearToken() // Чистимо токен тільки після закриття
 }
@@ -36,45 +43,11 @@ const formattedTime = computed(() => {
     m: minutes % 60,
   }
 })
+// const openTestModal = () => {
+//   if (modal.value?.type === "done") {
+//     modal.value = null
 
-const isGeoDisabledModalVisible = ref(true)
-
-const checkGeoStatus = () => {
-  if (!navigator.geolocation) {
-    isGeoDisabledModalVisible.value = true
-    return
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      // Геолокація працює — модалка не потрібна
-      isGeoDisabledModalVisible.value = false
-
-    },
-    (err) => {
-      // Помилка — показуємо модалку
-      if (err.code === err.PERMISSION_DENIED || err.code === err.POSITION_UNAVAILABLE) {
-        isGeoDisabledModalVisible.value = true
-      }
-    }
-  )
-}
-
-
-// Перевірка при монтуванні компонента
-onMounted(() => {
-  checkGeoStatus()
-})
-
-
-
-const openTestModal = () => {
-  if (modal.value?.type === "done") {
-    modal.value = null
-  } else {
-    modal.value = { type: "done",  }
-  }
-}
+// }
 
 </script>
 
@@ -94,7 +67,6 @@ const openTestModal = () => {
     >
       <p>{{ t(`status.${statusVal}`) }}</p>
     </div>
-    <h2 class="tracker-title">{{ $t("tracker.title") }}</h2>
     <div class="tracker-info">
       <div v-if="directionVal" class="tracker-info__item">
         <span>➡️ {{ $t("tracker.direction") }}</span>
@@ -121,19 +93,14 @@ const openTestModal = () => {
           <strong>{{ formattedTime.h }} {{$t("tracker.hours")}} {{ formattedTime.m }} {{$t("tracker.minutes")}}</strong>
         </template>
       </div>
-      <!-- 🔘 Кнопка для тесту відкриття/закриття -->
-<button class="open-test-btn" @click="openTestModal">
+
+      <!--  Кнопка для тесту відкриття/закриття -->
+<!-- <button class="open-test-btn" @click="openTestModal">
     {{ modalVal?.type === 'done' ? 'Закрити модалку' : 'Відкрити модалку' }}
-  </button>
+  </button> -->
     </div>
-
-
-
  <!-- Модалка для вимкненої геолокації -->
-      <ModalsGeoDisabled
-      v-if="isGeoDisabledModalVisible"
-      @close="isGeoDisabledModalVisible = false"
- />
+      <ModalsGeoDisabled/>
  <!-- Модалка вибору напряму — тільки якщо напрям ще не вибрано -->
     <ModalsConfirmDirection
       v-if="isDirectionModalVisible"
@@ -151,7 +118,7 @@ const openTestModal = () => {
     <ModalsCrossingTimeForm
       v-if="modalVal?.type === 'done'"
       :borderLabel="modalVal.borderLabel"
-      :time="timeElapsedVal"
+      :time="modalVal.time"
       @close="handleCloseCrossing"
     />
 

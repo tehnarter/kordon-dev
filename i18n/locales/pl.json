@@ -22,7 +22,9 @@
       "ustyluh": { "label": "Ustylug", "full": "Ustylug-Zosin" },
       "yahodyn": { "label": "Jagodyn", "full": "Jagodyn-Dorohusk" },
       "hrushiv": { "label": "Hruszów", "full": "Hruszów-Budomierz" },
-      "smilnytsia": { "label": "Smilnica", "full": "Smilnica-Kroscienko" }
+      "smilnytsia": { "label": "Smilnica", "full": "Smilnica-Kroscienko" },
+      "uhryniv": { "label": "Uhryniv", "full": "Uhryniv-Dolhobyczów" },
+      "nyzhankovychi": { "label": "Nyzhankovychi", "full": "Nyzhankovychi-Malhowice" }
     }
   },
 
@@ -35,7 +37,9 @@
       "zosin": { "label": "Zosin", "full": "Zosin-Ustylug" },
       "dorohusk": { "label": "Dorohusk", "full": "Dorohusk-Jagodyn" },
       "budomierz": { "label": "Budomierz", "full": "Budomierz-Hruszów" },
-      "kroscienko": { "label": "Kroscienko", "full": "Kroscienko-Smilnica" }
+      "kroscienko": { "label": "Kroscienko", "full": "Kroscienko-Smilnica" },
+      "dolhobychuv": { "label": "Dołhobyczów", "full": "Dołhobyczów-Uhryniv" },
+      "malkhovitse": { "label": "Malhowice", "full": "Malhowice-Nyzhankovychi" }
     }
   },
 
@@ -150,7 +154,6 @@
   "tracker": {
     "warning": "Uwaga !!! ",
     "warning-1": " Aplikacja jest w trakcie rozwoju",
-    "title": "Śledzenie przejścia granicznego",
     "direction": "Kierunek:",
     "current": "Współrzędne:",
     "accuracy": "Dokładność:",

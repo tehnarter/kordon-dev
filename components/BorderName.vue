@@ -164,7 +164,7 @@ function formatWaitTime(value: string | number) {
   if (isNaN(minutes)) return "-"
 
   if (minutes <= 59) {
-    return `${minutes} хв`
+    return `${minutes} ${t("tracker.minutes")}`
   }
 
   const hours = Math.floor(minutes / 60)

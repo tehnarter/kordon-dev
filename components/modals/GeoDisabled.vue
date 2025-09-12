@@ -1,26 +1,17 @@
-
 <script setup lang="ts">
-import { defineEmits } from 'vue'
-const emit = defineEmits(['close'])
-const closeModalGeo = () => {
-  emit('close') // повідомляємо батька про закриття
-}
+const { showGeoModal, closeGeoModal } = useGeoModal()
 </script>
-
 <template>
-<Teleport to="body">
+  <Teleport to="body" v-if="showGeoModal">
     <div class="modal-overlay">
       <div class="geo-modal">
-        <button class="close-button" @click="closeModalGeo">×</button>
-     <h3>{{ $t("modals.geo") }}</h3>
-      <p>{{ $t("modals.on") }}</p>
-        </div>
+        <button class="close-button" @click="closeGeoModal">×</button>
+        <h3>{{ $t("modals.geo") }}</h3>
+        <p>{{ $t("modals.on") }}</p>
+      </div>
     </div>
   </Teleport>
-
-
 </template>
-
 
 <style scoped lang="scss">
 .modal-overlay {

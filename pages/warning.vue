@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "custom",
+
 })
 
 useSeoMeta({
@@ -12,10 +13,10 @@ useSeoMeta({
     "Будь ласка, відкрийте цей сайт на мобільному пристрої для доступу до контенту.",
 })
 </script>
-
 <template>
   <div class="warning-page">
-    <div class="warning-content">
+    <div class="warning-page">
+       <div class="warning-content">
       <h1 class="warning-title">
         Сайт доступний тільки на мобільних пристроях
       </h1>
@@ -24,10 +25,11 @@ useSeoMeta({
         контенту.
       </p>
     </div>
-  </div>
+    </div>
+    </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .warning-page {
   display: flex;
   align-items: center;

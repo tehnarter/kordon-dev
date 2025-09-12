@@ -55,6 +55,18 @@ export function useMenu() {
           label: t("ua-pl.borders.smilnytsia.label"),
           full: t("ua-pl.borders.smilnytsia.full"),
         },
+        {
+          key: "uhryniv",
+          labelfun: () => t("ua-pl.borders['uhryniv'].label"),
+          label: t("ua-pl.borders.uhryniv.label"),
+          full: t("ua-pl.borders.uhryniv.full"),
+        },
+        {
+          key: "nyzhankovychi",
+          labelfun: () => t("ua-pl.borders['nyzhankovychi'].label"),
+          label: t("ua-pl.borders.nyzhankovychi.label"),
+          full: t("ua-pl.borders.nyzhankovychi.full"),
+        },
       ],
     },
     {
@@ -105,6 +117,18 @@ export function useMenu() {
           labelfun: () => t("pl-ua.borders['kroscienko'].label"),
           label: t("pl-ua.borders.kroscienko.label"),
           full: t("pl-ua.borders.kroscienko.full"),
+        },
+         {
+          key: "dolhobychuv",
+          labelfun: () => t("pl-ua.borders['dolhobychuv'].label"),
+          label: t("pl-ua.borders.dolhobychuv.label"),
+          full: t("pl-ua.borders.dolhobychuv.full"),
+        },
+         {
+          key: "malkhovitse",
+          labelfun: () => t("pl-ua.borders['malkhovitse'].label"),
+          label: t("pl-ua.borders.malkhovitse.label"),
+          full: t("pl-ua.borders.malkhovitse.full"),
         },
       ],
     },

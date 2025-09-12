@@ -22,7 +22,9 @@
       "ustyluh": { "label": "Ustyluh", "full": "Ustyluh-Zosin" },
       "yahodyn": { "label": "Yahodyn", "full": "Yahodyn-Dorohusk" },
       "hrushiv": { "label": "Hrushiv", "full": "Hrushiv-Budomierz" },
-      "smilnytsia": { "label": "Smilnytsia", "full": "Smilnytsia-Kroscienko" }
+      "smilnytsia": { "label": "Smilnytsia", "full": "Smilnytsia-Kroscienko" },
+      "uhryniv": { "label": "Uhryniv", "full": "Uhryniv-Dolhobychuv" },
+"nyzhankovychi": { "label": "Nyzhankovychi", "full": "Nyzhankovychi-Malkhovitse" }
     }
   },
 
@@ -35,7 +37,9 @@
       "zosin": { "label": "Zosin", "full": "Zosin-Ustyluh" },
       "dorohusk": { "label": "Dorohusk", "full": "Dorohusk-Yahodyn" },
       "budomierz": { "label": "Budomierz", "full": "Budomierz-Hrushiv" },
-      "kroscienko": { "label": "Kroscienko", "full": "Kroscienko-Smilnytsia" }
+      "kroscienko": { "label": "Kroscienko", "full": "Kroscienko-Smilnytsia" },
+      "dolhobychuv": { "label": "Dolhobychuv", "full": "Dolhobychuv-Uhryniv" },
+      "malkhovitse": { "label": "Malkhovitse", "full": "Malkhovitse-Nyzhankovychi" }
     }
   },
 
@@ -150,7 +154,6 @@
   "tracker": {
     "warning": "Attention !!! ",
     "warning-1": " The application is under development",
-    "title": "Border crossing tracking",
     "direction": "Direction:",
     "current": "Coordinates:",
     "accuracy": "Accuracy:",

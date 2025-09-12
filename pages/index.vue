@@ -60,6 +60,7 @@ useHead({
         <DirectionBorders v-if="showBorders" />
       </template>
     </Transition>
+    <SocialSidebar/>
   </main>
 </template>
 
