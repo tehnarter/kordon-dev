@@ -1,182 +1,131 @@
+
 <script setup lang="ts">
-const emit = defineEmits(["close"])
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-function closeNewsModal() {
-  emit("close")
+// --- Emits ---
+const emit = defineEmits<{
+  (e: "close"): void
+}>()
+
+// --- I18n ---
+const {t, locale } = useI18n();
+
+// --- State ---
+interface NewsBlock {
+  type: "p" | "h2" | "h3" | "ul";
+  text?: string;
+  items?: string[];
 }
-// блокування скролу під модалкою
-onMounted(() => {
-  document.body.style.overflow = "hidden"
-})
 
+interface NewsItem {
+  title: string;
+  content: NewsBlock[];
+}
+
+const news = ref<NewsItem[]>([]);
+
+// --- Runtime config ---
+const config = useRuntimeConfig();
+const apiKey = config.public.apiKey;
+const apiUrl = config.public.apiBase;
+
+// --- Utils ---
+function safeParse(content: string): NewsBlock[] {
+  try {
+    return JSON.parse(content) as NewsBlock[];
+  } catch {
+    return [];
+  }
+}
+
+// --- API ---
+async function loadNews(lang: string) {
+  try {
+    const res = await fetch(`${apiUrl}/api/get-news.php?lang=${lang}&api_key=${apiKey}`);
+    const data = await res.json();
+
+    if (Array.isArray(data) && data.length) {
+      news.value = data.map((item: any) => ({
+        title: item.title,
+        content: safeParse(item.content)
+      }));
+    } else if (data?.title) {
+      news.value = [{
+        title: data.title,
+        content: safeParse(data.content)
+      }];
+    } else {
+      news.value = [];
+    }
+  } catch (err) {
+    console.error("Помилка завантаження:", err);
+    news.value = [];
+  }
+}
+
+// --- Modal control ---
+function closeNewsModal() {
+  emit("close");
+}
+
+// --- Lifecycle ---
+onMounted(() => {
+  document.body.style.overflow = "hidden";
+});
 onUnmounted(() => {
-  document.body.style.overflow = ""
-})
+  document.body.style.overflow = "";
+});
+
+// --- Watchers ---
+watch(locale, (newLang) => {
+  loadNews(newLang);
+}, { immediate: true });
 </script>
+
 
 <template>
   <Teleport to="body">
     <div class="news-modal-overlay">
-      <!-- Кнопка закриття завжди зверху -->
       <button class="close-button" @click="closeNewsModal">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
              class="bi bi-x-circle" viewBox="0 0 16 16">
           <path
             d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
           <path
-            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1
-            .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707
-            l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8
-            4.646 5.354a.5.5 0 0 1 0-.708"/>
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5
+               0 0 1 .708.708L8.707 8l2.647 2.646a.5.5
+               0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5
+               0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5
+               0 0 1 0-.708"/>
         </svg>
       </button>
 
       <div class="news-modal">
-        <!-- Акордеон (одна новина = одне розгортання) -->
-        <details class="accordion">
-          <summary class="accordion-header">
-            ЄС змінює правила перетину кордону з жовтня 2025 року
-          </summary>
-          <div class="accordion-body">
-            <p>
-            З <strong>12 жовтня 2025 року</strong> для українців та інших громадян, які планують поїздки до країн Євросоюзу,
-            починають діяти нові правила в’їзду. ЄС запускає
-            <strong>Систему в’їзду/виїзду (EES)</strong> — електронну базу даних, що замінить штампи в паспортах на цифрову реєстрацію.
-            Про зміни повідомило Посольство України у Польщі.
-          </p>
+        <template v-if="news.length">
+          <details class="accordion" v-for="(item, i) in news" :key="i">
+            <summary class="accordion-header">{{ item.title }}</summary>
+            <div class="accordion-body">
+              <template v-for="(block, j) in item.content" :key="j">
+                <p v-if="block.type === 'p'" v-html="block.text"></p>
+                <h2 v-else-if="block.type === 'h2'" v-html="block.text"></h2>
+                <h3 v-else-if="block.type === 'h3'" v-html="block.text"></h3>
+                <ul v-else-if="block.type === 'ul'">
+                  <li v-for="(li, k) in block.items" :key="k" v-html="li"></li>
+                </ul>
+              </template>
+            </div>
+          </details>
+        </template>
 
-          <h2>Що змінюється</h2>
-          <p>
-            Нова система стосується короткострокових подорожей тривалістю до 90 днів у межах будь-якого 180-денного періоду.
-            Усі перетини зовнішніх кордонів ЄС будуть фіксуватися автоматично.
-          </p>
-
-          <h3>Під час контролю збиратимуть:</h3>
-          <ul>
-            <li>фото обличчя;</li>
-            <li>відбитки чотирьох пальців (для осіб від 12 років);</li>
-            <li>дані закордонного паспорта;</li>
-            <li>дату та місце в’їзду/виїзду, а також випадки відмови у в’їзді.</li>
-          </ul>
-
-          <h2>Як відбуватиметься процедура</h2>
-          <ul>
-            <li>пасажири автотранспорту повинні виходити з авто для здачі біометрії;</li>
-            <li>для залізничних поїздок порядок залежатиме від конкретного пункту пропуску;</li>
-            <li>відмова надати біометричні дані стане підставою для відмови у в’їзді.</li>
-          </ul>
-
-          <h2>Для чого вводять EES</h2>
-          <p>Європейський Союз зазначає, що система дозволить:</p>
-          <ul>
-            <li>посилити безпеку в країнах Шенгенської зони;</li>
-            <li>краще контролювати дотримання правил перебування;</li>
-            <li>зменшити ризик використання підроблених документів.</li>
-          </ul>
-          </div>
-        </details>
-        <details class="accordion">
-  <summary class="accordion-header">
-    "Шлях" відходить у минуле: в Україні змінили правила перетину кордону для водіїв
-  </summary>
-  <div class="accordion-body">
-    <p>
-      Єдиним інструментом для виїзду водіїв комерційного транспорту стане
-      <strong>«єЧерга»</strong>.
-    </p>
-
-    <p>
-      З <strong>10 вересня</strong> в Україні змінюється процедура перетину кордону для водіїв комерційного транспорту.
-      Відтепер ліцензованим перевізникам потрібно заповнювати дані лише в системі
-      <strong>«єЧерга»</strong>, а створювати заявку «18-60» (так званий «Шлях») більше не потрібно.
-    </p>
-
-    <p>
-      Про це повідомляє пресслужба Міністерства розвитку громад та територій України.
-    </p>
-
-    <h2>Що змінилося</h2>
-    <p>
-      Раніше алгоритм бронювання місця для військовозобов’язаних водіїв передбачав
-      спочатку оформлення заявки у модулі «18-60» («Шлях»), а вже потім — реєстрацію
-      у «єЧерзі».
-    </p>
-
-    <p>
-      Тепер верифікацію даних здійснюватимуть співробітники Державної прикордонної служби
-      безпосередньо за інформацією в «єЧерзі».
-    </p>
-
-    <h2>Для кого обов’язково</h2>
-    <p>
-      Перетин кордону для виконання комерційних перевезень буде доступний лише тим водіям,
-      які внесені до електронного кабінету перевізника в Єдиному комплексі інформаційних систем
-      (<strong>ЄКІС</strong>) Укртрансбезпеки.
-    </p>
-  </div>
-</details>
-<details class="accordion">
-  <summary class="accordion-header">
-    Після Польщі Латвія закриває небо на кордоні з РФ та Білоруссю
-  </summary>
-  <div class="accordion-body">
-   <p>
-      Слідом за Польщею <strong>Латвія</strong> запроваджує обмеження польотів
-      на сході країни, щоб запобігти несанкціонованим польотам та посилити готовність
-      до потенційних загроз.
-    </p>
-
-    <h2>Коли діє заборона</h2>
-    <p>
-      Із <strong>11 вересня о 18:00</strong> і щонайменше до <strong>18 вересня</strong>
-      Латвія закриває свій повітряний простір уздовж кордонів з Росією та Білоруссю.
-      Термін дії обмежень може бути продовжено.
-    </p>
-
-    <h2>Причини</h2>
-    <p>
-      Міністр оборони Латвії Андріс Спрюдс заявив, що недавні події у Польщі стали
-      грубим порушенням повітряного простору НАТО.
-      Латвія реагує превентивно, хоча прямих загроз наразі немає.
-    </p>
-
-    <h2>Заходи безпеки</h2>
-    <ul>
-      <li>національні збройні сили підвищили готовність у межах навчань "Namejs";</li>
-      <li>заборона дозволяє контролювати повітряний простір та відстежувати несанкціоновані дрони;</li>
-      <li>тестуються акустичні системи спостереження та протидронові технології;</li>
-      <li>на кордоні чергують підрозділи ППО NBS та літаки НАТО.</li>
-    </ul>
-
-    <blockquote>
-      «Безпілотні літальні апарати Росії в повітряному просторі НАТО є сигналом тривоги.
-      Ми маємо зробити все, щоб не допустити ескалації атак дронів», – наголосив Спрюдс.
-    </blockquote>
-
-    <h2>Контекст</h2>
-    <p>
-      10 вересня Польща також обмежила авіарух уздовж кордону з Україною та Білоруссю.
-      Обмеження діятимуть до <strong>9 грудня</strong>.
-    </p>
-
-    <p>
-      Того ж дня Росія атакувала Польщу безпілотниками: у країну проникло щонайменше 19 дронів,
-      з яких чотири були збиті. Через загрозу тимчасово зупиняли роботу аеропорти Варшави,
-      Любліна та Жешува.
-    </p>
-
-    <p>
-      Європейські авіакомпанії розглядають зміну маршрутів, щоб уникати зон поблизу
-      кордонів із Росією, Україною та Білоруссю.
-    </p>
-  </div>
-</details>
-
-
+        <template v-else>
+         <p class="no-news">{{ t("modals.news") }}</p>
+        </template>
       </div>
     </div>
   </Teleport>
 </template>
+
 
 <style scoped lang="scss">
 .news-modal-overlay {
@@ -192,13 +141,13 @@ onUnmounted(() => {
 
 .news-modal {
   position: relative;
-  background:var(--themes-bg-modal);
+  background: var(--themes-bg-modal);
   width: 100%;
   max-width: 900px;
   min-height: 100vh;
+  padding: 10px;
   animation: fadeIn 0.3s ease;
-  transition:
-      background-color 3s ease,
+  transition: background-color 0.3s ease;
 }
 
 .close-button {
@@ -213,24 +162,29 @@ onUnmounted(() => {
 
 /* Акордеон */
 .accordion {
-margin: 10px 5px;
+  margin: 10px 5px;
   border: 1px solid #bbbcc9;
   border-radius: 6px;
   overflow: hidden;
 
   summary {
     padding: 16px;
-   font-weight: 700;
+    font-weight: 700;
     list-style: none;
     font-size: 22px;
-color: #4db6ac;
+    color: #4db6ac;
+    cursor: pointer;
   }
 
   .accordion-body {
     padding: 16px;
     font-size: 18px;
-
   }
+}
+
+.no-news {
+  padding: 20px;
+  text-align: center;
 }
 
 @keyframes fadeIn {

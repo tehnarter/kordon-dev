@@ -187,6 +187,23 @@
       "car": "Car",
       "bus": "Bus",
       "tir": "TIR",
-      "pedestrian": "Pedestrian"
+      "pedestrian": "Pedestrian",
+      "news": "No news",
+      "info": "No information"
+
+    },
+     "nav": {
+      "hello": "Hello",
+      "guest": "Guest",
+      "directions": "Directions",
+      "news": "News",
+      "info": "Information",
+      "settings": "Settings",
+      "reset": "Reset direction",
+      "contacts": "Contacts"
+    },
+    "warning-page": {
+      "title": "This site is available on mobile devices only",
+      "text": "Please open this site on a mobile device to access the content."
     }
 }

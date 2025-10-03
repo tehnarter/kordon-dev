@@ -3,6 +3,7 @@
 .nuxt
 .nitro
 .cache
+.npmrc
 dist
 
 # Node dependencies

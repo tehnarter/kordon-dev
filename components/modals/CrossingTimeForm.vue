@@ -13,7 +13,7 @@ const emit = defineEmits<{
   (e: "close"): void
 }>()
 
-const { sessionToken, initToken } = useSessionToken()
+const { sessionToken } = useSessionToken()
 
 const reportedAt = ref("")
 
@@ -99,7 +99,6 @@ onMounted(() => {
 })
 
 onMounted(() => {
-  initToken()
   setReportedAtNowUTC()
   submitForm()
 })

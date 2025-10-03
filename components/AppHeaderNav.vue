@@ -3,7 +3,8 @@ import { ref, onMounted, nextTick, computed } from "vue"
 import gsap from "gsap"
 import { useMenu } from "@/composables/useMenu"
 import { useBorder } from "@/composables/useBorder"
-
+import { useI18n } from "vue-i18n"
+const { t } = useI18n()
 const { menu } = useMenu()
 const selected = useBorder()
 const emit = defineEmits(["close", "openModal"])
@@ -13,7 +14,7 @@ const activeChildSubmenu = ref<string | null>(null)
 const activeBorder = ref<string | null>(null)
 
 // Дані користувача
-const userName = ref("Гість")
+const userName = ref(t("nav.guest"))
 const userPhoto = ref("/logo-img.svg")
 
 onMounted(() => {
@@ -35,17 +36,17 @@ onMounted(() => {
 
 // Головне меню
 const fullMenu = computed(() => [
-  { key: "directions", name: "Напрямки", children: menu.value },
-  { key: "news", name: "Новини", modal: "newsBlock" },
-  { key: "about", name: "Інформація", modal: "infoBlock" },
+  { key: "directions", name: t("nav.directions"), children: menu.value },
+  { key: "news", name: t("nav.news"), modal: "newsBlock" },
+  { key: "info", name: t("nav.info"), modal: "infoBlock" },
   {
     key: "settings",
-    name: "Налаштування",
-    children: [{ key: "reset", name: "Скинути напрямок", action: "reset" }],
+    name: t("nav.settings"),
+    children: [{ key: "reset", name: t("nav.reset"), action: "reset" }],
   },
   {
     key: "contacts",
-    name: "Контакти",
+    name: t("nav.contacts"),
     children: [
       { key: "telegram", name: "Telegram", link: "https://t.me/tehnar_u_a", icon: "/telegram.svg" },
       { key: "facebook", name: "Facebook", link: "https://www.facebook.com/profile.php?id=61579371541481", icon: "/facebook.svg" },
@@ -89,7 +90,7 @@ function toggleChildSubmenu(key: string) {
 // Скидання додатку
 function resetApp() {
   const colorMode = localStorage.getItem("nuxt-color-mode")
-  ;["direction", "queue_token", "lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp"].forEach(k =>
+  ;["direction","lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp"].forEach(k =>
     localStorage.removeItem(k)
   )
   sessionStorage.clear()
@@ -110,7 +111,7 @@ function resetApp() {
         <div class="nav__item-login-img">
           <img :src="userPhoto" alt="user avatar" class="nav__avatar" />
         </div>
-        <div class="nav__item-name">Привіт, {{ userName }}</div>
+        <div class="nav__item-name">{{ `${t("nav.hello")}, ${userName}` }}</div>
       </div>
 
       <!-- Меню -->

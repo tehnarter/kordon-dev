@@ -3,30 +3,34 @@ definePageMeta({
   layout: "custom",
 
 })
+import { useHead } from "#imports"
+import { useI18n } from "vue-i18n"
+const { t, locale } = useI18n()
+const lang = locale.value
+useHead({
+   htmlAttrs: { lang },
+   title: t("warning-page.title"),
 
-useSeoMeta({
-  title: "Сайт доступний тільки на мобільних пристроях",
-  ogTitle: "Сайт доступний тільки на мобільних пристроях",
-  description:
-    "Будь ласка, відкрийте цей сайт на мобільному пристрої для доступу до контенту.",
-  ogDescription:
-    "Будь ласка, відкрийте цей сайт на мобільному пристрої для доступу до контенту.",
-})
+  meta: [
+    { name: "description", content:  t("warning-page.text")},]
+  })
+
+
+
 </script>
 <template>
-  <div class="warning-page">
-    <div class="warning-page">
-       <div class="warning-content">
-      <h1 class="warning-title">
-        Сайт доступний тільки на мобільних пристроях
-      </h1>
-      <p class="warning-text">
-        Будь ласка, відкрийте цей сайт на мобільному пристрої для доступу до
-        контенту.
-      </p>
-    </div>
-    </div>
-    </div>
+  <ClientOnly>
+      <div class="warning-page">
+         <div class="warning-content">
+        <h1 class="warning-title">
+         {{t("warning-page.title")}}
+        </h1>
+        <p class="warning-text">
+          {{t("warning-page.text")}}
+        </p>
+      </div>
+      </div>
+  </ClientOnly>
 </template>
 
 <style lang="scss">

@@ -1,18 +1,87 @@
 <script setup lang="ts">
-const emit = defineEmits(["close"])
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-function closeInfoModal() {
-  emit("close")
+// --- Emits ---
+const emit = defineEmits<{
+  (e: "close"): void
+}>()
+
+// --- I18n ---
+const {t, locale } = useI18n();
+
+// --- State ---
+interface InfoBlock {
+  type: "p" | "h2" | "h3" | "ul";
+  text?: string;
+  items?: string[];
 }
-// блокування скролу під модалкою
-onMounted(() => {
-  document.body.style.overflow = "hidden"
-})
 
+interface InfoItem {
+  title: string;
+  content: InfoBlock[];
+}
+
+const info = ref<InfoItem[]>([]);
+
+// --- Runtime config ---
+const config = useRuntimeConfig();
+const apiKey = config.public.apiKey;
+const apiUrl = config.public.apiBase;
+
+// --- Utils ---
+function safeParse(content: string): InfoBlock[] {
+  try {
+    return JSON.parse(content) as InfoBlock[];
+  } catch {
+    return [];
+  }
+}
+
+// --- API ---
+async function loadInfo(lang: string) {
+  try {
+    const res = await fetch(`${apiUrl}/api/get-info.php?lang=${lang}&api_key=${apiKey}`);
+    const data = await res.json();
+
+    if (Array.isArray(data) && data.length) {
+      info.value = data.map((item: any) => ({
+        title: item.title,
+        content: safeParse(item.content)
+      }));
+    } else if (data?.title) {
+      info.value = [{
+        title: data.title,
+        content: safeParse(data.content)
+      }];
+    } else {
+      info.value = [];
+    }
+  } catch (err) {
+    console.error("Помилка завантаження:", err);
+    info.value = [];
+  }
+}
+
+// --- Modal control ---
+function closeInfoModal() {
+  emit("close");
+}
+
+// --- Lifecycle ---
+onMounted(() => {
+  document.body.style.overflow = "hidden";
+});
 onUnmounted(() => {
-  document.body.style.overflow = ""
-})
+  document.body.style.overflow = "";
+});
+
+// --- Watchers ---
+watch(locale, (newLang) => {
+  loadInfo(newLang);
+}, { immediate: true });
 </script>
+
 
 <template>
   <Teleport to="body">
@@ -23,107 +92,39 @@ onUnmounted(() => {
           <path
             d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
           <path
-            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1
-            .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707
-            l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8
-            4.646 5.354a.5.5 0 0 1 0-.708"/>
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5
+               0 0 1 .708.708L8.707 8l2.647 2.646a.5.5
+               0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5
+               0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5
+               0 0 1 0-.708"/>
         </svg>
       </button>
 
       <div class="info-modal">
+        <template v-if="info.length">
+          <details class="accordion" v-for="(item, i) in info" :key="i">
+            <summary class="accordion-header">{{ item.title }}</summary>
+            <div class="accordion-body">
+              <template v-for="(block, j) in item.content" :key="j">
+                <p v-if="block.type === 'p'" v-html="block.text"></p>
+                <h2 v-else-if="block.type === 'h2'" v-html="block.text"></h2>
+                <h3 v-else-if="block.type === 'h3'" v-html="block.text"></h3>
+                <ul v-else-if="block.type === 'ul'">
+                  <li v-for="(li, k) in block.items" :key="k" v-html="li"></li>
+                </ul>
+              </template>
+            </div>
+          </details>
+        </template>
 
-        <details class="accordion">
-  <summary class="accordion-header">
-    Про додаток
-  </summary>
-  <div class="accordion-body">
-    <p>
-      <strong>Додаток "KORDON"</strong> створений для відстеження черг, часу проходження
-      пунктів пропуску та актуальних новин, що стосуються перетину державного кордону України.
-    </p>
-
-    <h2>Як користуватись</h2>
-    <ul>
-      <li>Обирайте напрямок та пункт пропуску зі списку;</li>
-      <li>Переглядайте середній час очікування та кількість транспорту в черзі;</li>
-      <li>За потреби додавайте власні дані про проходження кордону;</li>
-      <li>Отримуйте актуальні повідомлення та новини.</li>
-    </ul>
-
-    <h2>Загальні правила</h2>
-    <ul>
-      <li>Використання додатку є безкоштовним для всіх користувачів;</li>
-      <li>Дані про черги формуються на основі інформації користувачів та офіційних джерел;</li>
-      <li>Оновлення інформації здійснюється автоматично кожну годину;</li>
-      <li>Ви можете повідомляти про некоректні дані для їх перевірки.</li>
-    </ul>
-
-    <h2>Умови користування</h2>
-    <p>
-      Користуючись додатком "КОРДОН", ви погоджуєтесь із тим, що:
-    </p>
-    <ul>
-      <li>інформація може відрізнятися від фактичного стану черги;</li>
-      <li>розробники не несуть відповідальності за рішення, ухвалені на основі даних із додатку;</li>
-      <li>ваші внесені дані можуть бути використані для аналітики та покращення сервісу;</li>
-      <li>персональні дані не зберігаються, окрім введених вами при заповненні форми.</li>
-    </ul>
-
-    <p>
-      Додаток працює в режимі реального часу та постійно вдосконалюється для вашої зручності.
-    </p>
-  </div>
-</details>
-
-       <details class="accordion">
-  <summary class="accordion-header">
-    Загальні правила перетину кордону
-  </summary>
-  <div class="accordion-body">
-    <h2>Документи </h2>
-    <ul>
-      <li>Діючий закордонний паспорт або інший проїзний документ, визнаний країнами ЄС. Якщо паспорт біометричний — перевага. </li>
-      <li>Для короткотермінових поїздок без візи: підтвердження мети поїздки (туризм, відвідування, бізнес), можливі документи про проживання чи бронювання. </li>
-      <li>Підтвердження достатніх фінансових коштів на час перебування. </li>
-      <li>Якщо подорожуєте автомобілем — міжнародний страховий поліс (“Зелена картка”) може бути обов’язковим. </li>
-    </ul>
-
-    <h2>Що можна і що не можна везти</h2>
-    <ul>
-      <li>Особисті речі — одяг, предмети гігієни та інше для власного використання — зазвичай дозволені.</li>
-      <li>Обмеження на ввезення великих кількостей алкоголю, тютюну, лікарських препаратів без рецепту — залежить від країни ЄС. Потрібно перевіряти вимоги конкретного пункту пропуску.</li>
-      <li>Заборонені або обмежені товари — зброя, наркотики, небезпечні речовини, деякі продукти харчування, рослини чи тварини можуть потребувати дозволів або мати заборону. </li>
-      <li>Продукти, що підлягають санітарному чи фітосанітарному контролю — наприклад, м’ясо, молочні продукти, рослини — можуть бути обмежені або заборонені. </li>
-    </ul>
-
-    <h2>Нові візовий та в’їзний режим (EES, системи) — особливості</h2>
-    <ul>
-      <li>Система в’їзду/виїзду (EES) запроваджується з 12 жовтня 2025 року — вона цифрово фіксуватиме дані про в’їзд і виїзд, замість печаток. </li>
-      <li>Збиратимуть: фото обличчя, відбитки чотирьох пальців (для віку від 12 років), дані паспорта, дату і місце в’їзду/виїзду, випадки відмов.</li>
-      <li>Якщо відмовити надати біометричні дані — можливе відхилення в’їзду. </li>
-      <li>90 днів перебування в ЄС у межах будь-якого 180-денного періоду — за правилами безвізового режиму. </li>
-    </ul>
-
-    <h2>Додаткові умови та важливі рекомендації</h2>
-    <ul>
-      <li>Перевіряйте вимоги конкретної країни: можуть бути додаткові правила (одна сторінка паспорта, медичне страхування тощо).</li>
-      <li>Якщо плануєте подорож із тваринами, із спеціальним вантажем або особливими умовами — дізнавайтесь заздалегідь про дозволи.</li>
-      <li>Зберігайте усі підтверджуючі документи — бронювання, квитки, адреси проживання, можливо, довідки.</li>
-    </ul>
-
-    <h2>Правове попередження</h2>
-    <p>
-      Ця інформація є орієнтовною та не гарантує 100 % перетину кордону.
-      Закони й правила можуть змінюватись. Для точної інформації зв’яжіться з прикордонною службою або консульством країни, до якої прямуєте.
-    </p>
-  </div>
-</details>
-
-
+        <template v-else>
+          <p class="no-info">{{ t("modals.info") }}</p>
+        </template>
       </div>
     </div>
   </Teleport>
 </template>
+
 
 <style scoped lang="scss">
 .info-modal-overlay {
@@ -139,13 +140,13 @@ onUnmounted(() => {
 
 .info-modal {
   position: relative;
-  background:var(--themes-bg-modal);
+  background: var(--themes-bg-modal);
   width: 100%;
   max-width: 900px;
   min-height: 100vh;
+  padding: 10px;
   animation: fadeIn 0.3s ease;
-  transition:
-      background-color 3s ease,
+  transition: background-color 0.3s ease;
 }
 
 .close-button {
@@ -160,24 +161,29 @@ onUnmounted(() => {
 
 /* Акордеон */
 .accordion {
-margin: 10px 5px;
+  margin: 10px 5px;
   border: 1px solid #bbbcc9;
   border-radius: 6px;
   overflow: hidden;
 
   summary {
     padding: 16px;
-   font-weight: 700;
+    font-weight: 700;
     list-style: none;
     font-size: 22px;
-color: #4db6ac;
+    color: #4db6ac;
+    cursor: pointer;
   }
 
   .accordion-body {
     padding: 16px;
     font-size: 18px;
-
   }
+}
+
+.no-info {
+  padding: 20px;
+  text-align: center;
 }
 
 @keyframes fadeIn {

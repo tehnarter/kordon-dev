@@ -188,7 +188,23 @@
       "car": "Samochód",
       "bus": "Autobus",
       "tir": "TIR",
-      "pedestrian": "Pieszy"
+      "pedestrian": "Pieszy",
+      "news": "Brak wiadomości",
+      "info": "Brak informacji"
+    },
+     "nav": {
+      "hello": "Cześć",
+      "guest": "Gość",
+      "directions": "Kierunki",
+      "news": "Wiadomości",
+      "info": "Informacje",
+      "settings": "Ustawienia",
+      "reset": "Resetuj kierunek",
+      "contacts": "Kontakt"
+    },
+    "warning-page": {
+      "title": "Strona dostępna tylko na urządzeniach mobilnych",
+      "text": "Proszę otworzyć tę stronę na urządzeniu mobilnym, aby uzyskać dostęp do treści."
     }
 
 }

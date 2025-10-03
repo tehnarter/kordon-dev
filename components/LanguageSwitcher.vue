@@ -34,18 +34,19 @@ const availableLocales = computed(() =>
   locales.filter((l) => l.code !== locale.value)
 )
 
+// Функція для побудови шляху з правильним префіксом
 const getLocalePath = (code) => {
-  const currentPath = route.fullPath
-  const currentLocale = locale.value
+  let path = route.fullPath
 
-  const pathWithoutPrefix =
-    currentLocale !== defaultLocale
-      ? currentPath.replace(new RegExp(`^/${currentLocale}`), "") || "/"
-      : currentPath
+  // Видаляємо будь-який існуючий префікс мови
+  locales.forEach((l) => {
+    const prefix = `/${l.code}`
+    if (path === prefix) path = "/"
+    else if (path.startsWith(prefix + "/")) path = path.replace(prefix, "")
+  })
 
-  return code === defaultLocale
-    ? pathWithoutPrefix
-    : `/${code}${pathWithoutPrefix}`
+  // Додаємо новий префікс
+  return `/${code}${path}`
 }
 </script>
 
@@ -67,6 +68,7 @@ const getLocalePath = (code) => {
     </div>
   </div>
 </template>
+
 
 <style scoped lang="scss">
 .language-dropdown {

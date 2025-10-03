@@ -75,7 +75,7 @@ export function useMenu() {
       borders: [
         {
           key: "korchova",
-          coords: { lat: 49.295599, lon: 25.692518 },
+          coords: { lat: 49.299456, lon: 25.706496 },
           labelfun: () => t("pl-ua.borders['korchova'].label"),
           label: t("pl-ua.borders.korchova.label"),
           full: t("pl-ua.borders.korchova.full"),

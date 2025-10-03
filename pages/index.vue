@@ -14,7 +14,7 @@ const handleReloadBorders = () => {
 
 const route = useRoute()
 const config = useRuntimeConfig()
-const ogUrl = `${config.public.siteUrl}${route.fullPath}`
+const Url = `${config.public.siteUrl}${route.fullPath}`
 const Image = `${config.public.siteUrl}/preview.jpg` //1200×630px
 const i18nHead = useLocaleHead()
 const linksWithTrailingSlash = (i18nHead.value.link || []).map((link) => {
@@ -38,13 +38,14 @@ useHead({
     { property: "og:title", content: t("og.title") },
     { property: "og:description", content: t("og.description") },
     { property: "og:image", content: Image }, //1200×630 px,
-    { property: "og:url", content: ogUrl },
+    { property: "og:url", content: Url },
     { property: "og:type", content: "website" },
 
     // Twitter
     { name: "twitter:card", content: t("twitter.card") },
     { name: "twitter:title", content: t("twitter.title") },
     { name: "twitter:description", content: t("twitter.description") },
+    { name: "twitter:url", content: Url },
     { name: "twitter:image", content: Image }, //1200×630 px,
   ],
 })
