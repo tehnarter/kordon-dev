@@ -18,7 +18,8 @@ logs
 .fleet
 .idea
 
-# Local env files
-.env
-.env.*
-!.env.example
+# Github dev version
+composables/useSessionToken.ts
+composables/useBorderTracker.ts
+nuxt.config.ts
+
