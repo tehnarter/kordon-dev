@@ -22,3 +22,9 @@ logs
 .env
 .env.*
 !.env.example
+
+# Github dev version
+composables/useSessionToken.ts
+composables/useBorderTracker.ts
+nuxt.config.ts
+
