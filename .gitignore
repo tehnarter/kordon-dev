@@ -26,5 +26,6 @@ logs
 # Github dev version
 composables/useSessionToken.ts
 composables/useBorderTracker.ts
+composables/useNearbyBorder.ts
 nuxt.config.ts
 

@@ -33,10 +33,15 @@ onMounted(() => {
     gsap.to(".nav__overlay", { opacity: 1, pointerEvents: "auto", duration: 0.3 })
   })
 })
-
+const hasToken = !!localStorage.getItem('session_token');
 // Головне меню
 const fullMenu = computed(() => [
   { key: "directions", name: t("nav.directions"), children: menu.value },
+  {
+  key: "borderAction",
+  name: hasToken ? "Подати час" : "Подати чергу",
+  modal: hasToken ? "timeSubmit" : "queueSubmit"
+  },
   { key: "news", name: t("nav.news"), modal: "newsBlock" },
   { key: "info", name: t("nav.info"), modal: "infoBlock" },
   {

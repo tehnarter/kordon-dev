@@ -19,10 +19,14 @@ const handleCloseMenu = () => {
 
 const isNewsModalOpen = ref(false)
 const isInfoModalOpen = ref(false)
+const isQueueModalOpen = ref(false)
+const isTimeModalOpen = ref(false)
 
 function handleOpenModal(modalKey: string) {
   if (modalKey === "newsBlock") isNewsModalOpen.value = true
   else if (modalKey === "infoBlock") isInfoModalOpen.value = true
+  else if (modalKey === "queueSubmit") isQueueModalOpen.value = true
+  else if (modalKey === "timeSubmit") isTimeModalOpen.value = true
 }
 
 onMounted(() => {
@@ -96,7 +100,9 @@ onMounted(() => {
       ref="navRef"
     />
   <ModalsNewsBlock v-if="isNewsModalOpen" @close="isNewsModalOpen = false" />
-<ModalsInfoBlock v-if="isInfoModalOpen" @close="isInfoModalOpen = false" />
+  <ModalsInfoBlock v-if="isInfoModalOpen" @close="isInfoModalOpen = false" />
+  <ModalsQueueManualSubmit v-if="isQueueModalOpen" @close="isQueueModalOpen = false" />
+  <ModalsTimeManualSubmit v-if="isTimeModalOpen" @close="isTimeModalOpen = false" />
 
   </header>
 </template>
