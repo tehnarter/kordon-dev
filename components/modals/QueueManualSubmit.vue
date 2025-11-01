@@ -67,7 +67,7 @@ const getCurrentUTCTimeString = (): string => {
 
 // 🧭 Геолокація
 const { currentCoords } = useBorderTracker()
-const { nearbyBorder, nearbyLabel } = useNearbyBorder(currentCoords)
+const { nearbyBorder, nearbyLabel,nearbyLabelFull } = useNearbyBorder(currentCoords)
 
 const isChecking = ref<boolean>(true)
 const foundBorder = ref<string | null>(null)
@@ -93,6 +93,14 @@ watch(
 // 🔔 Звук при першому знаходженні
 watch(foundBorder, (newVal, oldVal) => {
   if (newVal && !oldVal) playFoundSound()
+})
+// 🕓 Збереження назви пункту на 24 години
+watch(nearbyLabelFull, (newVal) => {
+  if (newVal) {
+    const expiresAt = Date.now() + 24 * 60 * 60 * 1000 // 24 години
+    const data = { value: newVal, expiresAt }
+    localStorage.setItem("border-label-full", JSON.stringify(data))
+  }
 })
 
 // 🧹 Події життєвого циклу

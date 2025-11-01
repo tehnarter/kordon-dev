@@ -12,7 +12,7 @@ const emit = defineEmits(["close", "openModal"])
 const activeSubmenu = ref<string | null>(null)
 const activeChildSubmenu = ref<string | null>(null)
 const activeBorder = ref<string | null>(null)
-
+const hasToken = ref<string | null>(null)
 // Дані користувача
 const userName = ref(t("nav.guest"))
 const userPhoto = ref("/logo-img.svg")
@@ -32,15 +32,18 @@ onMounted(() => {
     gsap.fromTo(".nav", { x: "-100%" }, { x: "0%", duration: 0.4, ease: "power2.out" })
     gsap.to(".nav__overlay", { opacity: 1, pointerEvents: "auto", duration: 0.3 })
   })
+  hasToken.value = localStorage.getItem("queue_token")
 })
-const hasToken = !!localStorage.getItem('session_token');
+
+
 // Головне меню
 const fullMenu = computed(() => [
   { key: "directions", name: t("nav.directions"), children: menu.value },
   {
   key: "borderAction",
-  name: hasToken ? "Подати час" : "Подати чергу",
-  modal: hasToken ? "timeSubmit" : "queueSubmit"
+
+    name: hasToken.value ? "Подати час" : "Подати чергу",
+    modal: hasToken.value ? "timeSubmit" : "queueSubmit"
   },
   { key: "news", name: t("nav.news"), modal: "newsBlock" },
   { key: "info", name: t("nav.info"), modal: "infoBlock" },

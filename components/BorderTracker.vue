@@ -1,12 +1,13 @@
 // BorderTracker.vue
-
-
 <script setup lang="ts">
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
-const { t } = useI18n()
-const {
+import { useSessionToken } from "@/composables/useSessionToken"
+import { useBorderTracker } from "@/composables/useBorderTracker"
 
+const { t } = useI18n()
+const { clearToken } = useSessionToken()
+const {
   currentCoords,
   accuracy,
   statusKey,
@@ -24,15 +25,18 @@ const accuracyVal = computed(() => accuracy.value)
 const statusVal = computed(() => statusKey.value)
 const modalVal = computed(() => modal.value)
 const timeElapsedVal = computed(() => timeElapsed.value)
-const { clearToken } = useSessionToken()
+
+// ✅ Оновлена функція закриття
 const handleCloseCrossing = () => {
- if (modal.value?.type === "done") {
-    startTime.value = null   // очищаємо тільки після того, як користувач підтвердив
+  if (modal.value?.type === "done") {
+    startTime.value = null // очищаємо тільки після підтвердження
   }
   modal.value = null
-  clearToken() // Чистимо токен тільки після закриття
+  clearToken() // чистимо токен після закриття
+  localStorage.removeItem("border-label-full") // 🧹 очищаємо назву пункту після завершення
 }
-// Форматований час (години + хвилини)
+
+// ⏱️ Форматований час (години + хвилини)
 const formattedTime = computed(() => {
   const minutes = timeElapsed.value || 0
   if (minutes <= 59) {
@@ -43,13 +47,8 @@ const formattedTime = computed(() => {
     m: minutes % 60,
   }
 })
-// const openTestModal = () => {
-//   if (modal.value?.type === "done") {
-//     modal.value = null
-
-// }
-
 </script>
+
 
 
 <template>
