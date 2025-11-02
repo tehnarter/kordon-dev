@@ -42,7 +42,7 @@ const fullMenu = computed(() => [
   {
   key: "borderAction",
 
-    name: hasToken.value ? "Подати час" : "Подати чергу",
+    name: hasToken.value ? t("manual.time") : t("manual.queue"),
     modal: hasToken.value ? "timeSubmit" : "queueSubmit"
   },
   { key: "news", name: t("nav.news"), modal: "newsBlock" },
@@ -98,7 +98,7 @@ function toggleChildSubmenu(key: string) {
 // Скидання додатку
 function resetApp() {
   const colorMode = localStorage.getItem("nuxt-color-mode")
-  ;["direction","lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp"].forEach(k =>
+  ;["direction","lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp","queue_token", "border-label-full"].forEach(k =>
     localStorage.removeItem(k)
   )
   sessionStorage.clear()

@@ -12,19 +12,19 @@ const emit = defineEmits<{ (e: "close"): void }>()
 const { sessionToken, clearToken } = useSessionToken()
 const { resetStartTime } = useBorderTracker()
 
-// 🧩 Назва пункту збережена раніше
+//  Назва пункту збережена раніше
 const borderLabelFull = ref<string | null>(null)
 
-// 🕒 Поля введення користувача
+//  Поля введення користувача
 const hours = ref<number | null>(null)
 const minutes = ref<number | null>(null)
 
-// 📅 Поточна UTC-дата
+//  Поточна UTC-дата
 const reportedAt = ref("")
 const loading = ref(false)
 const message = ref<string | null>(null)
 
-// ✅ Отримуємо збережену назву пункту
+//  Отримуємо збережену назву пункту
 function getSavedBorderName() {
   const saved = localStorage.getItem("border-label-full")
   if (!saved) return null
@@ -41,7 +41,7 @@ function getSavedBorderName() {
   }
 }
 
-// 🕓 Формуємо поточний UTC-час
+// Формуємо поточний UTC-час
 function setReportedAtNowUTC() {
   const now = new Date()
   const pad = (n: number) => n.toString().padStart(2, "0")
@@ -50,21 +50,21 @@ function setReportedAtNowUTC() {
   )}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`
 }
 
-// 🧮 Загальний час у хвилинах
+//  Загальний час у хвилинах
 const totalMinutes = computed(() => {
   const h = hours.value || 0
   const m = minutes.value || 0
   return h * 60 + m
 })
 
-// 📤 Відправка часу
+//  Відправка часу
 const submitForm = async () => {
   if (!sessionToken.value) {
-    message.value = "❌ Не знайдено токен сесії"
+    message.value = t("message.token")
     return
   }
   if (totalMinutes.value <= 0) {
-    message.value = "❌ Введіть час проходження"
+    message.value = t("message.time")
     return
   }
 
@@ -90,24 +90,24 @@ const submitForm = async () => {
     const result = await res.json()
 
     if (!res.ok) {
-      message.value = result.error || "❌ Помилка відправки. Спробуйте пізніше."
+      message.value = t("message.err")
     } else {
-      message.value = "✅ Час проходження успішно збережено!"
+      message.value = t("message.ok")
 
-      // 🧹 Очищаємо все після успіху
+      //  Очищаємо все після успіху
       localStorage.removeItem("border-label-full")
       resetStartTime()
       clearToken()
       setTimeout(() => emit("close"), 1500)
     }
   } catch {
-    message.value = "❌ Помилка з'єднання із сервером"
+    message.value = " Помилка з'єднання із сервером"
   } finally {
     loading.value = false
   }
 }
 
-// 🔊 Звук при відкритті
+//  Звук при відкритті
 onMounted(() => {
   setReportedAtNowUTC()
   borderLabelFull.value = getSavedBorderName()
@@ -123,19 +123,19 @@ onMounted(() => {
       <div class="modal">
         <button class="close-button" @click="emit('close')">×</button>
 
-        <h3>{{ t("modals.cross") || "Фіксація часу перетину" }}</h3>
+        <h3>{{ t("manual.cross") }}</h3>
         <p class="modal-subtitle" v-if="borderLabelFull">
           <strong>{{ borderLabelFull }}</strong>
         </p>
 
         <form class="queue-form" @submit.prevent="submitForm">
-          <label>Вкажіть час проходження:</label>
+          <label>{{ t("manual.time-input") }}:</label>
           <div class="time-inputs">
             <input
               type="number"
               min="0"
               max="24"
-              placeholder="години"
+              :placeholder= "t('manual.hours')"
               v-model.number="hours"
             />
             <span>:</span>
@@ -143,13 +143,13 @@ onMounted(() => {
               type="number"
               min="0"
               max="59"
-              placeholder="хвилини"
+              :placeholder= "t('manual.minutes')"
               v-model.number="minutes"
             />
           </div>
 
           <button type="submit" :disabled="loading">
-            {{ loading ? "Відправлення..." : "Відправити" }}
+            {{ loading ?  t("manual.time-input")  :  t("manual.time-input")  }}
           </button>
 
           <p v-if="message" class="status">{{ message }}</p>

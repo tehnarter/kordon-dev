@@ -12,7 +12,7 @@ export function useMenu() {
       borders: [
         {
           key: "krakovets",
-          coords: { lat: 49.290763, lon: 25.696639 },
+          coords: { lat: 49.306010, lon: 25.686835 },
           labelfun: () => t("ua-pl.borders['krakovets'].label"),
           label: t("ua-pl.borders.krakovets.label"),
           full: t("ua-pl.borders.krakovets.full"),

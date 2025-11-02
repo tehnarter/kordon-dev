@@ -16,7 +16,7 @@ const emit = defineEmits<{ (e: "close"): void }>()
 
 // 🧮 Стан форми
 const queue_length = ref<number>(0)
-const vehicle_type = ref<string>("car")
+const vehicle_type = ref<string>("")
 const message = ref<string>("")
 const messageColor = ref<string>("green")
 const dropdownOpen = ref<boolean>(false)
@@ -24,7 +24,7 @@ const dropdownOpen = ref<boolean>(false)
 // 🎫 Сесія
 const { setToken } = useSessionToken()
 
-// 🚗 Варіанти транспорту
+//  Варіанти транспорту
 const vehicleOptions = computed(() => [
   { key: "car", label: t("modals.car") },
   { key: "bus", label: t("modals.bus") },
@@ -32,11 +32,13 @@ const vehicleOptions = computed(() => [
   { key: "pedestrian", label: t("modals.pedestrian") },
 ])
 
-const selectedLabel = computed(
-  () => vehicleOptions.value.find((v) => v.key === vehicle_type.value)?.label || t("modals.select")
+const selectedLabel = computed(() =>
+  vehicle_type.value
+    ? vehicleOptions.value.find((v) => v.key === vehicle_type.value)?.label
+    : t("modals.vehicle")
 )
 
-// 🎧 UI події
+//  UI події
 const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value)
 const selectOption = (key: string) => {
   vehicle_type.value = key
@@ -47,7 +49,7 @@ const handleClickOutside = (e: MouseEvent) => {
   if (!target.closest(".custom-select")) dropdownOpen.value = false
 }
 
-// 🔊 Звук при знаходженні пункту
+// Звук при знаходженні пункту
 const playFoundSound = () => {
   const sound = new Audio("/sounds/notify.mp3")
   sound.volume = 0.6
@@ -56,7 +58,7 @@ const playFoundSound = () => {
   })
 }
 
-// 🕓 Поточний час UTC
+//  Поточний час UTC
 const getCurrentUTCTimeString = (): string => {
   const now = new Date()
   const pad = (n: number) => n.toString().padStart(2, "0")
@@ -65,53 +67,87 @@ const getCurrentUTCTimeString = (): string => {
   )}:${pad(now.getUTCMinutes())}:00`
 }
 
-// 🧭 Геолокація
+//  Геолокація
 const { currentCoords } = useBorderTracker()
-const { nearbyBorder, nearbyLabel,nearbyLabelFull } = useNearbyBorder(currentCoords)
+const { nearbyBorder, nearbyLabel, nearbyLabelFull } = useNearbyBorder(currentCoords)
 
 const isChecking = ref<boolean>(true)
 const foundBorder = ref<string | null>(null)
 const foundLabel = ref<string | null>(null)
 
-// 🔁 Реакція на координати
+// Реакція на координати + таймер 1 хв
+let notFoundTimer: ReturnType<typeof setTimeout> | null = null
+const isTimeExpired = ref<boolean>(false)
+
 watch(
   currentCoords,
   async (val) => {
     if (!val) return
     isChecking.value = true
+    isTimeExpired.value = false
+    if (notFoundTimer) clearTimeout(notFoundTimer)
+
+    // ⏱ якщо за 60 секунд не знайдено — стоп
+    notFoundTimer = setTimeout(() => {
+      if (!foundBorder.value) {
+        isTimeExpired.value = true
+        isChecking.value = false
+      }
+    }, 60000)
+
     await new Promise((r) => setTimeout(r, 800))
     isChecking.value = false
 
     if (nearbyBorder.value) {
       foundBorder.value = nearbyBorder.value
       foundLabel.value = nearbyLabel.value
+      if (notFoundTimer) {
+        clearTimeout(notFoundTimer)
+        notFoundTimer = null
+      }
     }
   },
   { immediate: true }
 )
 
-// 🔔 Звук при першому знаходженні
+// 🎵 звук при першому знаходженні
 watch(foundBorder, (newVal, oldVal) => {
   if (newVal && !oldVal) playFoundSound()
 })
-// 🕓 Збереження назви пункту на 24 години
+
+// 💾 зберегти пункт на 24 години
 watch(nearbyLabelFull, (newVal) => {
   if (newVal) {
-    const expiresAt = Date.now() + 24 * 60 * 60 * 1000 // 24 години
-    const data = { value: newVal, expiresAt }
-    localStorage.setItem("border-label-full", JSON.stringify(data))
+    const expiresAt = Date.now() + 24 * 60 * 60 * 1000
+    localStorage.setItem("border-label-full", JSON.stringify({ value: newVal, expiresAt }))
   }
 })
-
-// 🧹 Події життєвого циклу
+const geoEnabled = ref<boolean>(true)
+// 🧹 події життєвого циклу
 onMounted(() => {
   document.addEventListener("click", handleClickOutside)
+  document.addEventListener("click", handleClickOutside)
+
+  // 🧭 Перевіряємо чи користувач дозволив геолокацію
+  if (!navigator.geolocation) {
+    geoEnabled.value = false
+    return
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    () => {
+      geoEnabled.value = true
+    },
+    () => {
+      geoEnabled.value = false
+    }
+  )
 })
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside)
 })
 
-// ❌ Закрити модалку
+// 🔚 Закрити модалку
 const closeQueueSubmit = () => emit("close")
 
 // 📤 Відправка черги
@@ -119,8 +155,16 @@ const submitQueue = async () => {
   message.value = ""
   messageColor.value = "green"
 
+  // ❌ Якщо не вибрано тип транспорту
+  if (!vehicle_type.value) {
+    message.value = t("modals.vehicle")
+    messageColor.value = "red"
+    return
+  }
+
+  //  Якщо черга від’ємна
   if (queue_length.value < 0) {
-    message.value = t("message.invalid") || "Кількість не може бути від’ємною"
+    message.value = t("message.invalid")
     messageColor.value = "red"
     return
   }
@@ -128,7 +172,7 @@ const submitQueue = async () => {
   try {
     const token = await registerSession()
     if (!token) {
-      message.value = t("message.sessionFail") || "❌ Не вдалося створити сесію"
+      message.value = t("message.session")
       messageColor.value = "red"
       return
     }
@@ -163,7 +207,7 @@ const submitQueue = async () => {
       message.value = t("message.ok")
       messageColor.value = "green"
       queue_length.value = 0
-      vehicle_type.value = "car"
+      vehicle_type.value = ""
       setTimeout(() => emit("close"), 1500)
     }
   } catch (err) {
@@ -175,26 +219,29 @@ const submitQueue = async () => {
 }
 </script>
 
-
 <template>
   <teleport to="body">
     <div class="modal-overlay">
       <div class="modal">
         <button class="close-button" @click="closeQueueSubmit">×</button>
+        <!--  Стан перевірки -->
+           <p v-if="!geoEnabled">
+           {{ $t("manual.enable-gps") || "Увімкніть, будь ласка, GPS" }}
+             </p>
 
-        <!-- 🔍 Стан перевірки -->
-        <p v-if="isChecking && !foundBorder">🔍 {{ $t('modals.searching') }}</p>
-
-        <!-- ✅ Якщо пункт знайдено -->
+              <p v-else-if="isChecking && !foundBorder && !isTimeExpired">
+        🔍      {{ $t("manual.searching") }}
+           </p>
+        <!--  Якщо пункт знайдено -->
         <template v-else-if="foundBorder">
-          <h3 class="modal-title">Подайте чергу для</h3>
+          <h3 class="modal-title">{{ $t("manual.title") }}</h3>
           <p class="modal-subtitle"><strong>{{ foundLabel }}</strong></p>
 
           <form @submit.prevent="submitQueue" class="queue-form">
             <div>
               <label>{{ $t("modals.type") }}</label>
               <div class="custom-select" @click="toggleDropdown">
-                <div class="custom-select__selected">
+                <div class="custom-select__selected" :class="{ placeholder: !vehicle_type }">
                   {{ selectedLabel }}
                   <span class="arrow" :class="{ open: dropdownOpen }">▼</span>
                 </div>
@@ -209,21 +256,32 @@ const submitQueue = async () => {
                 </ul>
               </div>
             </div>
-
             <div>
               <label for="queue_length">{{ $t("modals.queue") }}</label>
-              <input id="queue_length" type="number" v-model.number="queue_length" min="0" required />
+              <input
+                id="queue_length"
+                type="number"
+                v-model.number="queue_length"
+                min="0"
+                required
+                :disabled="!vehicle_type"
+                placeholder="0"
+              />
             </div>
 
-            <button type="submit">{{ $t("modals.confirm") }}</button>
+            <!-- ✅ Кнопка підтвердження -->
+            <button type="submit">
+              {{ $t("modals.confirm") }}
+            </button>
 
+            <!--  Повідомлення -->
             <p v-if="message" :style="{ color: messageColor }">{{ message }}</p>
           </form>
         </template>
 
         <!-- ⚠️ Якщо пункт не знайдено -->
-        <template v-else>
-          <p>⚠️ Ви не біля жодного пункту</p>
+        <template v-else >
+          <p>{{ $t("manual.not-border") }}</p>
         </template>
       </div>
     </div>
@@ -249,12 +307,16 @@ const submitQueue = async () => {
   width: 100%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
+  p {
+    text-align: center;
+    font-size: 1.2rem;
+  }
 }
 
 .close-button {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.2rem;
+  right: 0.7rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -279,6 +341,9 @@ const submitQueue = async () => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  p {
+    text-align: center;
+  }
 }
 
 .queue-form label {
@@ -320,6 +385,10 @@ const submitQueue = async () => {
     background-color: rgba(255, 255, 255, 0.15);
     cursor: pointer;
     position: relative;
+
+    &.placeholder {
+      color: #999;
+    }
   }
 
   .arrow {

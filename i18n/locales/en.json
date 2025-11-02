@@ -160,10 +160,15 @@
     "time": "Crossing time:",
     "hours": "h",
     "minutes": "min"
-  },"message": {
-  "error": "Queue submission failed",
+  },
+  "message": {
+  "error": "Queue submission error",
   "ok": "✅ Successfully submitted!",
-  "err": "Submission error"
+  "err": "Submission error",
+  "token": "Session token not found",
+  "time": "Enter the crossing time",
+  "invalid": "The value cannot be negative",
+  "session": "Failed to create session"
 },
 "status": {
   "waiting": "Waiting for GPS coordinates…",
@@ -173,6 +178,7 @@
 },
  "modals": {
       "select": "Select direction of movement",
+      "vehicle":"Select vehicle type",
       "confirm": "✅ Confirm",
       "cross": "You are leaving the international border crossing",
       "time": "Border crossing time: ",
@@ -205,5 +211,20 @@
     "warning-page": {
       "title": "This site is available on mobile devices only",
       "text": "Please open this site on a mobile device to access the content."
-    }
+    },
+    "manual": {
+  "time": "Submit time",
+  "queue": "Submit queue",
+  "searching": "Searching for the nearest border crossing...",
+  "title": "Submit the queue for the border crossing",
+  "not-border": "No border crossing found",
+  "enable-gps": "Please enable GPS",
+  "cross": "Enter the total border crossing time",
+  "time-input": "Enter crossing time",
+  "send": "Send",
+  "sends": "Sending...",
+  "hours": "hours",
+  "minutes": "minutes"
+}
+
 }

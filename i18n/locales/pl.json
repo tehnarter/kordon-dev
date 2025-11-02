@@ -161,10 +161,14 @@
     "hours": "g",
      "minutes": "min"
   },
-  "message": {
+ "message": {
   "error": "Błąd wysyłania kolejki",
-  "ok": "✅ Wysłano pomyślnie!",
-  "err": "Błąd wysyłki"
+  "ok": "✅ Pomyślnie wysłano!",
+  "err": "Błąd wysyłania",
+  "token": "Nie znaleziono tokenu sesji",
+  "time": "Wprowadź czas przekroczenia granicy",
+  "invalid": "Wartość nie może być ujemna",
+  "session": "Nie udało się utworzyć sesji"
 },
 "status": {
   "waiting": "Oczekiwanie na współrzędne GPS…",
@@ -174,7 +178,8 @@
 },
  "modals": {
       "select": "Wybierz kierunek ruchu",
-     "confirm": "✅ Potwierdź",
+      "vehicle":"Wybierz typ pojazdu",
+      "confirm": "✅ Potwierdź",
       "cross": "Opuszczasz międzynarodowe przejście graniczne",
       "time": "Czas przekroczenia granicy: ",
       "road": "Szerokiej drogi!",
@@ -205,6 +210,21 @@
     "warning-page": {
       "title": "Strona dostępna tylko na urządzeniach mobilnych",
       "text": "Proszę otworzyć tę stronę na urządzeniu mobilnym, aby uzyskać dostęp do treści."
-    }
+    },
+      "manual": {
+  "time": "Prześlij czas",
+  "queue": "Prześlij kolejkę",
+  "searching": "Wyszukiwanie najbliższego przejścia granicznego...",
+  "title": "Prześlij kolejkę dla przejścia granicznego",
+  "not-border": "Nie znaleziono żadnego przejścia granicznego",
+  "enable-gps": "Włącz GPS",
+  "cross": "Podaj całkowity czas przekroczenia granicy",
+  "time-input": "Podaj czas przejścia",
+  "send": "Wyślij",
+  "sends": "Wysyłanie...",
+  "hours": "godziny",
+  "minutes": "minuty"
+}
+
 
 }

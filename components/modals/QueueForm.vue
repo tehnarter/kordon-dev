@@ -5,9 +5,10 @@ import { registerSession } from "@/utils/registerSession"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 
-const { borderKey, borderLabel } = defineProps<{
+const { borderKey, borderLabel, borderLabelFull } = defineProps<{
   borderKey: string
   borderLabel: string
+  borderLabelFull: string
 }>()
 
 const emit = defineEmits<{
@@ -15,7 +16,7 @@ const emit = defineEmits<{
 }>()
 
 const queue_length = ref(0)
-const vehicle_type = ref("car")
+const vehicle_type = ref<string>("")
 const message = ref("")
 const messageColor = ref("green")
 const dropdownOpen = ref(false)
@@ -26,13 +27,13 @@ const vehicleOptions = [
   { key: "car", label: t("modals.car") },
   { key: "bus", label: t("modals.bus") },
   { key: "tir", label: t("modals.tir") },
-  { key: "pedestrian", label: t("modals.pedestrian")},
+  { key: "pedestrian", label: t("modals.pedestrian") },
 ]
 
-const selectedLabel = computed(
-  () =>
-    vehicleOptions.find((v) => v.key === vehicle_type.value)?.label ||
-    "Оберіть транспорт"
+const selectedLabel = computed(() =>
+  vehicle_type.value
+    ? vehicleOptions.find((v) => v.key === vehicle_type.value)?.label
+    : t("modals.vehicle")
 )
 
 const toggleDropdown = () => {
@@ -51,7 +52,7 @@ const handleClickOutside = (e: MouseEvent) => {
 
 onMounted(() => {
   document.addEventListener("click", handleClickOutside)
-    //  звук відкриття модального вікна
+  // звук відкриття модального вікна
   const audio = new Audio("/sounds/notify.mp3")
   audio.play().catch(() => {
     console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
@@ -71,8 +72,15 @@ const submitQueue = async () => {
   message.value = ""
   messageColor.value = "green"
 
+  //  Якщо не вибрано тип транспорту — форма не відправляється
+  if (!vehicle_type.value) {
+    message.value = t("modals.vehicle")
+    messageColor.value = "red"
+    return
+  }
+
   if (queue_length.value < 0) {
-    message.value = "Кількість не може бути від’ємною"
+    message.value = t("message.invalid")
     messageColor.value = "red"
     return
   }
@@ -80,7 +88,7 @@ const submitQueue = async () => {
   try {
     const token = await registerSession()
     if (!token) {
-      message.value = "❌ Не вдалося створити сесію"
+      message.value = t("message.session")
       messageColor.value = "red"
       return
     }
@@ -112,8 +120,16 @@ const submitQueue = async () => {
     } else {
       message.value = `${t("message.ok")}`
       messageColor.value = "green"
+
+      // ✅ Зберігаємо назву кордону в localStorage на 24 години
+      const expiresAt = Date.now() + 24 * 60 * 60 * 1000
+      localStorage.setItem(
+        "border-label-full",
+        JSON.stringify({ value: borderLabelFull, expiresAt })
+      )
+
       queue_length.value = 0
-      vehicle_type.value = "car"
+      vehicle_type.value = ""
       setTimeout(() => emit("close"), 1500)
     }
   } catch (err) {
@@ -129,21 +145,20 @@ const submitQueue = async () => {
   <teleport to="body">
     <div class="modal-overlay">
       <div class="modal">
-        <button class="modal-close" @click="emit('close')">×</button>
-
         <h3 class="modal-title">
           {{ $t("modals.warning") }}<br />
           {{ $t("modals.border") }}
-           </h3>
-        <p class="modal-subtitle">
-          <strong>{{ borderLabel }}</strong>
-        </p>
+        </h3>
+        <p class="modal-subtitle"><strong>{{ borderLabel }}</strong></p>
 
         <form @submit.prevent="submitQueue" class="queue-form">
           <div>
             <label>{{ $t("modals.type") }}</label>
             <div class="custom-select" @click="toggleDropdown">
-              <div class="custom-select__selected">
+              <div
+                class="custom-select__selected"
+                :class="{ placeholder: !vehicle_type }"
+              >
                 {{ selectedLabel }}
                 <span class="arrow" :class="{ open: dropdownOpen }">▼</span>
               </div>
@@ -167,10 +182,14 @@ const submitQueue = async () => {
               v-model.number="queue_length"
               min="0"
               required
+              :disabled="!vehicle_type"
+              placeholder="0"
             />
           </div>
 
-          <button type="submit">{{ $t("modals.confirm") }}</button>
+           <button type="submit">
+              {{ $t("modals.confirm") }}
+            </button>
 
           <p v-if="message" :style="{ color: messageColor }">{{ message }}</p>
         </form>
@@ -188,7 +207,6 @@ const submitQueue = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .modal {
@@ -199,17 +217,6 @@ const submitQueue = async () => {
   width: 100%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
 }
 
 .modal-title {
@@ -230,6 +237,9 @@ const submitQueue = async () => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  p {
+    text-align: center;
+  }
 }
 
 .queue-form label {
@@ -260,7 +270,6 @@ const submitQueue = async () => {
   background-color: #409389;
 }
 
-/* ==== custom select ==== */
 .custom-select {
   position: relative;
   user-select: none;
@@ -273,6 +282,10 @@ const submitQueue = async () => {
     font-size: 1rem;
     cursor: pointer;
     position: relative;
+
+    &.placeholder {
+      color: #999;
+    }
   }
 
   .arrow {
@@ -310,23 +323,6 @@ const submitQueue = async () => {
 
     li:hover {
       background: #f0f0f0;
-    }
-
-    /* Скролбар (візуально легкий) */
-    scrollbar-width: thin;
-    scrollbar-color: #bbb transparent;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #bbb;
-      border-radius: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
     }
   }
 }
