@@ -112,7 +112,6 @@ const formattedTime = computed(() => {
       v-if="modalVal?.type === 'input-queue'"
       :borderKey="modalVal.borderKey"
       :borderLabel="modalVal.borderLabel"
-      :borderLabelFull="modalVal.borderLabelFull"
       @close="modal = null"
     />
     <ModalsCrossingTimeForm

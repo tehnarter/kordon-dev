@@ -21,12 +21,17 @@ const isNewsModalOpen = ref(false)
 const isInfoModalOpen = ref(false)
 const isQueueModalOpen = ref(false)
 const isTimeModalOpen = ref(false)
+const borderKey = ref<string | null>(null)
 
 function handleOpenModal(modalKey: string) {
   if (modalKey === "newsBlock") isNewsModalOpen.value = true
   else if (modalKey === "infoBlock") isInfoModalOpen.value = true
   else if (modalKey === "queueSubmit") isQueueModalOpen.value = true
   else if (modalKey === "timeSubmit") isTimeModalOpen.value = true
+}
+function QueueModalOpen() {
+  isQueueModalOpen.value=false,
+  localStorage.removeItem("border-key")
 }
 
 onMounted(() => {
@@ -62,7 +67,18 @@ onMounted(() => {
 
     gestureLock.value = null // 🔓 після свайпу розблоковуємо
   })
+  if (!process.client) return
+  borderKey.value = localStorage.getItem("border-key")
+
+  window.addEventListener("storage", () => {
+    borderKey.value = localStorage.getItem("border-key")
+  })
 })
+watch(borderKey, (newVal) => {
+  console.log("🔄 border-key змінено:", newVal)
+})
+
+
 </script>
 
 
@@ -101,7 +117,7 @@ onMounted(() => {
     />
   <ModalsNewsBlock v-if="isNewsModalOpen" @close="isNewsModalOpen = false" />
   <ModalsInfoBlock v-if="isInfoModalOpen" @close="isInfoModalOpen = false" />
-  <ModalsQueueManualSubmit v-if="isQueueModalOpen" @close="isQueueModalOpen = false" />
+  <ModalsQueueManualSubmit v-if="isQueueModalOpen && !borderKey" @close="QueueModalOpen" />
   <ModalsTimeManualSubmit v-if="isTimeModalOpen" @close="isTimeModalOpen = false" />
 
   </header>

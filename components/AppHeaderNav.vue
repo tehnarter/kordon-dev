@@ -98,7 +98,7 @@ function toggleChildSubmenu(key: string) {
 // Скидання додатку
 function resetApp() {
   const colorMode = localStorage.getItem("nuxt-color-mode")
-  ;["direction","lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp","queue_token", "border-label-full"].forEach(k =>
+  ;["direction","lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp","queue_token", "border-key"].forEach(k =>
     localStorage.removeItem(k)
   )
   sessionStorage.clear()

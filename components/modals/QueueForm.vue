@@ -5,10 +5,9 @@ import { registerSession } from "@/utils/registerSession"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 
-const { borderKey, borderLabel, borderLabelFull } = defineProps<{
+const { borderKey, borderLabel } = defineProps<{
   borderKey: string
   borderLabel: string
-  borderLabelFull: string
 }>()
 
 const emit = defineEmits<{
@@ -124,8 +123,8 @@ const submitQueue = async () => {
       // ✅ Зберігаємо назву кордону в localStorage на 24 години
       const expiresAt = Date.now() + 24 * 60 * 60 * 1000
       localStorage.setItem(
-        "border-label-full",
-        JSON.stringify({ value: borderLabelFull, expiresAt })
+        "border-key",
+        JSON.stringify({ value: borderKey, expiresAt })
       )
 
       queue_length.value = 0

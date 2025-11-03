@@ -7,13 +7,14 @@ import { useRuntimeConfig } from "#app"
 
 const { t } = useI18n()
 const config = useRuntimeConfig()
+const { menu } = useMenu()
 
 const emit = defineEmits<{ (e: "close"): void }>()
 const { sessionToken, clearToken } = useSessionToken()
 const { resetStartTime } = useBorderTracker()
 
 //  Назва пункту збережена раніше
-const borderLabelFull = ref<string | null>(null)
+const borderKey = ref<string | null>(null)
 
 //  Поля введення користувача
 const hours = ref<number | null>(null)
@@ -26,20 +27,30 @@ const message = ref<string | null>(null)
 
 //  Отримуємо збережену назву пункту
 function getSavedBorderName() {
-  const saved = localStorage.getItem("border-label-full")
+  const saved = localStorage.getItem("border-key")
   if (!saved) return null
   try {
     const data = JSON.parse(saved)
     if (Date.now() > data.expiresAt) {
-      localStorage.removeItem("border-label-full")
+      localStorage.removeItem("border-key")
       return null
     }
     return data.value
   } catch {
-    localStorage.removeItem("border-label-full")
+    localStorage.removeItem("border-key")
     return null
   }
 }
+// 🔎 Знаходимо full по ключу
+const borderLabelFull = computed(() => {
+  if (!borderKey.value) return null
+
+  for (const direction of menu.value) {
+    const found = direction.borders.find(b => b.key === borderKey.value)
+    if (found) return found.full
+  }
+  return null
+})
 
 // Формуємо поточний UTC-час
 function setReportedAtNowUTC() {
@@ -87,15 +98,13 @@ const submitForm = async () => {
       body: JSON.stringify(body),
     })
 
-    const result = await res.json()
-
     if (!res.ok) {
       message.value = t("message.err")
     } else {
       message.value = t("message.ok")
 
       //  Очищаємо все після успіху
-      localStorage.removeItem("border-label-full")
+      localStorage.removeItem("border-key")
       resetStartTime()
       clearToken()
       setTimeout(() => emit("close"), 1500)
@@ -110,7 +119,7 @@ const submitForm = async () => {
 //  Звук при відкритті
 onMounted(() => {
   setReportedAtNowUTC()
-  borderLabelFull.value = getSavedBorderName()
+  borderKey.value = getSavedBorderName()
   const audio = new Audio("/sounds/notify-1.mp3")
   audio.play().catch(() => {})
 })
@@ -149,7 +158,7 @@ onMounted(() => {
           </div>
 
           <button type="submit" :disabled="loading">
-            {{ loading ?  t("manual.time-input")  :  t("manual.time-input")  }}
+            {{ loading ?  t("manual.sends")  :  t("manual.send")  }}
           </button>
 
           <p v-if="message" class="status">{{ message }}</p>
