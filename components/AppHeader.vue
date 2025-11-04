@@ -1,94 +1,106 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
 import { usePanels } from "@/composables/usePanels"
+import { useBorderKey } from "@/composables/useBorderKey"
 
 const { isMenuOpen, isSocialOpen, gestureLock } = usePanels()
+const { borderKey } = useBorderKey()
 
 const isClickedBurger = ref(false)
 const navRef = ref()
-
-const handleOpenMenu = () => {
-  if (isSocialOpen.value) return
-  isClickedBurger.value = true
-  isMenuOpen.value = true
-}
-const handleCloseMenu = () => {
-  isClickedBurger.value = false
-  isMenuOpen.value = false
-}
-
 const isNewsModalOpen = ref(false)
 const isInfoModalOpen = ref(false)
 const isQueueModalOpen = ref(false)
 const isTimeModalOpen = ref(false)
-const borderKey = ref<string | null>(null)
+
+function handleOpenMenu() {
+  if (isSocialOpen.value) return
+  isClickedBurger.value = true
+  isMenuOpen.value = true
+}
+
+function handleCloseMenu() {
+  isClickedBurger.value = false
+  isMenuOpen.value = false
+}
 
 function handleOpenModal(modalKey: string) {
-  if (modalKey === "newsBlock") isNewsModalOpen.value = true
-  else if (modalKey === "infoBlock") isInfoModalOpen.value = true
-  else if (modalKey === "queueSubmit") isQueueModalOpen.value = true
-  else if (modalKey === "timeSubmit") isTimeModalOpen.value = true
-}
-function QueueModalOpen() {
-  isQueueModalOpen.value=false,
-  localStorage.removeItem("border-key")
+  switch (modalKey) {
+    case "newsBlock":
+      isNewsModalOpen.value = true
+      break
+    case "infoBlock":
+      isInfoModalOpen.value = true
+      break
+    case "queueSubmit":
+      isQueueModalOpen.value = true
+      break
+    case "timeSubmit":
+      isTimeModalOpen.value = true
+      break
+  }
+
+  if (process.client) {
+    borderKey.value = localStorage.getItem("border-key")
+  }
 }
 
+// 🔹 Закриття ручного введення і очищення ключа
+function closeQueueModal() {
+  isQueueModalOpen.value = false
+  if (process.client) {
+    localStorage.removeItem("border-key")
+    borderKey.value = null
+  }
+}
+
+// 🔹 Ініціалізація свайпів меню
 onMounted(() => {
-  if (!process.client) return
-
   let startX = 0
   let endX = 0
   let swipeFromSlider = false
 
-  document.addEventListener("touchstart", (e) => {
+  const handleTouchStart = (e: TouchEvent) => {
     const target = e.target as HTMLElement
     swipeFromSlider = !!target.closest(".direction-buttons, .sort-buttons")
     startX = e.touches[0].clientX
-  })
+  }
 
-  document.addEventListener("touchend", (e) => {
-    if (isSocialOpen.value || gestureLock.value === "social") return // блокуємо, якщо працює соцка
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (isSocialOpen.value || gestureLock.value === "social") return
 
     endX = e.changedTouches[0].clientX
     const diff = endX - startX
-
     if (swipeFromSlider) return
 
     if (diff > 100 && !isClickedBurger.value) {
       gestureLock.value = "menu"
       handleOpenMenu()
-    }
-
-    if (diff < -100 && isClickedBurger.value) {
+    } else if (diff < -100 && isClickedBurger.value) {
       gestureLock.value = "menu"
       navRef.value?.closeWithAnimation()
     }
 
-    gestureLock.value = null // 🔓 після свайпу розблоковуємо
-  })
-  if (!process.client) return
-  borderKey.value = localStorage.getItem("border-key")
+    gestureLock.value = null
+  }
 
-  window.addEventListener("storage", () => {
-    borderKey.value = localStorage.getItem("border-key")
+  document.addEventListener("touchstart", handleTouchStart)
+  document.addEventListener("touchend", handleTouchEnd)
+
+  // 🧹 Очищення при розмонтуванні
+  onUnmounted(() => {
+    document.removeEventListener("touchstart", handleTouchStart)
+    document.removeEventListener("touchend", handleTouchEnd)
   })
 })
-watch(borderKey, (newVal) => {
-  console.log("🔄 border-key змінено:", newVal)
-})
-
-
 </script>
-
-
 
 <template>
   <header class="header">
     <div class="header__nav-1 nav-1">
       <div class="nav-1__container nav-1-content">
         <div class="header__logo">
-          <img src="/ukraine.svg" alt="" class="header__logo-img" />
+          <img src="/ukraine.svg" alt="Ukraine" class="header__logo-img" />
         </div>
         <ClientOnly>
           <ThemeSwitcher />
@@ -100,10 +112,7 @@ watch(borderKey, (newVal) => {
     <div class="header__nav-2 nav-2">
       <div class="nav-2__container nav-2-content">
         <div class="header__burger">
-          <Burger
-            :class="{ active: isClickedBurger }"
-            @click="handleOpenMenu"
-          />
+          <Burger :class="{ active: isClickedBurger }" @click="handleOpenMenu" />
         </div>
         <Geo />
       </div>
@@ -115,19 +124,24 @@ watch(borderKey, (newVal) => {
       @openModal="handleOpenModal"
       ref="navRef"
     />
-  <ModalsNewsBlock v-if="isNewsModalOpen" @close="isNewsModalOpen = false" />
-  <ModalsInfoBlock v-if="isInfoModalOpen" @close="isInfoModalOpen = false" />
-  <ModalsQueueManualSubmit v-if="isQueueModalOpen && !borderKey" @close="QueueModalOpen" />
-  <ModalsTimeManualSubmit v-if="isTimeModalOpen" @close="isTimeModalOpen = false" />
 
+    <ModalsNewsBlock v-if="isNewsModalOpen" @close="isNewsModalOpen = false" />
+    <ModalsInfoBlock v-if="isInfoModalOpen" @close="isInfoModalOpen = false" />
+    <ModalsQueueManualSubmit
+      v-if="isQueueModalOpen && !borderKey"
+      @close="closeQueueModal"
+    />
+    <ModalsTimeManualSubmit
+      v-if="isTimeModalOpen"
+      @close="isTimeModalOpen = false"
+    />
   </header>
 </template>
 
-<style  lang="scss">
+<style lang="scss">
 .header {
   &__nav-1 {
-    padding: 12px 0px;
-    width: 100%;
+    padding: 12px 0;
     height: 48px;
     background-color: var(--themes-bg-header);
     transition: background-color 3s ease;
@@ -145,26 +159,26 @@ watch(borderKey, (newVal) => {
   }
 
   &__nav-2 {
-    padding: 12px 0px;
-    width: 100%;
+    padding: 12px 0;
     height: 48px;
     background-color: var(--themes-bg-footer);
     transition: background-color 3s ease;
   }
 }
 
-.nav-1-content {
-  height: 100%;
+.nav-1-content,
+.nav-2-content {
   display: flex;
-  column-gap: 20px;
   align-items: center;
+  height: 100%;
+}
+
+.nav-1-content {
+  column-gap: 20px;
 }
 
 .nav-2-content {
-  height: 100%;
-  display: flex;
   justify-content: flex-start;
   column-gap: 15px;
-  align-items: center;
 }
 </style>

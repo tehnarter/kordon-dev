@@ -49,6 +49,9 @@ const handleClickOutside = (e: MouseEvent) => {
   if (!target.closest(".custom-select")) dropdownOpen.value = false
 }
 
+const { updateBorderKey } = useBorderKey()
+
+
 onMounted(() => {
   document.addEventListener("click", handleClickOutside)
   // звук відкриття модального вікна
@@ -119,6 +122,8 @@ const submitQueue = async () => {
     } else {
       message.value = `${t("message.ok")}`
       messageColor.value = "green"
+      queue_length.value = 0
+      vehicle_type.value = ""
 
       // ✅ Зберігаємо назву кордону в localStorage на 24 години
       const expiresAt = Date.now() + 24 * 60 * 60 * 1000
@@ -127,8 +132,7 @@ const submitQueue = async () => {
         JSON.stringify({ value: borderKey, expiresAt })
       )
 
-      queue_length.value = 0
-      vehicle_type.value = ""
+      updateBorderKey()
       setTimeout(() => emit("close"), 1500)
     }
   } catch (err) {
