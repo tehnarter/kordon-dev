@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue"
-import { useSessionToken } from "@/composables/useSessionToken"
 import { registerSession } from "@/utils/registerSession"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
-
+const { isMuted } = useSound()
 const { borderKey, borderLabel } = defineProps<{
   borderKey: string
   borderLabel: string
@@ -54,12 +53,14 @@ const { updateBorderKey } = useBorderKey()
 
 onMounted(() => {
   document.addEventListener("click", handleClickOutside)
+
   // звук відкриття модального вікна
-  const audio = new Audio("/sounds/notify.mp3")
-  audio.play().catch(() => {
-    console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
-  })
+   if (!isMuted.value) {
+    const audio = new Audio("/sounds/notify.mp3")
+    audio.play().catch(() => {})
+  }
 })
+
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside)
 })

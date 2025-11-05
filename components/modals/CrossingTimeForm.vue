@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useSessionToken } from "@/composables/useSessionToken"
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
-
+const { sessionToken } = useSessionToken()
+const { isMuted } = useSound()
 const { time, borderLabel } = defineProps<{
   time?: number | null
   borderLabel: string
@@ -13,7 +13,7 @@ const emit = defineEmits<{
   (e: "close"): void
 }>()
 
-const { sessionToken } = useSessionToken()
+
 
 const reportedAt = ref("")
 
@@ -88,14 +88,11 @@ const submitForm = async () => {
 }
 
 onMounted(() => {
-
-
-
     //  звук відкриття модального вікна
-  const audio = new Audio("/sounds/notify-1.mp3")
-  audio.play().catch(() => {
-    console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
-  })
+  if (!isMuted.value) {
+    const audio = new Audio("/sounds/notify-1.mp3")
+    audio.play().catch(() => {})
+  }
 })
 
 onMounted(() => {

@@ -45,8 +45,8 @@ function handleOpenModal(modalKey: string) {
   }
 }
 
-// 🔹 Закриття ручного введення і очищення ключа
-function closeQueueModal() {
+//  Закриття ручного введення і очищення ключа
+function handleManualClose() {
   isQueueModalOpen.value = false
   if (process.client) {
     localStorage.removeItem("border-key")
@@ -54,7 +54,12 @@ function closeQueueModal() {
   }
 }
 
-// 🔹 Ініціалізація свайпів меню
+//  Автоматичне закриття
+function handleAutoClose() {
+  isQueueModalOpen.value = false
+}
+
+//  Ініціалізація свайпів меню
 onMounted(() => {
   let startX = 0
   let endX = 0
@@ -87,7 +92,7 @@ onMounted(() => {
   document.addEventListener("touchstart", handleTouchStart)
   document.addEventListener("touchend", handleTouchEnd)
 
-  // 🧹 Очищення при розмонтуванні
+  //  Очищення при розмонтуванні
   onUnmounted(() => {
     document.removeEventListener("touchstart", handleTouchStart)
     document.removeEventListener("touchend", handleTouchEnd)
@@ -129,7 +134,8 @@ onMounted(() => {
     <ModalsInfoBlock v-if="isInfoModalOpen" @close="isInfoModalOpen = false" />
     <ModalsQueueManualSubmit
       v-if="isQueueModalOpen && !borderKey"
-      @close="closeQueueModal"
+      @closeManual="handleManualClose"
+      @closeAuto="handleAutoClose"
     />
     <ModalsTimeManualSubmit
       v-if="isTimeModalOpen"

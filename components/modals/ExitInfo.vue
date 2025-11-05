@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
 const { t } = useI18n()
+const { isMuted } = useSound()
 defineProps<{
   borderLabel: string
 }>()
@@ -13,12 +14,11 @@ const closeModal = () => {
   emit("close")
 }
 onMounted(() => {
-
-    //  звук відкриття модального вікна
-  const audio = new Audio("/sounds/notify-2.mp3")
-  audio.play().catch(() => {
-    console.warn("Автовідтворення заблоковане, зіграє після першого кліку по сайту")
-  })
+   // звук відкриття модального вікна
+   if (!isMuted.value) {
+    const audio = new Audio("/sounds/notify-2.mp3")
+    audio.play().catch(() => {})
+  }
 })
 </script>
 
@@ -28,11 +28,11 @@ onMounted(() => {
       <div class="exit-modal">
         <button class="close-button" @click="closeModal">×</button>
 
-        <h3>{{ $t("modals.cross") }}</h3>
+        <h3>{{ t("modals.cross") }}</h3>
         <p class="modal-subtitle">
           <strong>{{ borderLabel }}</strong>
         </p>
-        <p>{{ $t("modals.road") }}</p>
+        <p>{{ t("modals.road") }}</p>
       </div>
     </div>
   </Teleport>

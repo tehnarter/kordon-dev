@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue"
-import { useSessionToken } from "@/composables/useSessionToken"
-import { useBorderTracker } from "@/composables/useBorderTracker"
 import { useI18n } from "vue-i18n"
 import { useRuntimeConfig } from "#app"
 
 const { t } = useI18n()
-const config = useRuntimeConfig()
 const { menu } = useMenu()
-
-const emit = defineEmits<{ (e: "close"): void }>()
-const { sessionToken, clearToken } = useSessionToken()
+const { sessionToken, clearToken,initToken  } = useSessionToken()
 const { resetStartTime } = useBorderTracker()
-
+const emit = defineEmits<{ (e: "close"): void }>()
+const { isMuted } = useSound()
+const config = useRuntimeConfig()
 //  Назва пункту збережена раніше
 const borderKey = ref<string | null>(null)
 
@@ -118,10 +115,13 @@ const submitForm = async () => {
 
 //  Звук при відкритті
 onMounted(() => {
+  initToken()
   setReportedAtNowUTC()
   borderKey.value = getSavedBorderName()
-  const audio = new Audio("/sounds/notify-1.mp3")
-  audio.play().catch(() => {})
+  if (!isMuted.value) {
+    const audio = new Audio("/sounds/notify-1.mp3")
+    audio.play().catch(() => {})
+  }
 })
 </script>
 

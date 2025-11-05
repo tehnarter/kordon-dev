@@ -7,21 +7,24 @@ import { useBorderTracker } from "@/composables/useBorderTracker"
 import { useNearbyBorder } from "@/composables/useNearbyBorder"
 import { registerSession } from "@/utils/registerSession"
 
-// 🌐 i18n + config
+//  i18n + config
 const { t } = useI18n()
 const config = useRuntimeConfig()
+const { isMuted } = useSound()
+//  Emits
+const emit = defineEmits<{
+  (e: "closeManual"): void
+  (e: "closeAuto"): void
+}>()
 
-// 🪶 Emits
-const emit = defineEmits<{ (e: "close"): void }>()
-
-// 🧮 Стан форми
+//  Стан форми
 const queue_length = ref<number>(0)
 const vehicle_type = ref<string>("")
 const message = ref<string>("")
 const messageColor = ref<string>("green")
 const dropdownOpen = ref<boolean>(false)
 
-// 🎫 Сесія
+//  Сесія
 const { setToken } = useSessionToken()
 
 //  Варіанти транспорту
@@ -51,12 +54,14 @@ const handleClickOutside = (e: MouseEvent) => {
 
 // Звук при знаходженні пункту
 const playFoundSound = () => {
-  const sound = new Audio("/sounds/notify.mp3")
-  sound.volume = 0.6
-  sound.play().catch(() => {
-    console.warn("🔇 Не вдалося відтворити звук (можливо, браузер блокує автоплей).")
-  })
+  if (!isMuted.value) {
+    const audio = new Audio("/sounds/notify.mp3")
+    audio.volume = 0.6
+    audio.play().catch(() => {})
+  }
 }
+
+
 
 //  Поточний час UTC
 const getCurrentUTCTimeString = (): string => {
@@ -115,7 +120,7 @@ watch(foundBorder, (newVal, oldVal) => {
   if (newVal && !oldVal) playFoundSound()
 })
 
-// 💾 зберегти пункт на 24 години
+//  зберегти пункт на 24 години
 watch(nearbyBorder, (newVal) => {
   if (newVal) {
     const expiresAt = Date.now() + 24 * 60 * 60 * 1000
@@ -123,12 +128,11 @@ watch(nearbyBorder, (newVal) => {
   }
 })
 const geoEnabled = ref<boolean>(true)
-// 🧹 події життєвого циклу
+//  події життєвого циклу
 onMounted(() => {
   document.addEventListener("click", handleClickOutside)
-  document.addEventListener("click", handleClickOutside)
 
-  // 🧭 Перевіряємо чи користувач дозволив геолокацію
+  //  Перевіряємо чи користувач дозволив геолокацію
   if (!navigator.geolocation) {
     geoEnabled.value = false
     return
@@ -147,15 +151,19 @@ onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside)
 })
 
-// 🔚 Закрити модалку
-const closeQueueSubmit = () => emit("close")
+// Користувач натиснув «Закрити»
+const closeQueueSubmit = () => emit("closeManual")
+// ⏳ Автоматичне закриття після успішного сабміту
+const autoCloseModal = (delay = 1500) => {
+  setTimeout(() => emit("closeAuto"), delay)
+}
 
-// 📤 Відправка черги
+//  Відправка черги
 const submitQueue = async () => {
   message.value = ""
   messageColor.value = "green"
 
-  // ❌ Якщо не вибрано тип транспорту
+  //  Якщо не вибрано тип транспорту
   if (!vehicle_type.value) {
     message.value = t("modals.vehicle")
     messageColor.value = "red"
@@ -208,7 +216,7 @@ const submitQueue = async () => {
       messageColor.value = "green"
       queue_length.value = 0
       vehicle_type.value = ""
-      setTimeout(() => emit("close"), 1500)
+      autoCloseModal()
     }
   } catch (err) {
     console.error(err)
@@ -226,20 +234,20 @@ const submitQueue = async () => {
         <button class="close-button" @click="closeQueueSubmit">×</button>
         <!--  Стан перевірки -->
            <p v-if="!geoEnabled">
-           {{ $t("manual.enable-gps") || "Увімкніть, будь ласка, GPS" }}
+           {{ t("manual.enable-gps") || "Увімкніть, будь ласка, GPS" }}
              </p>
 
               <p v-else-if="isChecking && !foundBorder && !isTimeExpired">
-        🔍      {{ $t("manual.searching") }}
+        🔍      {{ t("manual.searching") }}
            </p>
-        <!--  Якщо пункт знайдено -->
+
         <template v-else-if="foundBorder">
           <h3 class="modal-title">{{ $t("manual.title") }}</h3>
           <p class="modal-subtitle"><strong>{{ foundLabel }}</strong></p>
 
           <form @submit.prevent="submitQueue" class="queue-form">
             <div>
-              <label>{{ $t("modals.type") }}</label>
+              <label>{{ t("modals.type") }}</label>
               <div class="custom-select" @click="toggleDropdown">
                 <div class="custom-select__selected" :class="{ placeholder: !vehicle_type }">
                   {{ selectedLabel }}
@@ -257,7 +265,7 @@ const submitQueue = async () => {
               </div>
             </div>
             <div>
-              <label for="queue_length">{{ $t("modals.queue") }}</label>
+              <label for="queue_length">{{ t("modals.queue") }}</label>
               <input
                 id="queue_length"
                 type="number"
@@ -268,21 +276,14 @@ const submitQueue = async () => {
                 placeholder="0"
               />
             </div>
-
-            <!-- ✅ Кнопка підтвердження -->
             <button type="submit">
-              {{ $t("modals.confirm") }}
+              {{ t("modals.confirm") }}
             </button>
-
-            <!--  Повідомлення -->
             <p v-if="message" :style="{ color: messageColor }">{{ message }}</p>
           </form>
         </template>
+          <p v-else >{{ t("manual.not-border") }}</p>
 
-        <!-- ⚠️ Якщо пункт не знайдено -->
-        <template v-else >
-          <p>{{ $t("manual.not-border") }}</p>
-        </template>
       </div>
     </div>
   </teleport>

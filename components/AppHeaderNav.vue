@@ -7,16 +7,16 @@ import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 const { menu } = useMenu()
 const selected = useBorder()
+const { sessionToken,initToken  } = useSessionToken()
 const emit = defineEmits(["close", "openModal"])
 
 const activeSubmenu = ref<string | null>(null)
 const activeChildSubmenu = ref<string | null>(null)
 const activeBorder = ref<string | null>(null)
-const hasToken = ref<string | null>(null)
 // Дані користувача
 const userName = ref(t("nav.guest"))
 const userPhoto = ref("/logo-img.svg")
-
+const { isMuted, toggleSound } = useSound()
 onMounted(() => {
   if (window.Telegram?.WebApp) {
     const tg = window.Telegram.WebApp
@@ -32,7 +32,7 @@ onMounted(() => {
     gsap.fromTo(".nav", { x: "-100%" }, { x: "0%", duration: 0.4, ease: "power2.out" })
     gsap.to(".nav__overlay", { opacity: 1, pointerEvents: "auto", duration: 0.3 })
   })
-  hasToken.value = localStorage.getItem("queue_token")
+  initToken()
 })
 
 
@@ -42,15 +42,19 @@ const fullMenu = computed(() => [
   {
   key: "borderAction",
 
-    name: hasToken.value ? t("manual.time") : t("manual.queue"),
-    modal: hasToken.value ? "timeSubmit" : "queueSubmit"
+    name: sessionToken.value ? t("manual.time") : t("manual.queue"),
+    modal: sessionToken.value ? "timeSubmit" : "queueSubmit"
   },
   { key: "news", name: t("nav.news"), modal: "newsBlock" },
   { key: "info", name: t("nav.info"), modal: "infoBlock" },
   {
     key: "settings",
     name: t("nav.settings"),
-    children: [{ key: "reset", name: t("nav.reset"), action: "reset" }],
+    children: [
+      { key: "reset", name: t("nav.reset"), action: "reset" },
+      { key: "mute", name: isMuted.value ? "🔊 Вкл звук" : "🔇 Викл звук", action: "mute" }
+
+    ],
   },
   {
     key: "contacts",
@@ -156,6 +160,7 @@ function resetApp() {
                   () => {
                     if (child.borders) toggleChildSubmenu(child.key)
                     else if (child.action === 'reset') resetApp()
+                    else if (child.action === 'mute') toggleSound()
                     else setActiveBorder(child)
                   }
                 "
