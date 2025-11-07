@@ -1,18 +1,18 @@
 {
   "seo": {
-  "title": "KORDON – Border queues and news from Ukraine's borderlands",
-  "description": "Up-to-date information about border queues, checkpoints, crossing rules, and news from Ukraine's border regions. Data updated in real time.",
-  "keywords": "Ukraine border, border queues, border news, checkpoints, border crossing, exit rules"
-},
-"og": {
-  "title": "KORDON – Border queues and news from Ukraine",
-  "description": "Real-time: queues at checkpoints, crossing rules, and the latest news from Ukraine's borders."
-},
-"twitter": {
-  "card": "summary_large_image",
-  "title": "KORDON – Border queues and news from Ukraine",
-  "description": "Live data about border queues, checkpoints, and news from Ukraine's border regions."
-},
+    "title": "KORDON – Border queues and news from Ukraine's borderlands",
+    "description": "Up-to-date information about border queues, checkpoints, crossing rules, and news from Ukraine's border regions. Data updated in real time.",
+    "keywords": "Ukraine border, border queues, border news, checkpoints, border crossing, exit rules"
+  },
+  "og": {
+    "title": "KORDON – Border queues and news from Ukraine",
+    "description": "Real-time: queues at checkpoints, crossing rules, and the latest news from Ukraine's borders."
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "KORDON – Border queues and news from Ukraine",
+    "description": "Live data about border queues, checkpoints, and news from Ukraine's border regions."
+  },
   "ua-pl": {
     "name": "Ukraine-Poland",
     "borders": {
@@ -24,7 +24,10 @@
       "hrushiv": { "label": "Hrushiv", "full": "Hrushiv-Budomierz" },
       "smilnytsia": { "label": "Smilnytsia", "full": "Smilnytsia-Kroscienko" },
       "uhryniv": { "label": "Uhryniv", "full": "Uhryniv-Dolhobychuv" },
-"nyzhankovychi": { "label": "Nyzhankovychi", "full": "Nyzhankovychi-Malkhovitse" }
+      "nyzhankovychi": {
+        "label": "Nyzhankovychi",
+        "full": "Nyzhankovychi-Malkhovitse"
+      }
     }
   },
 
@@ -39,7 +42,10 @@
       "budomierz": { "label": "Budomierz", "full": "Budomierz-Hrushiv" },
       "kroscienko": { "label": "Kroscienko", "full": "Kroscienko-Smilnytsia" },
       "dolhobychuv": { "label": "Dolhobychuv", "full": "Dolhobychuv-Uhryniv" },
-      "malkhovitse": { "label": "Malkhovitse", "full": "Malkhovitse-Nyzhankovychi" }
+      "malkhovitse": {
+        "label": "Malkhovitse",
+        "full": "Malkhovitse-Nyzhankovychi"
+      }
     }
   },
 
@@ -69,20 +75,20 @@
   },
 
   "ua-hu": {
-    "name": "Ukraine-Hungary",
+    "name": "Ukraine–Hungary",
     "borders": {
-      "chop": { "label": "Chop", "full": "Chop-Zahony" },
-      "luzhanka": { "label": "Luzhanka", "full": "Luzhanka-Bereh Daroc" },
-      "dzvinkove": { "label": "Dzvinkove", "full": "Dzvinkove-Astei" }
+      "chop": { "label": "Chop", "full": "Chop–Zahony" },
+      "luzhanka": { "label": "Luzhanka", "full": "Luzhanka–Beregsurany" },
+      "dzvinkove": { "label": "Dzvinkove", "full": "Dzvinkove–Lonya" }
     }
   },
 
   "hu-ua": {
-    "name": "Hungary-Ukraine",
+    "name": "Hungary–Ukraine",
     "borders": {
-      "zahony": { "label": "Zahony", "full": "Zahony-Chop" },
-      "beregdaroc": { "label": "Bereh Daroc", "full": "Bereh Daroc-Luzhanka" },
-      "astei": { "label": "Astei", "full": "Astei-Dzvinkove" }
+      "zahony": { "label": "Zahony", "full": "Zahony–Chop" },
+      "berehshuran": { "label": "Beregsurany", "full": "Beregsurany–Luzhanka" },
+      "lonya": { "label": "Lonya", "full": "Lonya–Dzvinkove" }
     }
   },
 
@@ -162,69 +168,69 @@
     "minutes": "min"
   },
   "message": {
-  "error": "Queue submission error",
-  "ok": "✅ Successfully submitted!",
-  "err": "Submission error",
-  "token": "Session token not found",
-  "time": "Enter the crossing time",
-  "invalid": "The value cannot be negative",
-  "session": "Failed to create session"
-},
-"status": {
-  "waiting": "Waiting for GPS coordinates…",
-  "received": "Coordinates received",
-  "error": "Geolocation is disabled or unavailable",
-  "not_supported": "Geolocation is not supported"
-},
- "modals": {
-      "select": "Select direction of movement",
-      "vehicle":"Select vehicle type",
-      "confirm": "✅ Confirm",
-      "cross": "You are leaving the international border crossing",
-      "time": "Border crossing time: ",
-      "road": "Have a safe journey!",
-      "choose": "— Select —",
-      "geo": "Geolocation is disabled",
-      "on": "Please enable geolocation in your device or browser settings to continue.",
-      "warning": "Attention!",
-      "border": "You are approaching an international border crossing",
-      "type": "Transport type: ",
-      "queue": "Queue length:",
-      "car": "Car",
-      "bus": "Bus",
-      "tir": "TIR",
-      "pedestrian": "Pedestrian",
-      "news": "No news",
-      "info": "No information"
-
-    },
-     "nav": {
-      "hello": "Hello",
-      "guest": "Guest",
-      "directions": "Directions",
-      "news": "News",
-      "info": "Information",
-      "settings": "Settings",
-      "reset": "Reset direction",
-      "contacts": "Contacts"
-    },
-    "warning-page": {
-      "title": "This site is available on mobile devices only",
-      "text": "Please open this site on a mobile device to access the content."
-    },
-    "manual": {
-  "time": "Submit time",
-  "queue": "Submit queue",
-  "searching": "Searching for the nearest border crossing...",
-  "title": "Submit the queue for the border crossing",
-  "not-border": "No border crossing found",
-  "enable-gps": "Please enable GPS",
-  "cross": "Enter the total border crossing time",
-  "time-input": "Enter crossing time",
-  "send": "Send",
-  "sends": "Sending...",
-  "hours": "hours",
-  "minutes": "minutes"
-}
-
+    "error": "Queue submission error",
+    "ok": "✅ Successfully submitted!",
+    "err": "Submission error",
+    "token": "Session token not found",
+    "time": "Enter the crossing time",
+    "invalid": "The value cannot be negative",
+    "session": "Failed to create session"
+  },
+  "status": {
+    "waiting": "Waiting for GPS coordinates…",
+    "received": "Coordinates received",
+    "error": "Geolocation is disabled or unavailable",
+    "not_supported": "Geolocation is not supported"
+  },
+  "modals": {
+    "select": "Select direction of movement",
+    "vehicle": "Select vehicle type",
+    "confirm": "✅ Confirm",
+    "cross": "You are leaving the international border crossing",
+    "time": "Border crossing time: ",
+    "road": "Have a safe journey!",
+    "choose": "— Select —",
+    "geo": "Geolocation is disabled",
+    "on": "Please enable geolocation in your device or browser settings to continue.",
+    "warning": "Attention!",
+    "border": "You are approaching an international border crossing",
+    "type": "Transport type: ",
+    "queue": "Queue length:",
+    "car": "Car",
+    "bus": "Bus",
+    "tir": "TIR",
+    "pedestrian": "Pedestrian",
+    "news": "No news",
+    "info": "No information"
+  },
+  "nav": {
+    "hello": "Hello",
+    "guest": "Guest",
+    "directions": "Directions",
+    "news": "News",
+    "info": "Information",
+    "settings": "Settings",
+    "reset": "Reset direction",
+    "contacts": "Contacts",
+    "mute-on": "🔊 Turn on sound",
+    "mute-off": "🔇 Mute sound"
+  },
+  "warning-page": {
+    "title": "This site is available on mobile devices only",
+    "text": "Please open this site on a mobile device to access the content."
+  },
+  "manual": {
+    "time": "Submit time",
+    "queue": "Submit queue",
+    "searching": "Searching for the nearest border crossing...",
+    "title": "Submit the queue for the border crossing",
+    "not-border": "No border crossing found",
+    "enable-gps": "Please enable GPS",
+    "cross": "Enter the total border crossing time",
+    "time-input": "Enter crossing time",
+    "send": "Send",
+    "sends": "Sending...",
+    "hours": "hours",
+    "minutes": "minutes"
+  }
 }

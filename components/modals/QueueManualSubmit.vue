@@ -312,6 +312,12 @@ const submitQueue = async () => {
     text-align: center;
     font-size: 1.2rem;
   }
+  .modal-subtitle {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #4db6ac;
+}
 }
 
 .close-button {

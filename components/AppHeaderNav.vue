@@ -7,7 +7,7 @@ import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 const { menu } = useMenu()
 const selected = useBorder()
-const { sessionToken,initToken  } = useSessionToken()
+const { sessionToken, initToken } = useSessionToken()
 const emit = defineEmits(["close", "openModal"])
 
 const activeSubmenu = ref<string | null>(null)
@@ -29,21 +29,28 @@ onMounted(() => {
   }
 
   nextTick(() => {
-    gsap.fromTo(".nav", { x: "-100%" }, { x: "0%", duration: 0.4, ease: "power2.out" })
-    gsap.to(".nav__overlay", { opacity: 1, pointerEvents: "auto", duration: 0.3 })
+    gsap.fromTo(
+      ".nav",
+      { x: "-100%" },
+      { x: "0%", duration: 0.4, ease: "power2.out" }
+    )
+    gsap.to(".nav__overlay", {
+      opacity: 1,
+      pointerEvents: "auto",
+      duration: 0.3,
+    })
   })
   initToken()
 })
-
 
 // Головне меню
 const fullMenu = computed(() => [
   { key: "directions", name: t("nav.directions"), children: menu.value },
   {
-  key: "borderAction",
+    key: "borderAction",
 
     name: sessionToken.value ? t("manual.time") : t("manual.queue"),
-    modal: sessionToken.value ? "timeSubmit" : "queueSubmit"
+    modal: sessionToken.value ? "timeSubmit" : "queueSubmit",
   },
   { key: "news", name: t("nav.news"), modal: "newsBlock" },
   { key: "info", name: t("nav.info"), modal: "infoBlock" },
@@ -52,17 +59,35 @@ const fullMenu = computed(() => [
     name: t("nav.settings"),
     children: [
       { key: "reset", name: t("nav.reset"), action: "reset" },
-      { key: "mute", name: isMuted.value ? "🔊 Вкл звук" : "🔇 Викл звук", action: "mute" }
-
+      {
+        key: "mute",
+        name: isMuted.value ? t("nav.mute-on") : t("nav.mute-off"),
+        action: "mute",
+      },
     ],
   },
   {
     key: "contacts",
     name: t("nav.contacts"),
     children: [
-      { key: "telegram", name: "Telegram", link: "https://t.me/tehnar_u_a", icon: "/telegram.svg" },
-      { key: "facebook", name: "Facebook", link: "https://www.facebook.com/profile.php?id=61579371541481", icon: "/facebook.svg" },
-      { key: "email", name: "Email", link: "mailto:tehnarpol@gmail.com", icon: "/mail.svg" },
+      {
+        key: "telegram",
+        name: "Telegram",
+        link: "https://t.me/tehnar_u_a",
+        icon: "/telegram.svg",
+      },
+      {
+        key: "facebook",
+        name: "Facebook",
+        link: "https://www.facebook.com/profile.php?id=61579371541481",
+        icon: "/facebook.svg",
+      },
+      {
+        key: "email",
+        name: "Email",
+        link: "mailto:tehnarpol@gmail.com",
+        icon: "/mail.svg",
+      },
     ],
   },
 ])
@@ -82,8 +107,17 @@ function openModal(modalKey: string) {
 
 function closeWithAnimation() {
   if (import.meta.client) {
-    gsap.to(".nav", { x: "-100%", duration: 0.4, ease: "power2.in", onComplete: () => emit("close") })
-    gsap.to(".nav__overlay", { opacity: 0, pointerEvents: "none", duration: 0.3 })
+    gsap.to(".nav", {
+      x: "-100%",
+      duration: 0.4,
+      ease: "power2.in",
+      onComplete: () => emit("close"),
+    })
+    gsap.to(".nav__overlay", {
+      opacity: 0,
+      pointerEvents: "none",
+      duration: 0.3,
+    })
   } else {
     emit("close")
   }
@@ -102,15 +136,35 @@ function toggleChildSubmenu(key: string) {
 // Скидання додатку
 function resetApp() {
   const colorMode = localStorage.getItem("nuxt-color-mode")
-  ;["direction","lastNearbyBorderKey", "lastNearbyBorderKeyTimestamp","queue_token", "border-key"].forEach(k =>
-    localStorage.removeItem(k)
-  )
+  ;[
+    "direction",
+    "lastNearbyBorderKey",
+    "lastNearbyBorderKeyTimestamp",
+    "queue_token",
+    "border-key",
+  ].forEach((k) => localStorage.removeItem(k))
   sessionStorage.clear()
   if (indexedDB.databases) {
-    indexedDB.databases().then(r => r.forEach(db => indexedDB.deleteDatabase(db.name!)))
+    indexedDB
+      .databases()
+      .then((r) => r.forEach((db) => indexedDB.deleteDatabase(db.name!)))
   }
   if (colorMode) localStorage.setItem("nuxt-color-mode", colorMode)
   location.reload()
+}
+function handleChildClick(child: any) {
+  if (child.borders) toggleChildSubmenu(child.key)
+  else if (child.action === "reset") resetApp()
+  else if (child.action === "mute") {
+    const wasMuted = isMuted.value
+    toggleSound()
+    if (wasMuted && !isMuted.value) {
+      const audio = new Audio("/sounds/notify-3.mp3")
+      audio.play().catch(() => {})
+    }
+  } else {
+    setActiveBorder(child)
+  }
 }
 </script>
 
@@ -132,14 +186,20 @@ function resetApp() {
           <div
             class="nav__link-item"
             :class="{ active: activeSubmenu === item.key }"
-            @click="item.children ? toggleSubmenu(item.key) : openModal(item.modal)"
+            @click="
+              item.children ? toggleSubmenu(item.key) : openModal(item.modal)
+            "
           >
             {{ item.name }}
           </div>
 
           <!-- Підменю 2 рівня -->
           <ul v-if="activeSubmenu === item.key" class="nav__listsub">
-            <li v-for="child in item.children" :key="child.key" class="nav__link">
+            <li
+              v-for="child in item.children"
+              :key="child.key"
+              class="nav__link"
+            >
               <!-- Контакти -->
               <a
                 v-if="item.key === 'contacts'"
@@ -156,21 +216,22 @@ function resetApp() {
               <div
                 v-else
                 class="nav__item-link"
-                @click="
-                  () => {
-                    if (child.borders) toggleChildSubmenu(child.key)
-                    else if (child.action === 'reset') resetApp()
-                    else if (child.action === 'mute') toggleSound()
-                    else setActiveBorder(child)
-                  }
-                "
+                @click="handleChildClick(child)"
               >
                 {{ child.name }}
               </div>
 
               <!-- Підменю 3 рівня (кордони) -->
-              <ul v-if="child.borders && activeChildSubmenu === child.key" class="nav__listsub-child">
-                <li v-for="border in child.borders" :key="border.key" class="nav__sublink" @click="setActiveBorder(border)">
+              <ul
+                v-if="child.borders && activeChildSubmenu === child.key"
+                class="nav__listsub-child"
+              >
+                <li
+                  v-for="border in child.borders"
+                  :key="border.key"
+                  class="nav__sublink"
+                  @click="setActiveBorder(border)"
+                >
                   {{ border.full }}
                 </li>
               </ul>
@@ -283,13 +344,16 @@ function resetApp() {
 }
 .nav__sublink {
   padding: 10px;
-  font-size: 16px; background-color: var(--themes-bg-subnav);
-  border-radius: 6px; margin-bottom: 6px;
+  font-size: 16px;
+  background-color: var(--themes-bg-subnav);
+  border-radius: 6px;
+  margin-bottom: 6px;
   transition: background-color 0.3s;
   &.active {
-    background: #1976d2; color: #fff;
-    }
+    background: #1976d2;
+    color: #fff;
   }
+}
 .nav__contact-link {
   display: flex;
   align-items: center;

@@ -1,18 +1,18 @@
 {
   "seo": {
-  "title": "KORDON – Kolejki na granicy i wiadomości z pogranicza Ukrainy",
-  "description": "Aktualne informacje o kolejkach na granicy, przejściach granicznych, zasadach przekraczania oraz wiadomościach z pogranicza Ukrainy. Dane aktualizowane w czasie rzeczywistym.",
-  "keywords": "granica Ukraina, kolejki na granicy, wiadomości graniczne, przejścia graniczne, przekraczanie granicy, zasady wyjazdu"
-},
-"og": {
-  "title": "KORDON – Kolejki i wiadomości z granicy Ukrainy",
-  "description": "Czas rzeczywisty: kolejki na przejściach granicznych, zasady przekraczania i najważniejsze wiadomości z granicy Ukrainy."
-},
-"twitter": {
-  "card": "summary_large_image",
-  "title": "KORDON – Kolejki i wiadomości z granicy Ukrainy",
-  "description": "Bieżące dane o kolejkach, przejściach granicznych i wiadomościach z pogranicza Ukrainy."
-},
+    "title": "KORDON – Kolejki na granicy i wiadomości z pogranicza Ukrainy",
+    "description": "Aktualne informacje o kolejkach na granicy, przejściach granicznych, zasadach przekraczania oraz wiadomościach z pogranicza Ukrainy. Dane aktualizowane w czasie rzeczywistym.",
+    "keywords": "granica Ukraina, kolejki na granicy, wiadomości graniczne, przejścia graniczne, przekraczanie granicy, zasady wyjazdu"
+  },
+  "og": {
+    "title": "KORDON – Kolejki i wiadomości z granicy Ukrainy",
+    "description": "Czas rzeczywisty: kolejki na przejściach granicznych, zasady przekraczania i najważniejsze wiadomości z granicy Ukrainy."
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "KORDON – Kolejki i wiadomości z granicy Ukrainy",
+    "description": "Bieżące dane o kolejkach, przejściach granicznych i wiadomościach z pogranicza Ukrainy."
+  },
   "ua-pl": {
     "name": "Ukraina-Polska",
     "borders": {
@@ -24,7 +24,10 @@
       "hrushiv": { "label": "Hruszów", "full": "Hruszów-Budomierz" },
       "smilnytsia": { "label": "Smilnica", "full": "Smilnica-Kroscienko" },
       "uhryniv": { "label": "Uhryniv", "full": "Uhryniv-Dolhobyczów" },
-      "nyzhankovychi": { "label": "Nyzhankovychi", "full": "Nyzhankovychi-Malhowice" }
+      "nyzhankovychi": {
+        "label": "Nyzhankovychi",
+        "full": "Nyzhankovychi-Malhowice"
+      }
     }
   },
 
@@ -69,20 +72,20 @@
   },
 
   "ua-hu": {
-    "name": "Ukraina-Węgry",
+    "name": "Ukraina–Węgry",
     "borders": {
-      "chop": { "label": "Czop", "full": "Czop-Zahony" },
-      "luzhanka": { "label": "Łużanka", "full": "Łużanka-Beregdaróc" },
-      "dzvinkove": { "label": "Dźwinkowe", "full": "Dźwinkowe-Astej" }
+      "chop": { "label": "Czop", "full": "Czop–Záhony" },
+      "luzhanka": { "label": "Łużanka", "full": "Łużanka–Beregsurány" },
+      "dzvinkove": { "label": "Dźwinkowe", "full": "Dźwinkowe–Lónya" }
     }
   },
 
   "hu-ua": {
-    "name": "Węgry-Ukraina",
+    "name": "Węgry–Ukraina",
     "borders": {
-      "zahony": { "label": "Zahony", "full": "Zahony-Czop" },
-      "beregdaroc": { "label": "Beregdaróc", "full": "Beregdaróc-Łużanka" },
-      "astei": { "label": "Astej", "full": "Astej-Dźwinkowe" }
+      "zahony": { "label": "Záhony", "full": "Záhony–Czop" },
+      "berehshuran": { "label": "Beregsurány", "full": "Beregsurány–Łużanka" },
+      "lonya": { "label": "Lónya", "full": "Lónya–Dźwinkowe" }
     }
   },
 
@@ -159,72 +162,72 @@
     "accuracy": "Dokładność:",
     "time": "Czas przejścia:",
     "hours": "g",
-     "minutes": "min"
+    "minutes": "min"
   },
- "message": {
-  "error": "Błąd wysyłania kolejki",
-  "ok": "✅ Pomyślnie wysłano!",
-  "err": "Błąd wysyłania",
-  "token": "Nie znaleziono tokenu sesji",
-  "time": "Wprowadź czas przekroczenia granicy",
-  "invalid": "Wartość nie może być ujemna",
-  "session": "Nie udało się utworzyć sesji"
-},
-"status": {
-  "waiting": "Oczekiwanie na współrzędne GPS…",
-  "received": "Współrzędne otrzymane",
-  "error": "Geolokalizacja wyłączona lub niedostępna",
-  "not_supported": "Geolokalizacja nie jest obsługiwana"
-},
- "modals": {
-      "select": "Wybierz kierunek ruchu",
-      "vehicle":"Wybierz typ pojazdu",
-      "confirm": "✅ Potwierdź",
-      "cross": "Opuszczasz międzynarodowe przejście graniczne",
-      "time": "Czas przekroczenia granicy: ",
-      "road": "Szerokiej drogi!",
-      "choose": "— Wybierz —",
-      "geo": "Geolokalizacja jest wyłączona",
-      "on": "Włącz geolokalizację w ustawieniach urządzenia lub przeglądarki, aby kontynuować.",
-      "warning": "Uwaga!",
-      "border": "Zbliżasz się do międzynarodowego przejścia granicznego",
-      "type": "Typ transportu: ",
-      "queue": "Liczba w kolejce:",
-      "car": "Samochód",
-      "bus": "Autobus",
-      "tir": "TIR",
-      "pedestrian": "Pieszy",
-      "news": "Brak wiadomości",
-      "info": "Brak informacji"
-    },
-     "nav": {
-      "hello": "Cześć",
-      "guest": "Gość",
-      "directions": "Kierunki",
-      "news": "Wiadomości",
-      "info": "Informacje",
-      "settings": "Ustawienia",
-      "reset": "Resetuj kierunek",
-      "contacts": "Kontakt"
-    },
-    "warning-page": {
-      "title": "Strona dostępna tylko na urządzeniach mobilnych",
-      "text": "Proszę otworzyć tę stronę na urządzeniu mobilnym, aby uzyskać dostęp do treści."
-    },
-      "manual": {
-  "time": "Prześlij czas",
-  "queue": "Prześlij kolejkę",
-  "searching": "Wyszukiwanie najbliższego przejścia granicznego...",
-  "title": "Prześlij kolejkę dla przejścia granicznego",
-  "not-border": "Nie znaleziono żadnego przejścia granicznego",
-  "enable-gps": "Włącz GPS",
-  "cross": "Podaj całkowity czas przekroczenia granicy",
-  "time-input": "Podaj czas przejścia",
-  "send": "Wyślij",
-  "sends": "Wysyłanie...",
-  "hours": "godziny",
-  "minutes": "minuty"
-}
-
-
+  "message": {
+    "error": "Błąd wysyłania kolejki",
+    "ok": "✅ Pomyślnie wysłano!",
+    "err": "Błąd wysyłania",
+    "token": "Nie znaleziono tokenu sesji",
+    "time": "Wprowadź czas przekroczenia granicy",
+    "invalid": "Wartość nie może być ujemna",
+    "session": "Nie udało się utworzyć sesji"
+  },
+  "status": {
+    "waiting": "Oczekiwanie na współrzędne GPS…",
+    "received": "Współrzędne otrzymane",
+    "error": "Geolokalizacja wyłączona lub niedostępna",
+    "not_supported": "Geolokalizacja nie jest obsługiwana"
+  },
+  "modals": {
+    "select": "Wybierz kierunek ruchu",
+    "vehicle": "Wybierz typ pojazdu",
+    "confirm": "✅ Potwierdź",
+    "cross": "Opuszczasz międzynarodowe przejście graniczne",
+    "time": "Czas przekroczenia granicy: ",
+    "road": "Szerokiej drogi!",
+    "choose": "— Wybierz —",
+    "geo": "Geolokalizacja jest wyłączona",
+    "on": "Włącz geolokalizację w ustawieniach urządzenia lub przeglądarki, aby kontynuować.",
+    "warning": "Uwaga!",
+    "border": "Zbliżasz się do międzynarodowego przejścia granicznego",
+    "type": "Typ transportu: ",
+    "queue": "Liczba w kolejce:",
+    "car": "Samochód",
+    "bus": "Autobus",
+    "tir": "TIR",
+    "pedestrian": "Pieszy",
+    "news": "Brak wiadomości",
+    "info": "Brak informacji"
+  },
+  "nav": {
+    "hello": "Cześć",
+    "guest": "Gość",
+    "directions": "Kierunki",
+    "news": "Wiadomości",
+    "info": "Informacje",
+    "settings": "Ustawienia",
+    "reset": "Resetuj kierunek",
+    "contacts": "Kontakt",
+    "mute-on": "🔊 Włącz dźwięk",
+    "mute-off": "🔇 Wyłącz dźwięk"
+  },
+  "warning-page": {
+    "title": "Strona dostępna tylko na urządzeniach mobilnych",
+    "text": "Proszę otworzyć tę stronę na urządzeniu mobilnym, aby uzyskać dostęp do treści."
+  },
+  "manual": {
+    "time": "Prześlij czas",
+    "queue": "Prześlij kolejkę",
+    "searching": "Wyszukiwanie najbliższego przejścia granicznego...",
+    "title": "Prześlij kolejkę dla przejścia granicznego",
+    "not-border": "Nie znaleziono żadnego przejścia granicznego",
+    "enable-gps": "Włącz GPS",
+    "cross": "Podaj całkowity czas przekroczenia granicy",
+    "time-input": "Podaj czas przejścia",
+    "send": "Wyślij",
+    "sends": "Wysyłanie...",
+    "hours": "godziny",
+    "minutes": "minuty"
+  }
 }

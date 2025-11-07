@@ -26,7 +26,7 @@ export function useMenu() {
         },
         {
           key: "shehyni",
-          coords: { lat: 50.262676, lon: 23.600136 },
+          coords: { lat: 49.798919, lon: 22.964763 },
           labelfun: () => t("ua-pl.borders['shehyni'].label"),
           label: t("ua-pl.borders.shehyni.label"),
           full: t("ua-pl.borders.shehyni.full"),
@@ -47,14 +47,14 @@ export function useMenu() {
         },
         {
           key: "hrushiv",
-          coords: { lat: 50.090369, lon: 23.288140 },
+          coords: { lat: 50.090369, lon: 23.28814 },
           labelfun: () => t("ua-pl.borders['hrushiv'].label"),
           label: t("ua-pl.borders.hrushiv.label"),
           full: t("ua-pl.borders.hrushiv.full"),
         },
         {
           key: "smilnytsia",
-          coords: { lat: 49.478750, lon: 22.714685 },
+          coords: { lat: 49.47875, lon: 22.714685 },
           labelfun: () => t("ua-pl.borders['smilnytsia'].label"),
           label: t("ua-pl.borders.smilnytsia.label"),
           full: t("ua-pl.borders.smilnytsia.full"),
@@ -128,14 +128,14 @@ export function useMenu() {
           label: t("pl-ua.borders.kroscienko.label"),
           full: t("pl-ua.borders.kroscienko.full"),
         },
-         {
+        {
           key: "dolhobychuv",
           coords: { lat: 50.579557, lon: 24.068752 },
           labelfun: () => t("pl-ua.borders['dolhobychuv'].label"),
           label: t("pl-ua.borders.dolhobychuv.label"),
           full: t("pl-ua.borders.dolhobychuv.full"),
         },
-         {
+        {
           key: "malkhovitse",
           coords: { lat: 49.699089, lon: 22.818068 },
           labelfun: () => t("pl-ua.borders['malkhovitse'].label"),
@@ -150,12 +150,14 @@ export function useMenu() {
       borders: [
         {
           key: "uzhhorod",
+          coords: { lat: 48.645994, lon: 22.266862 },
           labelfun: () => t("ua-sk.borders['uzhhorod'].label"),
           label: t("ua-sk.borders.uzhhorod.label"),
           full: t("ua-sk.borders.uzhhorod.full"),
         },
         {
           key: "mali-selmentsi",
+          coords: { lat: 48.512713, lon: 22.160889 },
           labelfun: () => t("ua-sk.borders['mali-selmentsi'].label"),
           label: t("ua-sk.borders.mali-selmentsi.label"),
           full: t("ua-sk.borders.mali-selmentsi.full"),
@@ -168,12 +170,14 @@ export function useMenu() {
       borders: [
         {
           key: "vysne-nemecke",
+          coords: { lat: 48.666869, lon: 22.257469 },
           labelfun: () => t("sk-ua.borders['vysne-nemecke'].label"),
           label: t("sk-ua.borders.vysne-nemecke.label"),
           full: t("sk-ua.borders.vysne-nemecke.full"),
         },
         {
           key: "velke-selmentsi",
+          coords: { lat: 48.509273, lon: 22.146722 },
           labelfun: () => t("sk-ua.borders['velke-selmentsi'].label"),
           label: t("sk-ua.borders.velke-selmentsi.label"),
           full: t("sk-ua.borders.velke-selmentsi.full"),
@@ -186,18 +190,21 @@ export function useMenu() {
       borders: [
         {
           key: "chop",
+          coords: { lat: 48.430261, lon: 22.175705 },
           labelfun: () => t("ua-hu.borders['chop'].label"),
           label: t("ua-hu.borders.chop.label"),
           full: t("ua-hu.borders.chop.full"),
         },
         {
           key: "luzhanka",
+          coords: { lat: 48.168436, lon: 22.588532 },
           labelfun: () => t("ua-hu.borders['luzhanka'].label"),
           label: t("ua-hu.borders.luzhanka.label"),
           full: t("ua-hu.borders.luzhanka.full"),
         },
         {
           key: "dzvinkove",
+          coords: { lat: 48.310792, lon: 22.34478 },
           labelfun: () => t("ua-hu.borders['dzvinkove'].label"),
           label: t("ua-hu.borders.dzvinkove.label"),
           full: t("ua-hu.borders.dzvinkove.full"),
@@ -210,21 +217,24 @@ export function useMenu() {
       borders: [
         {
           key: "zahony",
+          coords: { lat: 48.403362, lon: 22.166586 },
           labelfun: () => t("hu-ua.borders['zahony'].label"),
           label: t("hu-ua.borders.zahony.label"),
           full: t("hu-ua.borders.zahony.full"),
         },
         {
-          key: "beregdaroc",
-          labelfun: () => t("hu-ua.borders['beregdaroc'].label"),
-          label: t("hu-ua.borders.beregdaroc.label"),
-          full: t("hu-ua.borders.beregdaroc.full"),
+          key: "berehshuran", //beregdaroc
+          coords: { lat: 48.158802, lon: 22.556111 },
+          labelfun: () => t("hu-ua.borders['berehshuran'].label"),
+          label: t("hu-ua.borders.berehshuran.label"),
+          full: t("hu-ua.borders.berehshuran.full"),
         },
         {
-          key: "astei",
-          labelfun: () => t("hu-ua.borders['astei'].label"),
-          label: t("hu-ua.borders.astei.label"),
-          full: t("hu-ua.borders.astei.full"),
+          key: "lonya", //astei
+          coords: { lat: 48.321452, lon: 22.306478 },
+          labelfun: () => t("hu-ua.borders['lonya'].label"),
+          label: t("hu-ua.borders.lonya.label"),
+          full: t("hu-ua.borders.lonya.full"),
         },
       ],
     },
@@ -234,18 +244,21 @@ export function useMenu() {
       borders: [
         {
           key: "porubne",
+          coords: { lat: 47.998364, lon: 26.051535 },
           labelfun: () => t("ua-ro.borders['porubne'].label"),
           label: t("ua-ro.borders.porubne.label"),
           full: t("ua-ro.borders.porubne.full"),
         },
         {
           key: "dyakove",
+          coords: { lat: 48.006331, lon: 23.001868 },
           labelfun: () => t("ua-ro.borders['dyakove'].label"),
           label: t("ua-ro.borders.dyakove.label"),
           full: t("ua-ro.borders.dyakove.full"),
         },
         {
           key: "solotvyno",
+          coords: { lat: 47.946733, lon: 23.875105 },
           labelfun: () => t("ua-ro.borders['solotvyno'].label"),
           label: t("ua-ro.borders.solotvyno.label"),
           full: t("ua-ro.borders.solotvyno.full"),
@@ -258,18 +271,21 @@ export function useMenu() {
       borders: [
         {
           key: "siret",
+          coords: { lat: 47.975658, lon: 26.065997 },
           labelfun: () => t("ro-ua.borders['siret'].label"),
           label: t("ro-ua.borders.siret.label"),
           full: t("ro-ua.borders.siret.full"),
         },
         {
           key: "halmeu",
+          coords: { lat: 47.982295, lon: 23.008298 },
           labelfun: () => t("ro-ua.borders['halmeu'].label"),
           label: t("ro-ua.borders.halmeu.label"),
           full: t("ro-ua.borders.halmeu.full"),
         },
         {
           key: "sighet",
+          coords: { lat: 47.941566, lon: 23.889143 },
           labelfun: () => t("ro-ua.borders['sighet'].label"),
           label: t("ro-ua.borders.sighet.label"),
           full: t("ro-ua.borders.sighet.full"),
@@ -282,21 +298,22 @@ export function useMenu() {
       borders: [
         {
           key: "mohyli-podilskyi",
-          coords: { lat: 49.306010, lon: 25.686835 },
+          coords: { lat: 48.44904, lon: 27.785402 },
           labelfun: () => t("ua-md.borders['mohyliv'].label"),
           label: t("ua-md.borders.mohyliv.label"),
           full: t("ua-md.borders.mohyliv.full"),
         },
         {
           key: "mamalyha",
-
+          coords: { lat: 48.261129, lon: 26.610646 },
           labelfun: () => t("ua-md.borders['mamalyga'].label"),
           label: t("ua-md.borders.mamalyga.label"),
           full: t("ua-md.borders.mamalyga.full"),
         },
         {
           key: "roshoshany",
-          coords: { lat: 49.291698, lon: 25.694760 },
+          coords: { lat: 48.383376, lon: 27.032549 },
+          //coords: { lat: 49.291698, lon: 25.69476 }, test
           labelfun: () => t("ua-md.borders['rosozhany'].label"),
           label: t("ua-md.borders.rosozhany.label"),
           full: t("ua-md.borders.rosozhany.full"),
@@ -309,21 +326,22 @@ export function useMenu() {
       borders: [
         {
           key: "otaci",
-          coords: { lat: 49.290762, lon: 25.693662 },
+          coords: { lat: 48.442427, lon: 27.785359 },
           labelfun: () => t("md-ua.borders['otach'].label"),
           label: t("md-ua.borders.otach.label"),
           full: t("md-ua.borders.otach.full"),
         },
         {
           key: "criva",
-
+          coords: { lat: 48.267442, lon: 26.640525 },
           labelfun: () => t("md-ua.borders['kryva'].label"),
           label: t("md-ua.borders.kryva.label"),
           full: t("md-ua.borders.kryva.full"),
         },
         {
           key: "briceni",
-              coords: { lat: 49.295587, lon: 25.692561 },
+          coords: { lat: 48.370663, lon: 27.058983 },
+          //coords: { lat: 49.295587, lon: 25.692561 }, test
           labelfun: () => t("md-ua.borders['brycheny'].label"),
           label: t("md-ua.borders.brycheny.label"),
           full: t("md-ua.borders.brycheny.full"),

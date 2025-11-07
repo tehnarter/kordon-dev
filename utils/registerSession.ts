@@ -32,7 +32,7 @@ const api_key = useRuntimeConfig().public.apiKey
 
     // Зберігаємо в sessionStorage тільки після успішної реєстрації
     sessionStorage.setItem("active_token", session_token)
-    console.log("✅ Токен збережено:", session_token)
+   // console.log("✅ Токен збережено:", session_token)
     return session_token
   } catch (e) {
     console.error("❌ Запит не вдався", e)
