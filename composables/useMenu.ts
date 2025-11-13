@@ -223,14 +223,14 @@ export function useMenu() {
           full: t("hu-ua.borders.zahony.full"),
         },
         {
-          key: "berehshuran", //beregdaroc
+          key: "berehshuran",
           coords: { lat: 48.158802, lon: 22.556111 },
           labelfun: () => t("hu-ua.borders['berehshuran'].label"),
           label: t("hu-ua.borders.berehshuran.label"),
           full: t("hu-ua.borders.berehshuran.full"),
         },
         {
-          key: "lonya", //astei
+          key: "lonya",
           coords: { lat: 48.321452, lon: 22.306478 },
           labelfun: () => t("hu-ua.borders['lonya'].label"),
           label: t("hu-ua.borders.lonya.label"),

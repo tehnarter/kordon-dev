@@ -59,7 +59,6 @@ function getStatusClass(type: string, value: string | number): string {
   }
 }
 
-
 function getBorderLabel(borderName: string): string {
   const directionKeyNormalized = selectedDirection.value.toLowerCase()
   const direction = menu.value.find(
@@ -181,9 +180,10 @@ function formatWaitTime(value: string | number) {
 
   const hours = Math.floor(minutes / 60)
   const mins = minutes % 60
-  return mins > 0 ? `${hours} ${t("tracker.hours")} ${mins} ${t("tracker.minutes")}` : `${hours} год`
+  return mins > 0
+    ? `${hours} ${t("tracker.hours")} ${mins} ${t("tracker.minutes")}`
+    : `${hours} год`
 }
-
 </script>
 
 <template>
@@ -198,22 +198,24 @@ function formatWaitTime(value: string | number) {
       >
         <img :src="dir.flags.from" alt="Flag from" />
         <span>{{ dir.from }}</span>
-        <svg
-          class="arrow-icon"
-          viewBox="0 0 16 16"
-          width="16"
-          height="16"
-          aria-hidden="true"
-        >
-          <path
-            fill="currentColor"
-            d="M1 8h12M9 4l4 4-4 4"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke="currentColor"
-          />
-        </svg>
+        <span
+          ><svg
+            class="arrow-icon"
+            viewBox="0 0 16 16"
+            width="16"
+            height="16"
+            aria-hidden="true"
+          >
+            <path
+              fill="currentColor"
+              d="M1 8h12M9 4l4 4-4 4"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke="currentColor"
+            /></svg
+        ></span>
+
         <span>{{ dir.to }}</span>
         <img :src="dir.flags.to" alt="Flag to" />
       </button>
@@ -232,17 +234,20 @@ function formatWaitTime(value: string | number) {
               v-for="type in transportTypes"
               :key="type"
             >
-                   <div class="icon" v-html="getIcon(type, getStatusClass(type, border.queues[type]))"></div>
-                <div class="traffic-values">
-              <span :class="getStatusClass(type, border.queues[type])">
-              {{ border.queues[type] }}
-         </span>
-           <small :class="{ 'status-gray': border.times[type] === '-' }">
-  {{ formatWaitTime(border.times[type]) }}
-</small>
-                   </div>
-
-
+              <div
+                class="icon"
+                v-html="
+                  getIcon(type, getStatusClass(type, border.queues[type]))
+                "
+              ></div>
+              <div class="traffic-values">
+                <span :class="getStatusClass(type, border.queues[type])">
+                  {{ border.queues[type] }}
+                </span>
+                <small :class="{ 'status-gray': border.times[type] === '-' }">
+                  {{ formatWaitTime(border.times[type]) }}
+                </small>
+              </div>
             </div>
           </div>
         </div>
@@ -386,21 +391,16 @@ function formatWaitTime(value: string | number) {
 // Статуси
 .status-gray {
   color: #9e9e9e;
-
 }
 .status-green {
   color: #4caf50;
-
 }
 .status-yellow {
   color: #f8b201;
-
 }
 .status-red {
   color: #f44336;
-
 }
-
 
 // Завантаження/Помилка
 .loading,

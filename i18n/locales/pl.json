@@ -155,9 +155,9 @@
     "timeInfo": "Aktualna informacja z"
   },
   "tracker": {
-    "warning": "Uwaga !!! ",
-    "warning-1": " Aplikacja jest w trakcie rozwoju",
-    "direction": "Kierunek:",
+    "warning": "📢 Razem sprawiamy, że podróżowanie jest prostsze!",
+    "warning-1": "Dołącz do naszej społeczności!",
+    "direction": "Twój kierunek:",
     "current": "Współrzędne:",
     "accuracy": "Dokładność:",
     "time": "Czas przejścia:",

@@ -158,9 +158,9 @@
     "timeInfo": "Current information for"
   },
   "tracker": {
-    "warning": "Attention !!! ",
-    "warning-1": " The application is under development",
-    "direction": "Direction:",
+    "warning": "📢 Together we make travel easier!",
+    "warning-1": "Join our community!",
+    "direction": "Your direction:",
     "current": "Coordinates:",
     "accuracy": "Accuracy:",
     "time": "Crossing time:",

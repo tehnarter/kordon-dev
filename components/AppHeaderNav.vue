@@ -73,13 +73,13 @@ const fullMenu = computed(() => [
       {
         key: "telegram",
         name: "Telegram",
-        link: "https://t.me/tehnar_u_a",
+        link: "https://t.me/kordon_u_a",
         icon: "/telegram.svg",
       },
       {
         key: "facebook",
         name: "Facebook",
-        link: "https://www.facebook.com/profile.php?id=61579371541481",
+        link: "https://facebook.com/kordon.online",
         icon: "/facebook.svg",
       },
       {
