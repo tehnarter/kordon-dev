@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
   align-items: center;
 
   border-radius: 15px 0 0 15px;
-  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 6px rgba(5, 192, 183, 0.3);
   overflow: visible;
 
   // кнопка

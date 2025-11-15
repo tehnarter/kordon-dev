@@ -168,6 +168,7 @@ onMounted(() => {
 .tracker-card {
   border: 1px solid #ff4e50;
   border-radius: 8px;
+  overflow: hidden;
 }
 .tracker-block {
   display: flex;
@@ -180,10 +181,8 @@ onMounted(() => {
 .tracker-warning {
   color: #fff;
   font-size: 1.2rem;
-
   border-radius: 8px 8px 0 0;
   margin: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   letter-spacing: 1px;
 }
 
